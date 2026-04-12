@@ -25,13 +25,7 @@
 * **Database:** [Type of SQL database and migration tool]
 * **Artifact Registry:** [Container registry details]
 
-## 🚀 Deployment
-[General description of the container-based distribution strategy]
-
-### Docker Setup
-[Description of the Docker Compose environment and required configuration variables]
-
-## 🛠 Development
+## 🚀 Development
 ### Prerequisites
 * [Tool/Dependency 1]
 * [Tool/Dependency 2]
