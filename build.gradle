@@ -1,0 +1,32 @@
+plugins {
+    alias(libs.plugins.kotlin.jvm) apply true
+}
+
+allprojects {
+    group = "eu.luftiger.cae"
+    version = "1.0"
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: libs.plugins.kotlin.jvm.get().pluginId
+
+    dependencies {
+        libs.bundles.kotlin.get().forEach { dep ->
+            implementation dep
+        }
+    }
+
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+    }
+
+    plugins.withId("org.springframework.boot") {
+        if (name != "bootstrap") {
+            tasks.named("bootJar") { enabled = false }
+        }
+    }
+}
