@@ -5,6 +5,8 @@ import com.alleslocker.backend.application.common.security.PasswordHasher
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.application.person.usecase.CreatePersonUseCase
 import com.alleslocker.backend.application.person.usecase.CreatePersonUseCaseImpl
+import com.alleslocker.backend.application.person.usecase.DeletePersonUseCase
+import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImpl
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
@@ -20,6 +22,9 @@ class UseCaseFactoryImpl(
     private val useCases: Map<KClass<out InputBoundary<*, *>>, InputBoundary<*, *>> =
         mapOf(
             CreatePersonUseCase::class to CreatePersonUseCaseImpl(
+                personGateway = gatewayFactory[PersonGateway::class]
+            ),
+            DeletePersonUseCase::class to DeletePersonUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class]
             ),
             RegisterUserUseCase::class to RegisterUserUseCaseImpl(
