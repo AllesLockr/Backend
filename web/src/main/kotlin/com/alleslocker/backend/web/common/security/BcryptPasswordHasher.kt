@@ -1,6 +1,6 @@
 package com.alleslocker.backend.web.common.security
 
-import com.alleslocker.backend.application.security.PasswordHasher
+import com.alleslocker.backend.application.common.security.PasswordHasher
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 

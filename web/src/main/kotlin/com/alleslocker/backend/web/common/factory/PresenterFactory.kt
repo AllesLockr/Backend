@@ -1,4 +1,4 @@
-package com.alleslocker.backend.web.common.presenter.factory
+package com.alleslocker.backend.web.common.factory
 
 import com.alleslocker.backend.web.common.presenter.JsonRestPresenter
 import jakarta.servlet.http.HttpServletResponse

@@ -1,4 +1,4 @@
-package com.alleslocker.backend.application.security
+package com.alleslocker.backend.application.common.security
 
 interface PasswordHasher {
     fun hash(raw: String): String

@@ -5,4 +5,4 @@ import com.alleslocker.backend.application.user.dto.request.RegisterUserRequestD
 import com.alleslocker.backend.application.user.dto.response.RegisterUserResponseDto
 
 interface RegisterUserUseCase :
-    com.alleslocker.backend.application.common.InputBoundary<com.alleslocker.backend.application.user.dto.request.RegisterUserRequestDto, com.alleslocker.backend.application.user.dto.response.RegisterUserResponseDto>
+    InputBoundary<RegisterUserRequestDto, RegisterUserResponseDto>
