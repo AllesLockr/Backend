@@ -1,0 +1,87 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            version("kotlin", "2.2.10")
+            version("spring-boot", "3.5.6")
+            version("openapi", "2.8.13")
+            version("mariadb", "3.3.3")
+            version("jwt", "0.11.5")
+            version("kotest", "5.7.2")
+            version("h2", "1.3.148")
+            version("konsist", "0.17.3")
+
+            plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
+            plugin("kotlin-noarg", "org.jetbrains.kotlin.plugin.noarg").versionRef("kotlin")
+            plugin("spring-boot", "org.springframework.boot").versionRef("spring-boot")
+
+            // bom
+            library("bom-spring-boot", "org.springframework.boot", "spring-boot-dependencies").versionRef("spring-boot")
+
+            // kotlin
+            library("kotlin-stdlib", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").withoutVersion()
+            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").withoutVersion()
+
+            // kotest
+            library("kotest-engine", "io.kotest", "kotest-framework-engine-jvm").versionRef("kotest")
+            library("kotest-assertions", "io.kotest", "kotest-assertions-core-jvm").versionRef("kotest")
+            library("kotest-runner", "io.kotest", "kotest-runner-junit5-jvm").versionRef("kotest")
+            library("kotest-spring", "io.kotest.extensions", "kotest-extensions-spring").version("1.1.3")
+
+            //konsist
+            library("konsist", "com.lemonappdev", "konsist").versionRef("konsist")
+
+            //h2
+            library("h2", "com.h2database", "h2").versionRef("h2")
+
+
+            // spring boot
+            library("spring-boot-starter", "org.springframework.boot", "spring-boot-starter").withoutVersion()
+            library("spring-boot-security", "org.springframework.boot", "spring-boot-starter-security").withoutVersion()
+            library("spring-boot-jpa", "org.springframework.boot", "spring-boot-starter-data-jpa").withoutVersion()
+            library("spring-boot-web", "org.springframework.boot", "spring-boot-starter-web").withoutVersion()
+            library("spring-boot-test", "org.springframework.boot", "spring-boot-starter-test").withoutVersion()
+
+            // jackson
+            library("jackson-jsr310", "com.fasterxml.jackson.datatype", "jackson-datatype-jsr310").withoutVersion()
+            library("jackson-kotlin", "com.fasterxml.jackson.module", "jackson-module-kotlin").withoutVersion()
+            library("jackson-databind", "com.fasterxml.jackson.core", "jackson-databind").withoutVersion()
+            library("jackson-core", "com.fasterxml.jackson.core", "jackson-core").withoutVersion()
+
+            // openapi
+            library("openapi-starter-webmvc-ui", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").versionRef("openapi")
+
+
+            //mariadb
+            library("mariadb-java-client", "org.mariadb.jdbc", "mariadb-java-client").versionRef("mariadb")
+
+
+            //jwt
+            library("jwt-api", "io.jsonwebtoken", "jjwt-api").versionRef("jwt")
+            library("jwt-impl", "io.jsonwebtoken", "jjwt-impl").versionRef("jwt")
+            library("jwt-jackson", "io.jsonwebtoken", "jjwt-jackson").versionRef("jwt")
+
+            // #################
+            // bundles
+            // #################
+
+            bundle("kotlin", ["kotlin-stdlib", "kotlin-reflect"])
+        }
+    }
+}
+
+include(
+        "bootstrap",
+        "web",
+        "persistence",
+        "application",
+        "domain"
+)
+
+rootProject.name = "AllesLocker"

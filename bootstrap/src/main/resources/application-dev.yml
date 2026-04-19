@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/my_database
+    username: my_user
+    password: my_password
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+
+security:
+  jwt:
+    secret: e7be91f345681e3f4a1c9fef223bb8f9b47e0ca2c85a0cf8b3e53974274b9b8a
+    expiration: 86400000
+
+
+server:
+  port: 8080
