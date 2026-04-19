@@ -16,7 +16,7 @@ internal class DeletePersonPresenter(
     override fun present(response: DeletePersonResponseDto) {
         DeletePersonResponseSchema(
             response.id
-        ).presentAsJson(HttpStatus.CREATED)
+        ).presentAsJson(HttpStatus.OK)
     }
 
     override fun presentFailure(error: ErrorResponse) {

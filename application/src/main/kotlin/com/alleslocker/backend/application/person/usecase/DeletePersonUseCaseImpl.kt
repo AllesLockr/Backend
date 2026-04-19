@@ -23,7 +23,7 @@ internal class DeletePersonUseCaseImpl(
         }
 
         if (!personGateway.exists(id)) {
-            presenter.presentFailure(ErrorResponse.NotFound("Person with ID $id not found"))
+            presenter.presentFailure(ErrorResponse.NotFound("Person with ID ${id.value} not found"))
             return
         }
 

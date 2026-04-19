@@ -28,6 +28,7 @@ class PersonController(
         val presenter = CreatePersonPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(CreatePersonUseCase::class).execute(request.toDto(), presenter)
     }
+
     @PostMapping("/delete")
     fun delete(@RequestBody request: DeletePersonRequestSchema) {
         val presenter = DeletePersonPresenter(httpServletResponse, jacksonConverter)
