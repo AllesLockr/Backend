@@ -23,7 +23,7 @@ open class WebSecurityConfig(
     @Bean
     open fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration()
-        config.allowedOrigins = listOf("*")
+        config.allowedOrigins = listOf("http://localhost:5173", "http://localhost:8080")
         config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
         config.allowedHeaders = listOf("*")
         config.allowCredentials = true
