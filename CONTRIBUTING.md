@@ -22,4 +22,23 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 
 Example: `feat(auth): add google oauth2 provider`
 
-# Dev Setup (TODO)
+# Dev Setup
+### docker-compose.yml for database
+```yml
+services:
+  mariadb:
+    image: mariadb:11
+    network_mode: bridge
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: my_password
+      MARIADB_DATABASE: my_database
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
+
+```
