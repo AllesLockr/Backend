@@ -21,9 +21,9 @@ open class WebSecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter
 ) {
     @Bean
-    open fun corsConfigurationSource(): CorsConfigurationSource {
+    open fun corsConfigurationSource(props: CorsProperties): CorsConfigurationSource {
         val config = CorsConfiguration()
-        config.allowedOrigins = listOf("http://localhost:5173", "http://localhost:8080")
+        config.allowedOrigins = props.allowedOrigins
         config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
         config.allowedHeaders = listOf("*")
         config.allowCredentials = true
