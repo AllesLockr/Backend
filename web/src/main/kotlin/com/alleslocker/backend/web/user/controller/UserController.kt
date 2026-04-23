@@ -1,5 +1,6 @@
 package com.alleslocker.backend.web.user.controller
 
+import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.RegisterUserUseCase
@@ -9,6 +10,12 @@ import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
 import com.alleslocker.backend.web.user.presenter.RegisterUserPresenter
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.RegisterUserRequestSchema
+import com.alleslocker.backend.web.user.schema.response.LoginUserResponseSchema
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Tag(name = "User")
 @RestController
 @RequestMapping("/api/v1/user")
 class UserController(
@@ -30,6 +38,35 @@ class UserController(
         useCaseFactory.make(RegisterUserUseCase::class).execute(request.toDto(), presenter)
     }
 
+
+    @Operation(
+        summary = "Login a user.", responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = LoginUserResponseSchema::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "The username was not found.",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid username or password.",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            )
+        ]
+    )
     @PostMapping("/auth/login")
     fun login(@RequestBody request: LoginUserRequestSchema) {
         val presenter = LoginUserPresenter(httpServletResponse, jacksonConverter, jwtService)
