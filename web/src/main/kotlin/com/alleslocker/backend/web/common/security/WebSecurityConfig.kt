@@ -55,7 +55,9 @@ open class WebSecurityConfig(
                 it
                     .requestMatchers(
                         "/api/v1/user/auth/login",
-                        "/api/v1/user/auth/register"
+                        "/api/v1/user/auth/register",
+                        "/swagger-ui/*",
+                        "/v3/api-docs/**",
                     ).permitAll()
                     .anyRequest().authenticated()
             }
