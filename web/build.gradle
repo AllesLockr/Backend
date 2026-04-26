@@ -9,7 +9,7 @@ dependencies {
     implementation(libs.spring.boot.security)
     implementation(libs.jackson.kotlin)
     implementation(libs.jwt.api)
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16'
+    implementation(libs.openapi.springdoc)
 
     runtimeOnly(libs.jwt.impl)
     runtimeOnly(libs.jwt.jackson)

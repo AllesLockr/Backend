@@ -10,6 +10,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("kotlin", "2.2.10")
             version("spring-boot", "3.5.6")
+            version("springdoc", "2.8.16")
             version("openapi", "2.8.13")
             version("mariadb", "3.3.3")
             version("jwt", "0.11.5")
@@ -47,6 +48,9 @@ dependencyResolutionManagement {
             library("spring-boot-jpa", "org.springframework.boot", "spring-boot-starter-data-jpa").withoutVersion()
             library("spring-boot-web", "org.springframework.boot", "spring-boot-starter-web").withoutVersion()
             library("spring-boot-test", "org.springframework.boot", "spring-boot-starter-test").withoutVersion()
+
+            // springdoc
+            library("openapi-springdoc", "org.springdoc", "springdoc-openapi-starter-webmvc-ui").versionRef("springdoc")
 
             // jackson
             library("jackson-jsr310", "com.fasterxml.jackson.datatype", "jackson-datatype-jsr310").withoutVersion()
