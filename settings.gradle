@@ -85,7 +85,8 @@ include(
         "web",
         "persistence",
         "application",
-        "domain"
+        "domain",
+        "lockConnector"
 )
 
 rootProject.name = "AllesLocker"

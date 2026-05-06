@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":web"))
     implementation(project(":application"))
     implementation(project(":persistence"))
+    implementation(project(":lockConnector"))
 
     implementation(platform(libs.bom.spring.boot))
 

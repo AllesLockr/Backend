@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @SpringBootApplication
-@ComponentScan(basePackages = ["com.alleslocker.backend.bootstrap", "com.alleslocker.backend.web", "com.alleslocker.backend.persistence"])
+@ComponentScan(basePackages = ["com.alleslocker.backend.bootstrap", "com.alleslocker.backend.web", "com.alleslocker.backend.persistence", "com.alleslocker.backend.lockconnector"])
 @EnableJpaRepositories(basePackages = ["com.alleslocker.backend.persistence"])
 @EntityScan(basePackages = ["com.alleslocker.backend.persistence"])
 @EnableConfigurationProperties(JwtProperties::class)
