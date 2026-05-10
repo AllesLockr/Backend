@@ -28,7 +28,8 @@ class UseCaseFactoryImpl(
                 personAdapter = adapterFactory[PersonAdapter::class]
             ),
             DeletePersonUseCase::class to DeletePersonUseCaseImpl(
-                personGateway = gatewayFactory[PersonGateway::class]
+                personGateway = gatewayFactory[PersonGateway::class],
+                personAdapter = adapterFactory[PersonAdapter::class]
             ),
             RegisterUserUseCase::class to RegisterUserUseCaseImpl(
                 passwordHasher = passwordHasher,

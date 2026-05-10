@@ -33,3 +33,7 @@ lock-connector:
         name: person_name
         sur-name: person_surname
         email: email
+    delete-person:
+      endpoint: /person/delete
+      parameters:
+        id: person_id

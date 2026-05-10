@@ -11,6 +11,7 @@ class ConnectionConfig {
 
     class PersonConfig {
         val addPerson: EndpointConfig = EndpointConfig()
+        val deletePerson: EndpointConfig = EndpointConfig()
     }
     class EndpointConfig {
         lateinit var endpoint: String
