@@ -1,3 +1,5 @@
+@file:Suppress("SpringCompilerPlugin")
+
 package com.alleslocker.backend.web.person.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
@@ -69,7 +71,7 @@ class PersonController(
         ]
     )
     @PostMapping("/create")
-    fun login(@RequestBody request: CreatePersonRequestSchema) {
+    fun create(@RequestBody request: CreatePersonRequestSchema) {
         val presenter = CreatePersonPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(CreatePersonUseCase::class).execute(request.toDto(), presenter)
     }
