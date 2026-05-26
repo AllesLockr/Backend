@@ -1,4 +1,4 @@
-﻿package com.alleslocker.backend.application.person.usecase
+package com.alleslocker.backend.application.person.usecase
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.OutputBoundary
@@ -32,19 +32,13 @@ internal class DeletePersonUseCaseImpl(
         }
 
         val apiId = person.apiId
-        if (apiId == null) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Person with ID ${id.value} doesn't have an API ID"))
-            return
-        }
-        try {
-            personAdapter.deletePerson(
-                DeletePersonAdapterRequest(
-                    id = apiId
-                )
-            )
-        } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete person on external API: ${e.message ?: "Unknown error"}"))
-            return
+        if (apiId != null) {
+            try {
+                personAdapter.deletePerson(DeletePersonAdapterRequest(id = apiId))
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete person on external API: ${e.message ?: "Unknown error"}"))
+                return
+            }
         }
 
         try {

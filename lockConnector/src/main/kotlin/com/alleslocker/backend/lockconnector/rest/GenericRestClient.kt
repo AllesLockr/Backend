@@ -1,10 +1,9 @@
-﻿package com.alleslocker.backend.lockconnector.rest
+package com.alleslocker.backend.lockconnector.rest
 
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
-import org.springframework.web.client.body
 
 @Component
 class GenericRestClient() {
@@ -23,7 +22,7 @@ class GenericRestClient() {
             .retrieve()
             .toBodilessEntity()
     }
-    fun post2(endpoint: String, body: Any, headers: Map<String, String> =emptyMap(), contentType: MediaType): RestClient.ResponseSpec {
+    fun postForResponse(endpoint: String, body: Any, headers: Map<String, String> =emptyMap(), contentType: MediaType): RestClient.ResponseSpec {
         return client.post()
             .uri(endpoint)
             .contentType(contentType)
@@ -32,6 +31,14 @@ class GenericRestClient() {
             }
             .body(body)
             .retrieve()
+    }
+
+    fun delete(endpoint: String, headers: Map<String, String> =emptyMap()) {
+        client.delete()
+            .uri(endpoint)
+            .headers { header -> headers.forEach { (k, v) -> header.set(k,v) } }
+            .retrieve()
+            .toBodilessEntity()
     }
 
     inline fun <reified T> get(

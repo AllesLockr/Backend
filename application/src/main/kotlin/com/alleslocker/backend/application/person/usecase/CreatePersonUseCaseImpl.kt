@@ -66,12 +66,20 @@ internal class CreatePersonUseCaseImpl(
                 id = saved.id.value
             ))
         } catch (e: Exception) {
+            personGateway.deleteById(saved.id)
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to send to API: ${e.message ?: "Unknown error"}"))
             return
         }
+        val apiId = adapterResponse.id
+        if (apiId == null) {
+            personGateway.deleteById(saved.id)
+            presenter.presentFailure(ErrorResponse.InternalServerError("External API did not return person with id"))
+            return
+        }
+
 
         try {
-            personGateway.save(saved.copy(apiId = adapterResponse.id))
+            personGateway.save(saved.copy(apiId = apiId))
         } catch (e: Exception) {
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save API ID: ${e.message ?: "Unknown error"}"))
             return

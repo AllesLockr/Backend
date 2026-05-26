@@ -14,8 +14,8 @@ class IseoPersonClientImpl(
     private val tokenProvider: IseoTokenProvider,
     private val configProvider: ConfigProvider,
 ) : PersonClient {
-
     private data class IseoCreateUserResponse(val id: Int)
+
     override fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse {
         val guestRoleId = 5
         val transformedRequest = mapOf(
@@ -25,8 +25,10 @@ class IseoPersonClientImpl(
             "email" to request.email,
             "roleIds" to listOf(guestRoleId)
         )
+
         val token = tokenProvider.getValidToken()
-        val response = restClient.post2(
+
+        val response = restClient.postForResponse(
             endpoint = "${configProvider.load().baseUrl}/api/v2/users",
             body = transformedRequest,
             headers = mapOf(
@@ -34,6 +36,7 @@ class IseoPersonClientImpl(
             ),
             contentType = MediaType.APPLICATION_JSON
         ).body(IseoCreateUserResponse::class.java)
+            ?: throw IllegalStateException("ISEO returned empty response body")
 
         return AddPersonAdapterResponse(id = response?.id?.toString())
 
@@ -41,13 +44,11 @@ class IseoPersonClientImpl(
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
         val token = tokenProvider.getValidToken()
+        restClient.delete(
+            endpoint = "${configProvider.load().baseUrl}/api/v2/users/${request.id}",
+            headers = mapOf("Authorization" to "Bearer $token")
+        )
 
-        restClient.client.delete().uri("${configProvider.load().baseUrl}/api/v2/users/{id}", request.id)
-            .headers {
-                it.setBearerAuth(token)
-            }
-            .retrieve()
-            .toBodilessEntity()
 
     }
 }

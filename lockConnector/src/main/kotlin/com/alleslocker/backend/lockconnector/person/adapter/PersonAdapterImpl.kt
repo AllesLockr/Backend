@@ -21,7 +21,7 @@ internal class PersonAdapterImpl(
 
     private val iMoqClient: PersonClient = IMoqPersonClientImpl(restClient)
     private val assaClient: PersonClient = AssaPersonClientImpl(restClient)
-    private val iseoClient: PersonClient by lazy { IseoPersonClientImpl(restClient, tokenProvider, configProvider) }
+    private val iseoClient: PersonClient = IseoPersonClientImpl(restClient, tokenProvider, configProvider)
 
     override fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse {
 
