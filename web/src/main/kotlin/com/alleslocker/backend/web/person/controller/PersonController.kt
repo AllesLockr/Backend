@@ -69,7 +69,7 @@ class PersonController(
         ]
     )
     @PostMapping("/create")
-    fun login(@RequestBody request: CreatePersonRequestSchema) {
+    fun createPerson(@RequestBody request: CreatePersonRequestSchema) {
         val presenter = CreatePersonPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(CreatePersonUseCase::class).execute(request.toDto(), presenter)
     }
@@ -111,7 +111,7 @@ class PersonController(
         ]
     )
     @PostMapping("/delete")
-    fun delete(@RequestBody request: DeletePersonRequestSchema) {
+    fun deletePerson(@RequestBody request: DeletePersonRequestSchema) {
         val presenter = DeletePersonPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(DeletePersonUseCase::class).execute(request.toDto(), presenter)
     }
