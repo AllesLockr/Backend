@@ -7,5 +7,6 @@ data class Person(
     val firstname: PersonFirstname,
     val lastname: PersonLastname,
     val email: PersonEmail,
-    val roles: Set<Role>
+    val roles: Set<Role>,
+    val apiId: String? = null
 )

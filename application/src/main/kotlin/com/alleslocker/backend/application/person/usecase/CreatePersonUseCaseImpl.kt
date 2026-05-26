@@ -58,20 +58,25 @@ internal class CreatePersonUseCaseImpl(
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save person: ${e.message ?: "Unknown error"}"))
             return
         }
-        try {
-            personAdapter.addPerson(
-                AddPersonAdapterRequest(
-                    id = saved.id.value,
-                    firstname = saved.firstname.value,
-                    lastname = saved.lastname.value,
-                    email = saved.email.value
-                )
-            )
+        val adapterResponse = try {
+            personAdapter.addPerson(AddPersonAdapterRequest(
+                firstname = firstname.value,
+                lastname = lastname.value,
+                email = email.value,
+                id = saved.id.value
+            ))
         } catch (e: Exception) {
-            // TODO: What happens when it fails?
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to send to API: ${e.message ?: "Unknown error"}"))
             return
         }
+
+        try {
+            personGateway.save(saved.copy(apiId = adapterResponse.id))
+        } catch (e: Exception) {
+            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save API ID: ${e.message ?: "Unknown error"}"))
+            return
+        }
+
 
         presenter.present(
             CreatePersonResponseDto(
