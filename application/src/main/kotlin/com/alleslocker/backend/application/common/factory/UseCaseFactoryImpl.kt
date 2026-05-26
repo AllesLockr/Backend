@@ -1,5 +1,10 @@
 package com.alleslocker.backend.application.common.factory
 
+import com.alleslocker.backend.application.api.gateway.ApiDataGateway
+import com.alleslocker.backend.application.api.usecase.AddApiDataUseCase
+import com.alleslocker.backend.application.api.usecase.AddApiDataUseCaseImpl
+import com.alleslocker.backend.application.api.usecase.GetImplementedApisUseCase
+import com.alleslocker.backend.application.api.usecase.GetImplementedApisUseCaseImpl
 import com.alleslocker.backend.application.common.InputBoundary
 import com.alleslocker.backend.application.common.security.PasswordHasher
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
@@ -38,7 +43,11 @@ class UseCaseFactoryImpl(
             LoginUserUseCase::class to LoginUserUseCaseImpl(
                 passwordHasher = passwordHasher,
                 userGateway = gatewayFactory[UserGateway::class]
-            )
+            ),
+            AddApiDataUseCase::class to AddApiDataUseCaseImpl(
+                apiDataGateway = gatewayFactory[ApiDataGateway::class],
+            ),
+            GetImplementedApisUseCase::class to GetImplementedApisUseCaseImpl()
         )
 
     override fun <RQ, RS, I : InputBoundary<RQ, RS>> make(inputBoundary: KClass<out I>): I {
