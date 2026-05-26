@@ -6,4 +6,5 @@ sealed class ErrorResponse(val message: String) {
     class BadRequest(message: String) : ErrorResponse(message)
     class AlreadyExists(message: String) : ErrorResponse(message)
     class InternalServerError(message: String) : ErrorResponse(message)
+    class UnprocessableEntity(message: String) : ErrorResponse(message)
 }

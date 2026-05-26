@@ -10,3 +10,5 @@ app:
   cors:
     allowed-origins:
       - "http://localhost:5173"
+  security:
+    master-key: A7wGBfP2Iz2tYU26/jBz4wUmfM+gpgGqAPTVezyXygY=
