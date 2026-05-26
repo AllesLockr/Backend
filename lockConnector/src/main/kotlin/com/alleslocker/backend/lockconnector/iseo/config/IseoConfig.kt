@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationProperties(prefix = "lock-connector-iseo")
+// TODO: Delete / Move baseURl, user, pw to db read
 class IseoConfig {
     var baseUrl: String = ""
     var username: String = ""
