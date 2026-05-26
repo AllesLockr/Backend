@@ -21,4 +21,7 @@ open class PersonEntity {
 
     @Column(name = "email", nullable = false, unique = true)
     open lateinit var email: String
+
+    @Column(name = "api_id", nullable = true, unique = true)
+    open var apiId: String? = null
 }

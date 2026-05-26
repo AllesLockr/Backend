@@ -25,15 +25,21 @@ internal class DeletePersonUseCaseImpl(
             return
         }
 
-        if (!personGateway.exists(id)) {
+        val person = personGateway.findById(id)
+        if (person == null) {
             presenter.presentFailure(ErrorResponse.NotFound("Person with ID ${id.value} not found"))
             return
         }
 
+        val apiId = person.apiId
+        if (apiId == null) {
+            presenter.presentFailure(ErrorResponse.BadRequest("Person with ID ${id.value} doesn't have an API ID"))
+            return
+        }
         try {
             personAdapter.deletePerson(
                 DeletePersonAdapterRequest(
-                    id = id.value
+                    id = apiId
                 )
             )
         } catch (e: Exception) {
