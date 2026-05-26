@@ -1,4 +1,4 @@
-﻿package com.alleslocker.backend.lockconnector.iseo.client
+package com.alleslocker.backend.lockconnector.iseo.client
 
 import org.springframework.stereotype.Component
 import java.time.Instant

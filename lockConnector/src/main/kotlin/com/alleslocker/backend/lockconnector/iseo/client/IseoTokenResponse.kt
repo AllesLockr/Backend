@@ -1,4 +1,4 @@
-﻿package com.alleslocker.backend.lockconnector.iseo.client
+package com.alleslocker.backend.lockconnector.iseo.client
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
