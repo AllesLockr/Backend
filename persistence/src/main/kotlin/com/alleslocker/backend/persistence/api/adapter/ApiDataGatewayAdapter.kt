@@ -27,4 +27,8 @@ class ApiDataGatewayAdapter(private val repository: ApiDataRepository) : ApiData
         return repository.existsById(id.value)
     }
 
+    override fun findAll(): List<ApiData> {
+        return repository.findAll().map { it.toDomain() }
+    }
+
 }
