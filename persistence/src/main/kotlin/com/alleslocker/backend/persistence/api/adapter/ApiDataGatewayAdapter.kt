@@ -3,6 +3,7 @@ package com.alleslocker.backend.persistence.api.adapter
 import com.alleslocker.backend.application.api.gateway.ApiDataGateway
 import com.alleslocker.backend.domain.api.ApiData
 import com.alleslocker.backend.domain.api.ApiId
+import com.alleslocker.backend.domain.api.AvailableApis
 import com.alleslocker.backend.persistence.api.mapper.toDomain
 import com.alleslocker.backend.persistence.api.mapper.toEntity
 import com.alleslocker.backend.persistence.api.repository.ApiDataRepository
@@ -27,4 +28,7 @@ class ApiDataGatewayAdapter(private val repository: ApiDataRepository) : ApiData
         return repository.existsById(id.value)
     }
 
+    override fun findByForApi(forApi: AvailableApis): ApiData? {
+        return repository.findByForApi(forApi.name)?.toDomain()
+    }
 }

@@ -4,7 +4,7 @@ import com.alleslocker.backend.application.person.dto.request.AddPersonAdapterRe
 import com.alleslocker.backend.application.person.dto.request.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
 import com.alleslocker.backend.lockconnector.iseo.client.IseoTokenProvider
-import com.alleslocker.backend.lockconnector.iseo.config.IseoConfig
+import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.person.adapter.PersonClient
 import com.alleslocker.backend.lockconnector.rest.GenericRestClient
 import org.springframework.http.MediaType
@@ -12,7 +12,7 @@ import org.springframework.http.MediaType
 class IseoPersonClientImpl(
     private val restClient: GenericRestClient,
     private val tokenProvider: IseoTokenProvider,
-    private val iseoConfig: IseoConfig,
+    private val configProvider: ConfigProvider,
 ) : PersonClient {
 
     private data class IseoCreateUserResponse(val id: Int)
@@ -27,7 +27,7 @@ class IseoPersonClientImpl(
         )
         val token = tokenProvider.getValidToken()
         val response = restClient.post2(
-            endpoint = "${iseoConfig.baseUrl}/api/v2/users",
+            endpoint = "${configProvider.load().baseUrl}/api/v2/users",
             body = transformedRequest,
             headers = mapOf(
                 ("Authorization" to "Bearer $token")
@@ -42,7 +42,7 @@ class IseoPersonClientImpl(
     override fun deletePerson(request: DeletePersonAdapterRequest) {
         val token = tokenProvider.getValidToken()
 
-        restClient.client.delete().uri("${iseoConfig.baseUrl}/api/v2/users/{id}", request.id)
+        restClient.client.delete().uri("${configProvider.load().baseUrl}/api/v2/users/{id}", request.id)
             .headers {
                 it.setBearerAuth(token)
             }

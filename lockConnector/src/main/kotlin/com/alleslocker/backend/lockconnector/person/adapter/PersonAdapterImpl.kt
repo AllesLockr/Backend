@@ -5,7 +5,7 @@ import com.alleslocker.backend.application.person.dto.request.AddPersonAdapterRe
 import com.alleslocker.backend.application.person.dto.request.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
 import com.alleslocker.backend.lockconnector.iseo.client.IseoTokenProvider
-import com.alleslocker.backend.lockconnector.iseo.config.IseoConfig
+import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.person.client.AssaPersonClientImpl
 import com.alleslocker.backend.lockconnector.person.client.IMoqPersonClientImpl
 import com.alleslocker.backend.lockconnector.person.client.IseoPersonClientImpl
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Component
 internal class PersonAdapterImpl(
     private val restClient: GenericRestClient,
     private val tokenProvider: IseoTokenProvider,
-    private val iseoConfig: IseoConfig
+    private val configProvider: ConfigProvider
 ) : PersonAdapter {
 
     private val iMoqClient: PersonClient = IMoqPersonClientImpl(restClient)
     private val assaClient: PersonClient = AssaPersonClientImpl(restClient)
-    private val iseoClient: PersonClient by lazy { IseoPersonClientImpl(restClient, tokenProvider, iseoConfig) }
+    private val iseoClient: PersonClient by lazy { IseoPersonClientImpl(restClient, tokenProvider, configProvider) }
 
     override fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse {
 

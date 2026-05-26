@@ -1,4 +1,5 @@
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":application"))
     implementation(platform(libs.bom.spring.boot))
     implementation(libs.spring.boot.web)
