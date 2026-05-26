@@ -8,11 +8,11 @@ import org.springframework.web.client.RestClient
 
 @Component
 class IseoTokenClient(private val config: IseoConfig) {
-    private val client by lazy {
-        RestClient.builder().baseUrl(config.baseUrl).build()
-    }
 
     fun getToken(): IseoTokenResponse {
+        val client by lazy {
+            RestClient.builder().baseUrl(config.baseUrl).build()
+        }
         val formData = LinkedMultiValueMap<String, String>().apply{
             add("grant_type", "password")
             add("username", config.username)

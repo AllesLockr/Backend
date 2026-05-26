@@ -33,7 +33,7 @@ internal class DeletePersonUseCaseImpl(
 
         val apiId = person.apiId
         if (apiId == null) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Person with ID ${id.value} doesn't have an API ID"))
+            presenter.presentFailure(ErrorResponse.InternalServerError("Person with ID ${id.value} doesn't have an API ID"))
             return
         }
         try {
