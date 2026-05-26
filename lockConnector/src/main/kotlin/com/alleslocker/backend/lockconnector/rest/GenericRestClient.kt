@@ -23,6 +23,16 @@ class GenericRestClient() {
             .retrieve()
             .toBodilessEntity()
     }
+    fun post2(endpoint: String, body: Any, headers: Map<String, String> =emptyMap(), contentType: MediaType): RestClient.ResponseSpec {
+        return client.post()
+            .uri(endpoint)
+            .contentType(contentType)
+            .headers { header -> headers.forEach {
+                    (k, v) -> header.set(k,v) }
+            }
+            .body(body)
+            .retrieve()
+    }
 
     inline fun <reified T> get(
         endpoint: String,

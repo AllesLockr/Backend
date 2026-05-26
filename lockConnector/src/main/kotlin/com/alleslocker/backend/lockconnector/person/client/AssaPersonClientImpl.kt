@@ -2,12 +2,13 @@ package com.alleslocker.backend.lockconnector.person.client
 
 import com.alleslocker.backend.application.person.dto.request.AddPersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.request.DeletePersonAdapterRequest
+import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
 import com.alleslocker.backend.lockconnector.person.adapter.PersonClient
 import com.alleslocker.backend.lockconnector.rest.GenericRestClient
 
 class AssaPersonClientImpl(private val restClient: GenericRestClient) : PersonClient {
 
-    override fun addPerson(request: AddPersonAdapterRequest) {
+    override fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse {
 
         val transformedRequest = mapOf(
             Pair("role", "USER"),
@@ -16,6 +17,7 @@ class AssaPersonClientImpl(private val restClient: GenericRestClient) : PersonCl
         restClient.post("http://localhost:8067/user", transformedRequest)
 
         //TODO assa only saves ids. Save the response with the id in our db
+        return AddPersonAdapterResponse(id = null)
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
