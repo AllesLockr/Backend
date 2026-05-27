@@ -25,8 +25,8 @@ class SpringLogger(private val gateway: AuditLogGateway) : Logger {
         log().info(message)
     }
 
-    override fun error(message: String) {
-        log().error(message)
+    override fun error(message: String, throwable: Throwable?) {
+        log().error(message, throwable)
     }
 
     override fun audit(auditLog: AuditLog) {

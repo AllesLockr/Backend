@@ -33,14 +33,19 @@ class GetAllAuditLogsPagedUseCaseImpl(
         }
 
         if (pageSize !in 1..500) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Size must be greater than 0 and less than 500"))
+            presenter.presentFailure(ErrorResponse.BadRequest("Size must be between 1 and 500"))
             return
         }
 
         var filter = AuditLogFilterDto()
 
-        if (request.filter != null)
+        if (request.filter != null) {
             filter = request.filter
+
+            if (filter.toDate != null && filter.toDate.isBefore(filter.fromDate))
+                presenter.presentFailure(ErrorResponse.BadRequest("fromDate must be before toDate"))
+        }
+
 
         val page: Page<AuditLog> = try {
             gateway.getAllAuditLogsPaged(filter, pageNum, pageSize)
