@@ -1,4 +1,4 @@
-﻿package com.alleslocker.backend.application.person.dto.request
+﻿package com.alleslocker.backend.application.person.dto.request.adapter
 
 data class AddPersonAdapterRequest (
     val id: String,

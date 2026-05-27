@@ -3,7 +3,7 @@
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
-import com.alleslocker.backend.application.person.dto.request.DeletePersonAdapterRequest
+import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.request.DeletePersonRequestDto
 import com.alleslocker.backend.application.person.dto.response.DeletePersonResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway
