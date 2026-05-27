@@ -8,7 +8,8 @@ fun PersonEntity.toDomain(): Person = Person(
     email = PersonEmail(this.email),
     firstname = PersonFirstname(this.firstname),
     lastname = PersonLastname(this.lastname),
-    roles = emptySet() // TODO: map roles
+    roles = emptySet(), // TODO: map roles
+    apiId = this.apiId
 )
 
 fun Person.toEntity(existing: PersonEntity? = null): PersonEntity {
@@ -18,6 +19,7 @@ fun Person.toEntity(existing: PersonEntity? = null): PersonEntity {
     entity.email = this.email.value
     entity.firstname = this.firstname.value
     entity.lastname = this.lastname.value
+    entity.apiId = this.apiId
 
     return entity
 }
