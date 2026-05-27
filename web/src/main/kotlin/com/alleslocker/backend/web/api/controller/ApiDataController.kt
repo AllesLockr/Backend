@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "API-Data", description = "Configure 3rd party lock provider APIs.")
@@ -70,9 +71,9 @@ class ApiDataController(
         ]
     )
     @PostMapping()
-    fun addApiData(@RequestBody request: AddApiDataRequestSchema) {
+    fun addApiData(@AuthenticationPrincipal requesterId: String, @RequestBody request: AddApiDataRequestSchema) {
         val presenter = AddApiDataPresenter(httpServletResponse, jacksonConverter)
-        useCaseFactory.make(AddApiDataUseCase::class).execute(request.toDto(), presenter)
+        useCaseFactory.make(AddApiDataUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 
     @Operation(
