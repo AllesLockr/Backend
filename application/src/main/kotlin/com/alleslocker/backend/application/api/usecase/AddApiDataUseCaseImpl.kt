@@ -3,14 +3,21 @@ package com.alleslocker.backend.application.api.usecase
 import com.alleslocker.backend.application.api.dto.request.AddApiDataRequestDto
 import com.alleslocker.backend.application.api.gateway.ApiDataGateway
 import com.alleslocker.backend.application.common.ErrorResponse
+import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.common.SuccessResponse
 import com.alleslocker.backend.domain.api.*
+import com.alleslocker.backend.domain.auditlog.AuditLog
+import com.alleslocker.backend.domain.auditlog.AuditLogId
+import com.alleslocker.backend.domain.auditlog.AuditLogMessage
+import com.alleslocker.backend.domain.user.UserId
 import java.net.URI
 import java.net.URISyntaxException
+import java.time.Instant
 
 class AddApiDataUseCaseImpl(
     private val apiDataGateway: ApiDataGateway,
+    private val logger: Logger,
 ) : AddApiDataUseCase {
     override fun execute(
         request: AddApiDataRequestDto,
@@ -51,7 +58,14 @@ class AddApiDataUseCaseImpl(
         } catch (e: Exception) {
             return presenter.presentFailure(ErrorResponse.InternalServerError("Could not save api to db: ${e.message}"))
         }
-
+        logger.audit(
+            AuditLog(
+                id = AuditLogId.generate(),
+                message = AuditLogMessage("Added new API-Data for ${saved.forApi} with url ${saved.baseUrl}"),
+                performedByUserId = UserId(request.requesterId),
+                createdAt = Instant.now(),
+            )
+        )
         presenter.present(SuccessResponse.Created("Successfully added ${saved.baseUrl}"))
     }
 }
