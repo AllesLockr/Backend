@@ -27,9 +27,10 @@ class IseoPersonClientImpl(
         )
 
         val token = tokenProvider.getValidToken()
+        val baseUrl = configProvider.load().baseUrl
 
         val response = restClient.postForResponse(
-            endpoint = "${configProvider.load().baseUrl}/api/v2/users",
+            endpoint = "${baseUrl}/api/v2/users",
             body = transformedRequest,
             headers = mapOf(
                 ("Authorization" to "Bearer $token")
@@ -38,6 +39,18 @@ class IseoPersonClientImpl(
         ).body(IseoCreateUserResponse::class.java)
             ?: throw IllegalStateException("ISEO returned empty response body")
 
+        val enableUser = try {
+            restClient.postForResponse(
+                endpoint = "${baseUrl}/api/v2/users/${response.id}/enable",
+                headers = mapOf("Authorization" to "Bearer $token"),
+                contentType = MediaType.APPLICATION_JSON,
+                body = emptyMap<String, Any>()
+            ).body(IseoCreateUserResponse::class.java)
+                ?: throw IllegalStateException("ISEO returned empty response body")
+        } catch (e: Exception) {
+            // TODO: Better error handling
+            throw e
+        }
         return AddPersonAdapterResponse(id = response?.id?.toString())
 
     }
