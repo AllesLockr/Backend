@@ -20,7 +20,12 @@ class AuditLogGatewayAdapter(private val repository: AuditLogRepository) : Audit
         page: Int,
         size: Int
     ): Page<AuditLog> {
-        val pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))
+        val pageable = PageRequest.of(
+            page, size, Sort.by(
+                Sort.Order.desc("createdAt"),
+                Sort.Order.desc("id")
+            )
+        )
         val specification = AuditLogSpecification.withFilter(filter)
         val result = repository.findAll(specification, pageable)
 
