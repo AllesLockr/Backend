@@ -153,7 +153,7 @@ class PersonController(
 
         ]
     )
-    @GetMapping("/all")
+    @PostMapping("/all")
     fun getPersonsPaged(
         @RequestBody request: GetPersonsPagedRequestSchema
     ) {
