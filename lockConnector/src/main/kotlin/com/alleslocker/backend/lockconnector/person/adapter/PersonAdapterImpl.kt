@@ -1,8 +1,8 @@
 package com.alleslocker.backend.lockconnector.person.adapter
 
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
-import com.alleslocker.backend.application.person.dto.request.AddPersonAdapterRequest
-import com.alleslocker.backend.application.person.dto.request.DeletePersonAdapterRequest
+import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonAdapterRequest
+import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
 import com.alleslocker.backend.lockconnector.iseo.client.IseoTokenProvider
 import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
