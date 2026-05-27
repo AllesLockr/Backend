@@ -5,4 +5,5 @@ import com.alleslocker.backend.domain.api.ApiData
 import com.alleslocker.backend.domain.api.ApiId
 
 interface ApiDataGateway : ReadWriteGateway<ApiData, ApiId> {
+    fun findAll(): List<ApiData>
 }

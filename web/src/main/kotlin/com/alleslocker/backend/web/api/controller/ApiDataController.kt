@@ -1,16 +1,23 @@
 package com.alleslocker.backend.web.api.controller
 
+import com.alleslocker.backend.application.api.dto.response.GetApiDataResponseDto
 import com.alleslocker.backend.application.api.dto.response.GetImplementedApisResponseDto
 import com.alleslocker.backend.application.api.usecase.AddApiDataUseCase
+import com.alleslocker.backend.application.api.usecase.GetAllApiDataUseCase
+import com.alleslocker.backend.application.api.usecase.GetApiDataUseCase
 import com.alleslocker.backend.application.api.usecase.GetImplementedApisUseCase
 import com.alleslocker.backend.application.common.ErrorResponse
+import com.alleslocker.backend.application.common.IdRequest
 import com.alleslocker.backend.application.common.SuccessResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.web.api.mapper.toDto
 import com.alleslocker.backend.web.api.presenter.AddApiDataPresenter
+import com.alleslocker.backend.web.api.presenter.GetAllApiDataPresenter
+import com.alleslocker.backend.web.api.presenter.GetApiDataPresenter
 import com.alleslocker.backend.web.api.presenter.GetImplementedApisPresenter
 import com.alleslocker.backend.web.api.schema.AddApiDataRequestSchema
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -84,5 +91,71 @@ class ApiDataController(
     fun implementedApis() {
         val presenter = GetImplementedApisPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetImplementedApisUseCase::class).execute(Unit, presenter)
+    }
+
+    @Operation(
+        summary = "Get one Api-Data.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = GetApiDataResponseDto::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            ),
+        ],
+    )
+    @GetMapping("/{id}")
+    fun getApiData(@PathVariable("id") id: String) {
+        val presenter = GetApiDataPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(GetApiDataUseCase::class).execute(IdRequest(id), presenter)
+    }
+
+    @Operation(
+        summary = "Get all Api-Datas.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [Content(
+                    mediaType = "application/json",
+                    array = ArraySchema(schema = Schema(implementation = GetApiDataResponseDto::class))
+                )]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            ),
+        ],
+    )
+    @GetMapping("/all")
+    fun getAllApiData() {
+        val presenter = GetAllApiDataPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(GetAllApiDataUseCase::class).execute(Unit, presenter)
     }
 }
