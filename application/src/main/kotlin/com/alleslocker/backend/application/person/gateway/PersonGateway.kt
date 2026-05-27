@@ -8,5 +8,5 @@ import com.alleslocker.backend.domain.person.PersonId
 
 interface PersonGateway : ReadWriteGateway<Person, PersonId> {
     fun existsByEmail(email: String): Boolean
-    fun getAllPersonsPaged(filter: PersonFilterDto, page: Int = 1, size: Int = 10): Page<Person>
+    fun getAllPersonsPaged(filter: PersonFilterDto, page: Int = 0, size: Int = 10): Page<Person>
 }
