@@ -2,16 +2,20 @@ package com.alleslocker.backend.web.person.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
+import com.alleslocker.backend.application.person.dto.request.CountPersonsRequestDto
+import com.alleslocker.backend.application.person.usecase.CountPersonsUseCase
 import com.alleslocker.backend.application.person.usecase.CreatePersonUseCase
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCase
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.web.person.mapper.toDto
+import com.alleslocker.backend.web.person.presenter.CountPersonsPresenter
 import com.alleslocker.backend.web.person.presenter.CreatePersonPresenter
 import com.alleslocker.backend.web.person.presenter.DeletePersonPresenter
 import com.alleslocker.backend.web.person.presenter.GetPersonsPagedPresenter
 import com.alleslocker.backend.web.person.schema.request.CreatePersonRequestSchema
 import com.alleslocker.backend.web.person.schema.request.DeletePersonRequestSchema
 import com.alleslocker.backend.web.person.schema.request.GetPersonsPagedRequestSchema
+import com.alleslocker.backend.web.person.schema.response.CountPersonsResponseSchema
 import com.alleslocker.backend.web.person.schema.response.CreatePersonResponseSchema
 import com.alleslocker.backend.web.person.schema.response.DeletePersonResponseSchema
 import com.alleslocker.backend.web.person.schema.response.GetPersonsPagedResponseSchema
@@ -22,6 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -158,5 +163,32 @@ class PersonController(
     ) {
         val presenter = GetPersonsPagedPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetPersonsPagedUseCase::class).execute(request.toDto(), presenter)
+    }
+
+    @Operation(
+        summary = "Get the total number of persons.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = CountPersonsResponseSchema::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Something went wrong...rip",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            )
+        ]
+    )
+    @GetMapping("/count")
+    fun getPersonsCount() {
+        val presenter = CountPersonsPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(CountPersonsUseCase::class).execute(CountPersonsRequestDto(), presenter)
     }
 }

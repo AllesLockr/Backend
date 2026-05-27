@@ -38,6 +38,9 @@ class UseCaseFactoryImpl(
             GetPersonsPagedUseCase::class to GetPersonsPagedUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
             ),
+            CountPersonsUseCase::class to CountPersonsUseCaseImpl(
+                personGateway = gatewayFactory[PersonGateway::class],
+            ),
             RegisterUserUseCase::class to RegisterUserUseCaseImpl(
                 passwordHasher = passwordHasher,
                 userGateway = gatewayFactory[UserGateway::class]

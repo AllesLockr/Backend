@@ -17,6 +17,9 @@ import org.springframework.stereotype.Component
 class PersonGatewayAdapter(
     private val repository: PersonRepository
 ) : PersonGateway {
+
+    override fun count() = repository.count()
+
     override fun existsByEmail(email: String): Boolean =
         repository.existsByEmail(email)
 
