@@ -21,7 +21,7 @@ internal class GetPersonsPagedUseCaseImpl(
         }
 
         if (request.size <= 0) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Size must greater than zero"))
+            presenter.presentFailure(ErrorResponse.BadRequest("Size must be greater than zero"))
             return
         }
 
