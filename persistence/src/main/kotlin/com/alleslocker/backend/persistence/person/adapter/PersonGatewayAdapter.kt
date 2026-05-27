@@ -10,6 +10,7 @@ import com.alleslocker.backend.persistence.person.mapper.toEntity
 import com.alleslocker.backend.persistence.person.repository.PersonRepository
 import com.alleslocker.backend.persistence.person.specification.PersonSpecification
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
 @Component
@@ -24,7 +25,7 @@ class PersonGatewayAdapter(
         page: Int,
         size: Int
     ): Page<Person> {
-        val pageable = PageRequest.of(page, size)
+        val pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"))
         val specification = PersonSpecification.withFilter(filter)
         val result = repository.findAll(specification, pageable)
 
