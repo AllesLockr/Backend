@@ -3,7 +3,7 @@ package com.alleslocker.backend.application.person.usecase
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
-import com.alleslocker.backend.application.person.dto.request.AddPersonAdapterRequest
+import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.request.CreatePersonRequestDto
 import com.alleslocker.backend.application.person.dto.response.CreatePersonResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway

@@ -31,4 +31,8 @@ class ApiDataGatewayAdapter(private val repository: ApiDataRepository) : ApiData
     override fun findByForApi(forApi: AvailableApis): ApiData? {
         return repository.findByForApi(forApi.name)?.toDomain()
     }
+    override fun findAll(): List<ApiData> {
+        return repository.findAll().map { it.toDomain() }
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.alleslocker.backend.application.common.factory
 
 import com.alleslocker.backend.application.api.gateway.ApiDataGateway
-import com.alleslocker.backend.application.api.usecase.AddApiDataUseCase
-import com.alleslocker.backend.application.api.usecase.AddApiDataUseCaseImpl
-import com.alleslocker.backend.application.api.usecase.GetImplementedApisUseCase
-import com.alleslocker.backend.application.api.usecase.GetImplementedApisUseCaseImpl
+import com.alleslocker.backend.application.api.usecase.*
 import com.alleslocker.backend.application.common.InputBoundary
 import com.alleslocker.backend.application.common.security.PasswordHasher
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
@@ -13,6 +10,8 @@ import com.alleslocker.backend.application.person.usecase.CreatePersonUseCase
 import com.alleslocker.backend.application.person.usecase.CreatePersonUseCaseImpl
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCase
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImpl
+import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
+import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCaseImpl
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
@@ -36,6 +35,9 @@ class UseCaseFactoryImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
                 personAdapter = adapterFactory[PersonAdapter::class]
             ),
+            GetPersonsPagedUseCase::class to GetPersonsPagedUseCaseImpl(
+                personGateway = gatewayFactory[PersonGateway::class],
+            ),
             RegisterUserUseCase::class to RegisterUserUseCaseImpl(
                 passwordHasher = passwordHasher,
                 userGateway = gatewayFactory[UserGateway::class]
@@ -47,7 +49,9 @@ class UseCaseFactoryImpl(
             AddApiDataUseCase::class to AddApiDataUseCaseImpl(
                 apiDataGateway = gatewayFactory[ApiDataGateway::class],
             ),
-            GetImplementedApisUseCase::class to GetImplementedApisUseCaseImpl()
+            GetImplementedApisUseCase::class to GetImplementedApisUseCaseImpl(),
+            GetApiDataUseCase::class to GetApiDataUseCaseImpl(gatewayFactory[ApiDataGateway::class]),
+            GetAllApiDataUseCase::class to GetAllApiDataUseCaseImpl(gatewayFactory[ApiDataGateway::class]),
         )
 
     override fun <RQ, RS, I : InputBoundary<RQ, RS>> make(inputBoundary: KClass<out I>): I {
