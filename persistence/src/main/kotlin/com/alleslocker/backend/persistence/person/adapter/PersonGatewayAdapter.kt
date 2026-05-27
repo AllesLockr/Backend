@@ -25,8 +25,8 @@ class PersonGatewayAdapter(
         size: Int
     ): Page<Person> {
         val pageable = PageRequest.of(page, size)
-        val filter = PersonSpecification.withFilter(filter)
-        val result = repository.findAll(filter, pageable)
+        val specification = PersonSpecification.withFilter(filter)
+        val result = repository.findAll(specification, pageable)
 
         return Page(
             content = result.content.map { it.toDomain() },
