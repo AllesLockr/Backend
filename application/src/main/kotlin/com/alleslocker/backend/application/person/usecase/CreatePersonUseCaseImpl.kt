@@ -59,12 +59,14 @@ internal class CreatePersonUseCaseImpl(
             return
         }
         val adapterResponse = try {
-            personAdapter.addPerson(AddPersonAdapterRequest(
-                firstname = firstname.value,
-                lastname = lastname.value,
-                email = email.value,
-                id = saved.id.value
-            ))
+            personAdapter.addPerson(
+                AddPersonAdapterRequest(
+                    firstname = firstname.value,
+                    lastname = lastname.value,
+                    email = email.value,
+                    id = saved.id.value
+                )
+            )
         } catch (e: Exception) {
             personGateway.deleteById(saved.id)
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to send to API: ${e.message ?: "Unknown error"}"))
