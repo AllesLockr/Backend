@@ -16,12 +16,12 @@ internal class GetPersonsPagedUseCaseImpl(
         presenter: OutputBoundary<GetPersonsPagedResponseDto>
     ) {
         if (request.page < 0) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Page must be zero or greater"))
+            presenter.presentFailure(ErrorResponse.BadRequest("Page must be 0 or greater"))
             return
         }
 
-        if (request.size <= 0) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Size must be greater than zero"))
+        if (request.size !in 1..500) {
+            presenter.presentFailure(ErrorResponse.BadRequest("Size must be greater than 0 and less than 500"))
             return
         }
 
