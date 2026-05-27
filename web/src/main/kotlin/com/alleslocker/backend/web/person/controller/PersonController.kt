@@ -4,13 +4,17 @@ import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.application.person.usecase.CreatePersonUseCase
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCase
+import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.web.person.mapper.toDto
 import com.alleslocker.backend.web.person.presenter.CreatePersonPresenter
 import com.alleslocker.backend.web.person.presenter.DeletePersonPresenter
+import com.alleslocker.backend.web.person.presenter.GetPersonsPagedPresenter
 import com.alleslocker.backend.web.person.schema.request.CreatePersonRequestSchema
 import com.alleslocker.backend.web.person.schema.request.DeletePersonRequestSchema
+import com.alleslocker.backend.web.person.schema.request.GetPersonsPagedRequestSchema
 import com.alleslocker.backend.web.person.schema.response.CreatePersonResponseSchema
 import com.alleslocker.backend.web.person.schema.response.DeletePersonResponseSchema
+import com.alleslocker.backend.web.person.schema.response.GetPersonsPagedResponseSchema
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -33,7 +37,8 @@ class PersonController(
 ) {
 
     @Operation(
-        summary = "Create a new person that can be assigned to locks, roles, etc.", responses = [
+        summary = "Create a new person that can be assigned to locks, roles, etc.",
+        responses = [
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
@@ -75,7 +80,8 @@ class PersonController(
     }
 
     @Operation(
-        summary = "Delete an existing person by user id.", responses = [
+        summary = "Delete an existing person by user id.",
+        responses = [
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
@@ -114,5 +120,43 @@ class PersonController(
     fun deletePerson(@RequestBody request: DeletePersonRequestSchema) {
         val presenter = DeletePersonPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(DeletePersonUseCase::class).execute(request.toDto(), presenter)
+    }
+
+    @Operation(
+        summary = "Get all persons paginated.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = GetPersonsPagedResponseSchema::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid page or size.",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Something went wrong...rip",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponse::class)
+                )]
+            )
+
+        ]
+    )
+    @PostMapping("/all")
+    fun getPersonsPaged(
+        @RequestBody request: GetPersonsPagedRequestSchema
+    ) {
+        val presenter = GetPersonsPagedPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(GetPersonsPagedUseCase::class).execute(request.toDto(), presenter)
     }
 }

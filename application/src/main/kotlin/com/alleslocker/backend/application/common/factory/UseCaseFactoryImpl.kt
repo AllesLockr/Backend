@@ -10,6 +10,8 @@ import com.alleslocker.backend.application.person.usecase.CreatePersonUseCase
 import com.alleslocker.backend.application.person.usecase.CreatePersonUseCaseImpl
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCase
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImpl
+import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
+import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCaseImpl
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
@@ -32,6 +34,9 @@ class UseCaseFactoryImpl(
             DeletePersonUseCase::class to DeletePersonUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
                 personAdapter = adapterFactory[PersonAdapter::class]
+            ),
+            GetPersonsPagedUseCase::class to GetPersonsPagedUseCaseImpl(
+                personGateway = gatewayFactory[PersonGateway::class],
             ),
             RegisterUserUseCase::class to RegisterUserUseCaseImpl(
                 passwordHasher = passwordHasher,
