@@ -74,9 +74,15 @@ internal class CreatePersonUseCaseImpl(
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to send to API: ${e.message ?: "Unknown error"}"))
             return
         }
-        val apiIdentities = adapterResponse.externalIds
-            .map { (api, id) -> ExternalApiIdentity(api, ExternalId(id)) }
-            .toSet()
+        val apiIdentities = try {
+            adapterResponse.externalIds
+                .map { (api, id) -> ExternalApiIdentity(api, ExternalId(id)) }
+                .toSet()
+        } catch (e: IllegalArgumentException) {
+            personGateway.deleteById(saved.id)
+            presenter.presentFailure(ErrorResponse.InternalServerError("External API returned invalid person IDs"))
+            return
+        }
         if (apiIdentities.isEmpty()) {
             personGateway.deleteById(saved.id)
             presenter.presentFailure(ErrorResponse.InternalServerError("External API did not return any person IDs"))
@@ -86,7 +92,8 @@ internal class CreatePersonUseCaseImpl(
         try {
             personGateway.save(saved.copy(apiIdentities = apiIdentities))
         } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save external IDs: ${e.message ?: "Unknown error"}"))
+            personGateway.deleteById(saved.id)
+            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save external IDs"))
             return
         }
 

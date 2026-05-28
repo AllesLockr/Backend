@@ -21,7 +21,7 @@ internal class GetLocksPagedUseCaseImpl(
         }
 
         if (request.size !in 1..500) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Size must be greater than 0 and less than 500"))
+            presenter.presentFailure(ErrorResponse.BadRequest("Size must be between 1 and 500"))
             return
         }
 
@@ -31,7 +31,7 @@ internal class GetLocksPagedUseCaseImpl(
                 size = request.size
             )
         } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load locks: ${e.message ?: "Unknown error"}"))
+            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load locks"))
             return
         }
 

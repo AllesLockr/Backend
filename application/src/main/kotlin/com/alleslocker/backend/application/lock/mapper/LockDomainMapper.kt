@@ -8,5 +8,5 @@ fun Lock.toDto() = LockDto(
     name = this.name.value,
     serialNumber = this.serialNumber.value,
     tagId = this.lockTagId?.value,
-    externalIds = this.apiIdentities.associate { it.api.name to it.externalId.value },
+    apiIdentities = this.apiIdentities.associate { it.api.name to it.externalId.value },
 )
