@@ -1,5 +1,6 @@
 package com.alleslocker.backend.domain.person
 
+import com.alleslocker.backend.domain.api.AvailableApis
 import com.alleslocker.backend.domain.role.Role
 
 data class Person(
@@ -8,5 +9,5 @@ data class Person(
     val lastname: PersonLastname,
     val email: PersonEmail,
     val roles: Set<Role>,
-    val apiId: String? = null
+    val externalIds: Map<AvailableApis, String> = emptyMap()
 )

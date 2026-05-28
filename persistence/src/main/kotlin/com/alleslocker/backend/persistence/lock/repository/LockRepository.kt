@@ -1,4 +1,6 @@
 package com.alleslocker.backend.persistence.lock.repository
 
-class LockRepository {
-}
+import com.alleslocker.backend.persistence.lock.entity.LockEntity
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface LockRepository : JpaRepository<LockEntity, String>

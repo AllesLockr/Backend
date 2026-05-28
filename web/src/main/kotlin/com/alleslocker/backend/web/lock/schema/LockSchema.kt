@@ -1,4 +1,9 @@
 package com.alleslocker.backend.web.lock.schema
 
-class LockSchema {
-}
+data class LockSchema(
+    val id: String,
+    val name: String,
+    val serialNumber: String,
+    val tagId: Long?,
+    val externalIds: Map<String, String>,
+)

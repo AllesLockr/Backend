@@ -31,10 +31,9 @@ internal class DeletePersonUseCaseImpl(
             return
         }
 
-        val apiId = person.apiId
-        if (apiId != null) {
+        if (person.externalIds.isNotEmpty()) {
             try {
-                personAdapter.deletePerson(DeletePersonAdapterRequest(id = apiId))
+                personAdapter.deletePerson(DeletePersonAdapterRequest(externalIds = person.externalIds))
             } catch (e: Exception) {
                 presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete person on external API: ${e.message ?: "Unknown error"}"))
                 return

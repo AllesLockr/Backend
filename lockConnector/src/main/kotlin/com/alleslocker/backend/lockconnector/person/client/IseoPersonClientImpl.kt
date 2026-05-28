@@ -3,6 +3,7 @@ package com.alleslocker.backend.lockconnector.person.client
 import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
+import com.alleslocker.backend.domain.api.AvailableApis
 import com.alleslocker.backend.lockconnector.iseo.client.IseoTokenProvider
 import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.person.adapter.PersonClient
@@ -51,17 +52,17 @@ class IseoPersonClientImpl(
             // TODO: Better error handling
             throw e
         }
-        return AddPersonAdapterResponse(id = response?.id?.toString())
+        return AddPersonAdapterResponse(externalIds = mapOf(AvailableApis.ISEO to response.id.toString()))
 
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
+        val iseoId = request.externalIds[AvailableApis.ISEO]
+            ?: throw IllegalStateException("Cannot delete person from ISEO: no ISEO external ID present")
         val token = tokenProvider.getValidToken()
         restClient.delete(
-            endpoint = "${configProvider.load().baseUrl}/api/v2/users/${request.id}",
+            endpoint = "${configProvider.load().baseUrl}/api/v2/users/$iseoId",
             headers = mapOf("Authorization" to "Bearer $token")
         )
-
-
     }
 }

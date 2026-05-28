@@ -11,7 +11,8 @@ fun Person.toDto() = PersonDto(
     id = this.id.value,
     firstname = this.firstname.value,
     lastname = this.lastname.value,
-    email = this.email.value
+    email = this.email.value,
+    externalIds = this.externalIds,
 )
 
 fun PersonDto.toDomain() = Person(
@@ -19,5 +20,6 @@ fun PersonDto.toDomain() = Person(
     firstname = PersonFirstname(this.firstname),
     lastname = PersonLastname(this.lastname),
     email = PersonEmail(this.email),
-    roles = emptySet() //TODO: Add roles
+    roles = emptySet(), //TODO: Add roles
+    externalIds = this.externalIds,
 )

@@ -4,6 +4,6 @@ package com.alleslocker.backend.domain.lock
 value class LockSerialNumber(val value: String) {
     init {
         require(value.isNotBlank()) { "LockSerialNumber cannot be blank" }
-        require(value.length <= 100) { "LockSerialNumber cannot be longer than 50 characters" }
+        require(value.length <= 100) { "LockSerialNumber cannot be longer than 100 characters" }
     }
 }

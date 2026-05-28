@@ -1,4 +1,6 @@
 package com.alleslocker.backend.application.lock.dto.request
 
-class GetLocksPagedRequestDto {
-}
+data class GetLocksPagedRequestDto(
+    val page: Int,
+    val size: Int,
+)

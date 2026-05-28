@@ -1,8 +1,11 @@
 package com.alleslocker.backend.domain.lock
 
+import com.alleslocker.backend.domain.api.AvailableApis
+
 data class Lock (
     val id: LockId,
-    val apiId: String,
     val name: LockName,
-    val serialNumber: LockSerialNumber
+    val serialNumber: LockSerialNumber,
+    val lockTagId: LockTagId? = null,
+    val externalIds: Map<AvailableApis, String> = emptyMap(),
 )
