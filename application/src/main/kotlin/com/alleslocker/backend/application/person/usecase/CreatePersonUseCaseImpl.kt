@@ -7,6 +7,8 @@ import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonA
 import com.alleslocker.backend.application.person.dto.request.CreatePersonRequestDto
 import com.alleslocker.backend.application.person.dto.response.CreatePersonResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway
+import com.alleslocker.backend.domain.api.ExternalApiIdentity
+import com.alleslocker.backend.domain.api.ExternalId
 import com.alleslocker.backend.domain.person.*
 
 internal class CreatePersonUseCaseImpl(
@@ -72,15 +74,17 @@ internal class CreatePersonUseCaseImpl(
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to send to API: ${e.message ?: "Unknown error"}"))
             return
         }
-        val externalIds = adapterResponse.externalIds
-        if (externalIds.isEmpty()) {
+        val apiIdentities = adapterResponse.externalIds
+            .map { (api, id) -> ExternalApiIdentity(api, ExternalId(id)) }
+            .toSet()
+        if (apiIdentities.isEmpty()) {
             personGateway.deleteById(saved.id)
             presenter.presentFailure(ErrorResponse.InternalServerError("External API did not return any person IDs"))
             return
         }
 
         try {
-            personGateway.save(saved.copy(externalIds = externalIds))
+            personGateway.save(saved.copy(apiIdentities = apiIdentities))
         } catch (e: Exception) {
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save external IDs: ${e.message ?: "Unknown error"}"))
             return

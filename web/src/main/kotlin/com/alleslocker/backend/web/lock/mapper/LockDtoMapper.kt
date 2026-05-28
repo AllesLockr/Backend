@@ -8,5 +8,5 @@ fun LockDto.toSchema() = LockSchema(
     name = this.name,
     serialNumber = this.serialNumber,
     tagId = this.tagId,
-    externalIds = this.externalIds.mapKeys { it.key.name },
+    externalIds = this.externalIds,
 )

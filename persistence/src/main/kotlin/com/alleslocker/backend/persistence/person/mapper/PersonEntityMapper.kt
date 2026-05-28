@@ -1,5 +1,7 @@
 package com.alleslocker.backend.persistence.person.mapper
 
+import com.alleslocker.backend.domain.api.ExternalApiIdentity
+import com.alleslocker.backend.domain.api.ExternalId
 import com.alleslocker.backend.domain.person.*
 import com.alleslocker.backend.persistence.person.entity.PersonEntity
 
@@ -9,7 +11,7 @@ fun PersonEntity.toDomain(): Person = Person(
     firstname = PersonFirstname(this.firstname),
     lastname = PersonLastname(this.lastname),
     roles = emptySet(), // TODO: map roles
-    externalIds = this.externalIds.toMap()
+    apiIdentities = this.externalIds.map { (api, id) -> ExternalApiIdentity(api, ExternalId(id)) }.toSet(),
 )
 
 fun Person.toEntity(existing: PersonEntity? = null): PersonEntity {
@@ -19,7 +21,7 @@ fun Person.toEntity(existing: PersonEntity? = null): PersonEntity {
     entity.email = this.email.value
     entity.firstname = this.firstname.value
     entity.lastname = this.lastname.value
-    entity.externalIds = this.externalIds.toMutableMap()
+    entity.externalIds = this.apiIdentities.associate { it.api to it.externalId.value }.toMutableMap()
 
     return entity
 }

@@ -1,5 +1,7 @@
 package com.alleslocker.backend.persistence.lock.mapper
 
+import com.alleslocker.backend.domain.api.ExternalApiIdentity
+import com.alleslocker.backend.domain.api.ExternalId
 import com.alleslocker.backend.domain.lock.Lock
 import com.alleslocker.backend.domain.lock.LockId
 import com.alleslocker.backend.domain.lock.LockName
@@ -12,7 +14,7 @@ fun LockEntity.toDomain(): Lock = Lock(
     name = LockName(this.name),
     serialNumber = LockSerialNumber(this.serialNumber),
     lockTagId = this.tagId?.let { LockTagId(it) },
-    externalIds = this.externalIds.toMap(),
+    apiIdentities = this.externalIds.map { (api, id) -> ExternalApiIdentity(api, ExternalId(id)) }.toSet(),
 )
 
 fun Lock.toEntity(existing: LockEntity? = null): LockEntity {
@@ -22,7 +24,7 @@ fun Lock.toEntity(existing: LockEntity? = null): LockEntity {
     entity.name = this.name.value
     entity.serialNumber = this.serialNumber.value
     entity.tagId = this.lockTagId?.value
-    entity.externalIds = this.externalIds.toMutableMap()
+    entity.externalIds = this.apiIdentities.associate { it.api to it.externalId.value }.toMutableMap()
 
     return entity
 }
