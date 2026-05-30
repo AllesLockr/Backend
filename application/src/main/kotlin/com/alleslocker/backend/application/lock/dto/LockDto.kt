@@ -5,5 +5,6 @@ data class LockDto(
     val name: String,
     val serialNumber: String,
     val tagId: Long?,
-    val apiIdentities: Map<String, String> = emptyMap(),
+    val externalApi: String? = null,
+    val externalId: String? = null,
 )

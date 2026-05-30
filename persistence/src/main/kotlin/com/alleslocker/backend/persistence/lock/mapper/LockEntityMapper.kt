@@ -14,7 +14,9 @@ fun LockEntity.toDomain(): Lock = Lock(
     name = LockName(this.name),
     serialNumber = LockSerialNumber(this.serialNumber),
     lockTagId = this.tagId?.let { LockTagId(it) },
-    apiIdentities = this.externalIds.map { (api, id) -> ExternalApiIdentity(api, ExternalId(id)) }.toSet(),
+    apiIdentity = if (this.externalApi != null && this.externalId != null)
+        ExternalApiIdentity(this.externalApi!!, ExternalId(this.externalId!!))
+    else null,
 )
 
 fun Lock.toEntity(existing: LockEntity? = null): LockEntity {
@@ -24,7 +26,8 @@ fun Lock.toEntity(existing: LockEntity? = null): LockEntity {
     entity.name = this.name.value
     entity.serialNumber = this.serialNumber.value
     entity.tagId = this.lockTagId?.value
-    entity.externalIds = this.apiIdentities.associate { it.api to it.externalId.value }.toMutableMap()
+    entity.externalApi = this.apiIdentity?.api
+    entity.externalId = this.apiIdentity?.externalId?.value
 
     return entity
 }

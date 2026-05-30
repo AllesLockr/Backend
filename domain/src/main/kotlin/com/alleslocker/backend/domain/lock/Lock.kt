@@ -7,5 +7,5 @@ data class Lock (
     val name: LockName,
     val serialNumber: LockSerialNumber,
     val lockTagId: LockTagId? = null,
-    val apiIdentities: Set<ExternalApiIdentity> = emptySet(),
+    val apiIdentity: ExternalApiIdentity? = null,
 )

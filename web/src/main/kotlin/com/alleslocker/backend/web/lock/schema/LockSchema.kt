@@ -5,5 +5,6 @@ data class LockSchema(
     val name: String,
     val serialNumber: String,
     val tagId: Long?,
-    val externalIds: Map<String, String>,
+    val externalApi: String?,
+    val externalId: String?,
 )
