@@ -17,6 +17,7 @@ dependencyResolutionManagement {
             version("kotest", "5.7.2")
             version("h2", "1.3.148")
             version("konsist", "0.17.3")
+            version("ktlint-cli", "1.8.0")
 
             plugin("kotlin-jvm", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
             plugin("kotlin-noarg", "org.jetbrains.kotlin.plugin.noarg").versionRef("kotlin")
@@ -70,6 +71,9 @@ dependencyResolutionManagement {
             library("jwt-api", "io.jsonwebtoken", "jjwt-api").versionRef("jwt")
             library("jwt-impl", "io.jsonwebtoken", "jjwt-impl").versionRef("jwt")
             library("jwt-jackson", "io.jsonwebtoken", "jjwt-jackson").versionRef("jwt")
+
+            //ktlint
+            library("ktlint-cli", "com.pinterest.ktlint", "ktlint-cli").versionRef("ktlint-cli")
 
             // #################
             // bundles

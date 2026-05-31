@@ -2,6 +2,18 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply true
 }
 
+configurations {
+    ktlint
+}
+
+dependencies {
+    ktlint(libs.ktlint.cli) {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, getObjects().named(Bundling, Bundling.EXTERNAL))
+        }
+    }
+}
+
 allprojects {
     group = "com.alleslocker.backend"
     version = "1.0"
@@ -29,4 +41,24 @@ subprojects {
             tasks.named("bootJar") { enabled = false }
         }
     }
+}
+
+tasks.register("ktlintCheck", JavaExec) {
+    group = "verification"
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    mainClass = "com.pinterest.ktlint.Main"
+    args "**/src/**/*.kt", "**.kts", "!**/build/**"
+}
+
+tasks.register("ktlintFormat", JavaExec) {
+    group = "formatting"
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    mainClass = "com.pinterest.ktlint.Main"
+    args "-F", "**/src/**/*.kt", "**.kts", "!**/build/**"
+}
+
+tasks.named("check") {
+    dependsOn tasks.named("ktlintCheck")
 }
