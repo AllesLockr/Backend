@@ -10,9 +10,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 internal class CountPersonsPresenter(
     httpServletResponse: HttpServletResponse,
-    jacksonConverter: MappingJackson2HttpMessageConverter
+    jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : JsonRestPresenter<CountPersonsResponseDto>(httpServletResponse, jacksonConverter) {
-
     override fun present(response: CountPersonsResponseDto) {
         response.toSchema().presentAsJson()
     }
@@ -20,5 +19,4 @@ internal class CountPersonsPresenter(
     override fun presentFailure(error: ErrorResponse) {
         error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
     }
-
 }

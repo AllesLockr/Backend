@@ -9,8 +9,9 @@ class IseoTokenProvider(
 ) {
     private data class CachedToken(
         val token: String,
-        val expiresAt: Instant
+        val expiresAt: Instant,
     )
+
     private var cachedToken: CachedToken? = null
 
     @Synchronized
@@ -23,10 +24,11 @@ class IseoTokenProvider(
             }
         }
         val response = tokenClient.getToken()
-        val newToken = CachedToken(
-            token = response.accessToken,
-            expiresAt = now.plusSeconds(response.expiresIn)
-        )
+        val newToken =
+            CachedToken(
+                token = response.accessToken,
+                expiresAt = now.plusSeconds(response.expiresIn),
+            )
         cachedToken = newToken
         return newToken.token
     }

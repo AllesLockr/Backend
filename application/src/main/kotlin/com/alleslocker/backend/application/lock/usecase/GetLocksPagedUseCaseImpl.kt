@@ -8,12 +8,11 @@ import com.alleslocker.backend.application.lock.gateway.LockGateway
 import com.alleslocker.backend.application.lock.mapper.toDto
 
 internal class GetLocksPagedUseCaseImpl(
-    private val lockGateway: LockGateway
+    private val lockGateway: LockGateway,
 ) : GetLocksPagedUseCase {
-
     override fun execute(
         request: GetLocksPagedRequestDto,
-        presenter: OutputBoundary<GetLocksPagedResponseDto>
+        presenter: OutputBoundary<GetLocksPagedResponseDto>,
     ) {
         if (request.page < 0) {
             presenter.presentFailure(ErrorResponse.BadRequest("Page must be 0 or greater"))
@@ -25,20 +24,21 @@ internal class GetLocksPagedUseCaseImpl(
             return
         }
 
-        val page = try {
-            lockGateway.getAllLocksPaged(
-                page = request.page,
-                size = request.size
-            )
-        } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load locks"))
-            return
-        }
+        val page =
+            try {
+                lockGateway.getAllLocksPaged(
+                    page = request.page,
+                    size = request.size,
+                )
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load locks"))
+                return
+            }
 
         presenter.present(
             GetLocksPagedResponseDto(
-                page.map { it.toDto() }
-            )
+                page.map { it.toDto() },
+            ),
         )
     }
 }

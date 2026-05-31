@@ -1,7 +1,9 @@
 package com.alleslocker.backend.domain.user
 
 @JvmInline
-value class Username(val value: String) {
+value class Username(
+    val value: String,
+) {
     init {
         require(value.isNotEmpty()) { "Username cannot be empty" }
         require(value.length in 3..30) { "Username must be between 3 and 30 characters long" }

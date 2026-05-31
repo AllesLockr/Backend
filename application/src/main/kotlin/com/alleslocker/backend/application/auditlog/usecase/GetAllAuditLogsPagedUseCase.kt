@@ -5,5 +5,4 @@ import com.alleslocker.backend.application.auditlog.dto.response.GetAuditLogResp
 import com.alleslocker.backend.application.common.InputBoundary
 import com.alleslocker.backend.application.common.model.Page
 
-interface GetAllAuditLogsPagedUseCase : InputBoundary<GetAllAuditLogsPagedRequestDto, Page<GetAuditLogResponseDto>> {
-}
+interface GetAllAuditLogsPagedUseCase : InputBoundary<GetAllAuditLogsPagedRequestDto, Page<GetAuditLogResponseDto>>

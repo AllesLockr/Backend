@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec
 
 @Component
 class AesCryptionService(
-    @Value("\${app.security.master-key}") private val base64Key: String
+    @Value("\${app.security.master-key}") private val base64Key: String,
 ) : CryptionService {
     private val algorithm = "AES/GCM/NoPadding"
     private val tagLengthBit = 128
@@ -25,11 +25,12 @@ class AesCryptionService(
             "CRITICAL ERROR: 'master-key' is not set!"
         }
 
-        val decodedKey = try {
-            Base64.getDecoder().decode(base64Key)
-        } catch (e: IllegalArgumentException) {
-            throw IllegalArgumentException("CRITICAL ERROR: 'master-key' is not a valid Base64-String!", e)
-        }
+        val decodedKey =
+            try {
+                Base64.getDecoder().decode(base64Key)
+            } catch (e: IllegalArgumentException) {
+                throw IllegalArgumentException("CRITICAL ERROR: 'master-key' is not a valid Base64-String!", e)
+            }
 
         require(decodedKey.size == 32) {
             "CRITICAL ERROR: 'master-key' must be 256 Bit (32 Bytes) long! Current length: ${decodedKey.size * 8} Bit."
@@ -52,10 +53,12 @@ class AesCryptionService(
             val cipherText = cipher.doFinal(plainText.toByteArray(Charsets.UTF_8))
 
             // IV und Chiffretext in ein einziges Byte-Array zusammenfügen [IV (12 Bytes) + Chiffretext]
-            val cipherTextWithIv = ByteBuffer.allocate(iv.size + cipherText.size)
-                .put(iv)
-                .put(cipherText)
-                .array()
+            val cipherTextWithIv =
+                ByteBuffer
+                    .allocate(iv.size + cipherText.size)
+                    .put(iv)
+                    .put(cipherText)
+                    .array()
 
             Base64.getEncoder().encodeToString(cipherTextWithIv)
         } catch (e: Exception) {
@@ -85,7 +88,8 @@ class AesCryptionService(
             String(decryptedBytes, Charsets.UTF_8)
         } catch (e: Exception) {
             throw RuntimeException(
-                "Error while decrypting: ", e
+                "Error while decrypting: ",
+                e,
             )
         }
     }

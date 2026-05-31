@@ -16,7 +16,6 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "person")
 open class PersonEntity {
-
     @Id
     @Column(name = "id", nullable = false, unique = true)
     open lateinit var id: String

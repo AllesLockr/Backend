@@ -15,9 +15,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 internal class LoginUserPresenter(
     httpServletResponse: HttpServletResponse,
     jacksonConverter: MappingJackson2HttpMessageConverter,
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
 ) : JsonRestPresenter<LoginUserResponseDto>(httpServletResponse, jacksonConverter) {
-
     override fun present(response: LoginUserResponseDto) {
         val token = jwtService.generateToken(response.userId)
         LoginUserResponseSchema(

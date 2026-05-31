@@ -7,5 +7,6 @@ import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterR
 
 interface PersonAdapter : Adapter {
     fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse
+
     fun deletePerson(request: DeletePersonAdapterRequest)
 }

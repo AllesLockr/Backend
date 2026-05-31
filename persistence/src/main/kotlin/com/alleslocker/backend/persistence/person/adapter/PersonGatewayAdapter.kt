@@ -15,18 +15,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class PersonGatewayAdapter(
-    private val repository: PersonRepository
+    private val repository: PersonRepository,
 ) : PersonGateway {
-
     override fun count() = repository.count()
 
-    override fun existsByEmail(email: String): Boolean =
-        repository.existsByEmail(email)
+    override fun existsByEmail(email: String): Boolean = repository.existsByEmail(email)
 
     override fun getAllPersonsPaged(
         filter: PersonFilterDto,
         page: Int,
-        size: Int
+        size: Int,
     ): Page<Person> {
         val pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"))
         val specification = PersonSpecification.withFilter(filter)
@@ -37,7 +35,7 @@ class PersonGatewayAdapter(
             totalElements = result.totalElements,
             size = result.size,
             totalPages = result.totalPages,
-            page = page
+            page = page,
         )
     }
 
@@ -50,9 +48,7 @@ class PersonGatewayAdapter(
         repository.deleteById(id.value)
     }
 
-    override fun findById(id: PersonId): Person? =
-        repository.findById(id.value).orElse(null)?.toDomain()
+    override fun findById(id: PersonId): Person? = repository.findById(id.value).orElse(null)?.toDomain()
 
-    override fun exists(id: PersonId): Boolean =
-        repository.existsById(id.value)
+    override fun exists(id: PersonId): Boolean = repository.existsById(id.value)
 }

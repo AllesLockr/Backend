@@ -1,13 +1,13 @@
 package com.alleslocker.backend.application.person.usecase
 
 import com.alleslocker.backend.application.common.ErrorResponse
+import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
-import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.request.DeletePersonRequestDto
+import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.DeletePersonResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway
-import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
 import com.alleslocker.backend.domain.auditlog.AuditLogMessage
@@ -20,17 +20,17 @@ internal class DeletePersonUseCaseImpl(
     private val personAdapter: PersonAdapter,
     private val logger: Logger,
 ) : DeletePersonUseCase {
-
     override fun execute(
         request: DeletePersonRequestDto,
-        presenter: OutputBoundary<DeletePersonResponseDto>
+        presenter: OutputBoundary<DeletePersonResponseDto>,
     ) {
-        val id = try {
-            PersonId(request.id)
-        } catch (e: IllegalArgumentException) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Invalid person ID: ${e.message}"))
-            return
-        }
+        val id =
+            try {
+                PersonId(request.id)
+            } catch (e: IllegalArgumentException) {
+                presenter.presentFailure(ErrorResponse.BadRequest("Invalid person ID: ${e.message}"))
+                return
+            }
 
         val person = personGateway.findById(id)
         if (person == null) {
@@ -43,7 +43,9 @@ internal class DeletePersonUseCaseImpl(
             try {
                 personAdapter.deletePerson(DeletePersonAdapterRequest(externalIds = externalIds))
             } catch (e: Exception) {
-                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete person on external API: ${e.message ?: "Unknown error"}"))
+                presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Failed to delete person on external API: ${e.message ?: "Unknown error"}"),
+                )
                 return
             }
         }
@@ -60,12 +62,12 @@ internal class DeletePersonUseCaseImpl(
                 message = AuditLogMessage("Deleted person ${id.value}"),
                 performedByUserId = UserId(request.requesterId),
                 createdAt = Instant.now(),
-            )
+            ),
         )
         presenter.present(
             DeletePersonResponseDto(
-                id = id.value
-            )
+                id = id.value,
+            ),
         )
     }
 }

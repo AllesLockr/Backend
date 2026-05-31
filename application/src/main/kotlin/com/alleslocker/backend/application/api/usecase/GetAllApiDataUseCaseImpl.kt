@@ -7,11 +7,11 @@ import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.OutputBoundary
 
 class GetAllApiDataUseCaseImpl(
-    private val apiGateway: ApiDataGateway
+    private val apiGateway: ApiDataGateway,
 ) : GetAllApiDataUseCase {
     override fun execute(
         request: Unit,
-        presenter: OutputBoundary<List<GetApiDataResponseDto>>
+        presenter: OutputBoundary<List<GetApiDataResponseDto>>,
     ) {
         try {
             val apiDataList = apiGateway.findAll()

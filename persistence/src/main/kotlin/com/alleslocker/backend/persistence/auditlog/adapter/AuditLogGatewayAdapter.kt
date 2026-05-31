@@ -14,18 +14,23 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
 @Component
-class AuditLogGatewayAdapter(private val repository: AuditLogRepository) : AuditLogGateway {
+class AuditLogGatewayAdapter(
+    private val repository: AuditLogRepository,
+) : AuditLogGateway {
     override fun getAllAuditLogsPaged(
         filter: AuditLogFilterDto,
         page: Int,
-        size: Int
+        size: Int,
     ): Page<AuditLog> {
-        val pageable = PageRequest.of(
-            page, size, Sort.by(
-                Sort.Order.desc("createdAt"),
-                Sort.Order.desc("id")
+        val pageable =
+            PageRequest.of(
+                page,
+                size,
+                Sort.by(
+                    Sort.Order.desc("createdAt"),
+                    Sort.Order.desc("id"),
+                ),
             )
-        )
         val specification = AuditLogSpecification.withFilter(filter)
         val result = repository.findAll(specification, pageable)
 
@@ -34,7 +39,7 @@ class AuditLogGatewayAdapter(private val repository: AuditLogRepository) : Audit
             totalElements = result.totalElements,
             size = result.size,
             totalPages = result.totalPages,
-            page = page
+            page = page,
         )
     }
 
@@ -47,11 +52,7 @@ class AuditLogGatewayAdapter(private val repository: AuditLogRepository) : Audit
         repository.deleteById(id.value)
     }
 
-    override fun findById(id: AuditLogId): AuditLog? {
-        return repository.findById(id.value).orElse(null)?.toDomain()
-    }
+    override fun findById(id: AuditLogId): AuditLog? = repository.findById(id.value).orElse(null)?.toDomain()
 
-    override fun exists(id: AuditLogId): Boolean {
-        return repository.existsById(id.value)
-    }
+    override fun exists(id: AuditLogId): Boolean = repository.existsById(id.value)
 }

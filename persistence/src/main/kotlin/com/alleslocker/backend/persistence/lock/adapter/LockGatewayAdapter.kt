@@ -13,10 +13,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class LockGatewayAdapter(
-    private val repository: LockRepository
+    private val repository: LockRepository,
 ) : LockGateway {
-
-    override fun getAllLocksPaged(page: Int, size: Int): Page<Lock> {
+    override fun getAllLocksPaged(
+        page: Int,
+        size: Int,
+    ): Page<Lock> {
         val pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"))
         val result = repository.findAll(pageable)
 
@@ -25,7 +27,7 @@ class LockGatewayAdapter(
             totalElements = result.totalElements,
             size = result.size,
             totalPages = result.totalPages,
-            page = page
+            page = page,
         )
     }
 
@@ -38,9 +40,7 @@ class LockGatewayAdapter(
         repository.deleteById(id.value)
     }
 
-    override fun findById(id: LockId): Lock? =
-        repository.findById(id.value).orElse(null)?.toDomain()
+    override fun findById(id: LockId): Lock? = repository.findById(id.value).orElse(null)?.toDomain()
 
-    override fun exists(id: LockId): Boolean =
-        repository.existsById(id.value)
+    override fun exists(id: LockId): Boolean = repository.existsById(id.value)
 }

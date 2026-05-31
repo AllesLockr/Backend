@@ -27,46 +27,55 @@ class UseCaseFactoryImpl(
     private val passwordHasher: PasswordHasher,
     private val logger: Logger,
 ) : UseCaseFactory {
-
     private val useCases: Map<KClass<out InputBoundary<*, *>>, InputBoundary<*, *>> =
         mapOf(
-            CreatePersonUseCase::class to CreatePersonUseCaseImpl(
-                personGateway = gatewayFactory[PersonGateway::class],
-                personAdapter = adapterFactory[PersonAdapter::class],
-                logger = logger,
-            ),
-            DeletePersonUseCase::class to DeletePersonUseCaseImpl(
-                personGateway = gatewayFactory[PersonGateway::class],
-                personAdapter = adapterFactory[PersonAdapter::class],
-                logger = logger,
-            ),
-            GetPersonsPagedUseCase::class to GetPersonsPagedUseCaseImpl(
-                personGateway = gatewayFactory[PersonGateway::class],
-            ),
-            CountPersonsUseCase::class to CountPersonsUseCaseImpl(
-                personGateway = gatewayFactory[PersonGateway::class],
-            ),
-            GetLocksPagedUseCase::class to GetLocksPagedUseCaseImpl(
-                lockGateway = gatewayFactory[LockGateway::class],
-            ),
-            RegisterUserUseCase::class to RegisterUserUseCaseImpl(
-                passwordHasher = passwordHasher,
-                userGateway = gatewayFactory[UserGateway::class]
-            ),
-            LoginUserUseCase::class to LoginUserUseCaseImpl(
-                passwordHasher = passwordHasher,
-                userGateway = gatewayFactory[UserGateway::class]
-            ),
-            AddApiDataUseCase::class to AddApiDataUseCaseImpl(
-                apiDataGateway = gatewayFactory[ApiDataGateway::class], logger = logger,
-            ),
+            CreatePersonUseCase::class to
+                CreatePersonUseCaseImpl(
+                    personGateway = gatewayFactory[PersonGateway::class],
+                    personAdapter = adapterFactory[PersonAdapter::class],
+                    logger = logger,
+                ),
+            DeletePersonUseCase::class to
+                DeletePersonUseCaseImpl(
+                    personGateway = gatewayFactory[PersonGateway::class],
+                    personAdapter = adapterFactory[PersonAdapter::class],
+                    logger = logger,
+                ),
+            GetPersonsPagedUseCase::class to
+                GetPersonsPagedUseCaseImpl(
+                    personGateway = gatewayFactory[PersonGateway::class],
+                ),
+            CountPersonsUseCase::class to
+                CountPersonsUseCaseImpl(
+                    personGateway = gatewayFactory[PersonGateway::class],
+                ),
+            GetLocksPagedUseCase::class to
+                GetLocksPagedUseCaseImpl(
+                    lockGateway = gatewayFactory[LockGateway::class],
+                ),
+            RegisterUserUseCase::class to
+                RegisterUserUseCaseImpl(
+                    passwordHasher = passwordHasher,
+                    userGateway = gatewayFactory[UserGateway::class],
+                ),
+            LoginUserUseCase::class to
+                LoginUserUseCaseImpl(
+                    passwordHasher = passwordHasher,
+                    userGateway = gatewayFactory[UserGateway::class],
+                ),
+            AddApiDataUseCase::class to
+                AddApiDataUseCaseImpl(
+                    apiDataGateway = gatewayFactory[ApiDataGateway::class],
+                    logger = logger,
+                ),
             GetImplementedApisUseCase::class to GetImplementedApisUseCaseImpl(),
             GetApiDataUseCase::class to GetApiDataUseCaseImpl(gatewayFactory[ApiDataGateway::class]),
             GetAllApiDataUseCase::class to GetAllApiDataUseCaseImpl(gatewayFactory[ApiDataGateway::class]),
-            GetAllAuditLogsPagedUseCase::class to GetAllAuditLogsPagedUseCaseImpl(
-                gatewayFactory[AuditLogGateway::class],
-                logger
-            )
+            GetAllAuditLogsPagedUseCase::class to
+                GetAllAuditLogsPagedUseCaseImpl(
+                    gatewayFactory[AuditLogGateway::class],
+                    logger,
+                ),
         )
 
     override fun <RQ, RS, I : InputBoundary<RQ, RS>> make(inputBoundary: KClass<out I>): I {

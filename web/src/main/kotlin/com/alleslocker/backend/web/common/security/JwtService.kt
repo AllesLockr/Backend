@@ -9,7 +9,7 @@ import java.util.Date
 
 @Component
 class JwtService(
-    private val jwtProperties: JwtProperties
+    private val jwtProperties: JwtProperties,
 ) {
     private val key by lazy {
         Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray())
@@ -18,7 +18,8 @@ class JwtService(
     fun generateToken(userId: String): String {
         val now = System.currentTimeMillis()
 
-        return Jwts.builder()
+        return Jwts
+            .builder()
             .setSubject(userId)
             .setIssuedAt(Date(now))
             .setExpiration(Date(now + jwtProperties.expiration))
@@ -28,13 +29,14 @@ class JwtService(
 
     fun validate(token: String) {
         try {
-            val parser = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
+            val parser =
+                Jwts
+                    .parserBuilder()
+                    .setSigningKey(key)
+                    .build()
 
             val claims = parser.parseClaimsJws(token)
             println("JWT VALIDATED OK. Claims: " + claims.body)
-
         } catch (ex: Exception) {
             println("JWT ERROR: ${ex::class.simpleName} -> ${ex.message}")
             throw ex
@@ -42,7 +44,8 @@ class JwtService(
     }
 
     fun extractUserId(token: String): String =
-        Jwts.parserBuilder()
+        Jwts
+            .parserBuilder()
             .setSigningKey(key)
             .build()
             .parseClaimsJws(token)

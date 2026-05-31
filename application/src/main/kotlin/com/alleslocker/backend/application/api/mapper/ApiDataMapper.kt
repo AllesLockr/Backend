@@ -26,6 +26,6 @@ fun ApiData.toDto(): GetApiDataResponseDto {
         baseUrl = this.baseUrl.toString(),
         apiKey = apiKey,
         apiUsername = apiUsername,
-        apiPassword = apiPassword
+        apiPassword = apiPassword,
     )
 }

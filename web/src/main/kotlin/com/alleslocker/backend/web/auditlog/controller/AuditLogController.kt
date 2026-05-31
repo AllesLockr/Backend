@@ -33,32 +33,40 @@ class AuditLogController(
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    array = ArraySchema(Schema(implementation = GetAuditLogResponseDto::class)),
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(Schema(implementation = GetAuditLogResponseDto::class)),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid page or size.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong...rip",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
 
-        ]
+        ],
     )
     @PostMapping("/all")
-    fun getAllAuditLogsPaged(@RequestBody request: GetAllAuditLogsPagedRequestDto) {
+    fun getAllAuditLogsPaged(
+        @RequestBody request: GetAllAuditLogsPagedRequestDto,
+    ) {
         val presenter = GetAllAuditLogsPagedPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetAllAuditLogsPagedUseCase::class).execute(request, presenter)
     }

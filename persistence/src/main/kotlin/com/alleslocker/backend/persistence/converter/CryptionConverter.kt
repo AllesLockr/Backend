@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy
 
 @Converter
 class CryptionConverter(
-    @Lazy private val cryptionService: CryptionService
+    @Lazy private val cryptionService: CryptionService,
 ) : AttributeConverter<String, String> {
     override fun convertToDatabaseColumn(attribute: String?): String? {
         if (attribute.isNullOrBlank()) {

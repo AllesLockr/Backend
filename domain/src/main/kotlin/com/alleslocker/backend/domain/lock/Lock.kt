@@ -2,7 +2,7 @@ package com.alleslocker.backend.domain.lock
 
 import com.alleslocker.backend.domain.api.ExternalApiIdentity
 
-data class Lock (
+data class Lock(
     val id: LockId,
     val name: LockName,
     val serialNumber: LockSerialNumber,

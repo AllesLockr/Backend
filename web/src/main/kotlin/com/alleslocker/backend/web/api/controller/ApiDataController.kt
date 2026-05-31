@@ -35,58 +35,72 @@ class ApiDataController(
     private val httpServletResponse: HttpServletResponse,
     private val jacksonConverter: MappingJackson2HttpMessageConverter,
 ) {
-
     @Operation(
-        summary = "Add new api credentials for an implemented api.", responses = [
+        summary = "Add new api credentials for an implemented api.",
+        responses = [
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = SuccessResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = SuccessResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "422",
                 description = "The 'forApi' value was not valid.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
-        ]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
     )
     @PostMapping()
-    fun addApiData(@AuthenticationPrincipal requesterId: String, @RequestBody request: AddApiDataRequestSchema) {
+    fun addApiData(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: AddApiDataRequestSchema,
+    ) {
         val presenter = AddApiDataPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(AddApiDataUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 
     @Operation(
-        summary = "Get all implemented 3rd party APIs.", responses = [
+        summary = "Get all implemented 3rd party APIs.",
+        responses = [
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = GetImplementedApisResponseDto::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetImplementedApisResponseDto::class),
+                    ),
+                ],
             ),
-        ]
+        ],
     )
     @GetMapping("/implemented")
     fun implementedApis() {
@@ -100,36 +114,46 @@ class ApiDataController(
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = GetApiDataResponseDto::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetApiDataResponseDto::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "404",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
         ],
     )
     @GetMapping("/{id}")
-    fun getApiData(@PathVariable("id") id: String) {
+    fun getApiData(
+        @PathVariable("id") id: String,
+    ) {
         val presenter = GetApiDataPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetApiDataUseCase::class).execute(IdRequest(id), presenter)
     }
@@ -140,17 +164,21 @@ class ApiDataController(
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    array = ArraySchema(schema = Schema(implementation = GetApiDataResponseDto::class))
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = GetApiDataResponseDto::class)),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
         ],
     )

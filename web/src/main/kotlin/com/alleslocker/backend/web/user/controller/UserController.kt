@@ -30,45 +30,55 @@ class UserController(
     private val useCaseFactory: UseCaseFactory,
     private val httpServletResponse: HttpServletResponse,
     private val jacksonConverter: MappingJackson2HttpMessageConverter,
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
 ) {
     @PostMapping("/auth/register")
-    fun register(@RequestBody request: RegisterUserRequestSchema) {
+    fun register(
+        @RequestBody request: RegisterUserRequestSchema,
+    ) {
         val presenter = RegisterUserPresenter(httpServletResponse, jacksonConverter, jwtService)
         useCaseFactory.make(RegisterUserUseCase::class).execute(request.toDto(), presenter)
     }
 
-
     @Operation(
-        summary = "Login a user.", responses = [
+        summary = "Login a user.",
+        responses = [
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = LoginUserResponseSchema::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = LoginUserResponseSchema::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "The username was not found.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid username or password.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
-        ]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
     )
     @PostMapping("/auth/login")
-    fun login(@RequestBody request: LoginUserRequestSchema) {
+    fun login(
+        @RequestBody request: LoginUserRequestSchema,
+    ) {
         val presenter = LoginUserPresenter(httpServletResponse, jacksonConverter, jwtService)
         useCaseFactory.make(LoginUserUseCase::class).execute(request.toDto(), presenter)
     }

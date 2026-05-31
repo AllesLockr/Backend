@@ -4,5 +4,5 @@ data class Role(
     val id: RoleId,
     val name: RoleName,
     val description: RoleDescription,
-    val color: RoleColor
+    val color: RoleColor,
 )

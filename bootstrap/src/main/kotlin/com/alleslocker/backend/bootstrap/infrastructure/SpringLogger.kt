@@ -8,16 +8,18 @@ import org.springframework.stereotype.Component
 import org.slf4j.Logger as Slf4jLogger
 
 @Component
-class SpringLogger(private val gateway: AuditLogGateway) : Logger {
-
+class SpringLogger(
+    private val gateway: AuditLogGateway,
+) : Logger {
     private fun log(): Slf4jLogger {
-        val callerClassName = StackWalker.getInstance().walk { stream ->
-            stream
-                .map { it.className }
-                .filter { name -> name != SpringLogger::class.java.name && !name.startsWith("kotlin.") }
-                .findFirst()
-                .orElse(SpringLogger::class.java.name)
-        }
+        val callerClassName =
+            StackWalker.getInstance().walk { stream ->
+                stream
+                    .map { it.className }
+                    .filter { name -> name != SpringLogger::class.java.name && !name.startsWith("kotlin.") }
+                    .findFirst()
+                    .orElse(SpringLogger::class.java.name)
+            }
         return LoggerFactory.getLogger(callerClassName)
     }
 
@@ -25,7 +27,10 @@ class SpringLogger(private val gateway: AuditLogGateway) : Logger {
         log().info(message)
     }
 
-    override fun error(message: String, throwable: Throwable?) {
+    override fun error(
+        message: String,
+        throwable: Throwable?,
+    ) {
         log().error(message, throwable)
     }
 

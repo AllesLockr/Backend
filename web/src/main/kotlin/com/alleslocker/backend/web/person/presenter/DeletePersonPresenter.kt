@@ -10,12 +10,11 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 internal class DeletePersonPresenter(
     httpServletResponse: HttpServletResponse,
-    jacksonConverter: MappingJackson2HttpMessageConverter
+    jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : JsonRestPresenter<DeletePersonResponseDto>(httpServletResponse, jacksonConverter) {
-
     override fun present(response: DeletePersonResponseDto) {
         DeletePersonResponseSchema(
-            response.id
+            response.id,
         ).presentAsJson(HttpStatus.OK)
     }
 

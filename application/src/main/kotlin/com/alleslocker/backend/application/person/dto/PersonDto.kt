@@ -8,5 +8,5 @@ data class PersonDto(
     val lastname: String,
     val email: String,
     val apiIdentities: Set<ExternalApiIdentityDto> = emptySet(),
-    //TODO: Add roles
+    // TODO: Add roles
 )

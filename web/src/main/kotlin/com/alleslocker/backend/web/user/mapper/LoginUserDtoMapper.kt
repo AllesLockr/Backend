@@ -7,7 +7,8 @@ import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.RegisterUserRequestSchema
 import com.alleslocker.backend.web.user.schema.response.RegisterUserResponseSchema
 
-fun LoginUserRequestSchema.toDto() = LoginUserRequestDto(
-    username = this.username,
-    password = this.password
-)
+fun LoginUserRequestSchema.toDto() =
+    LoginUserRequestDto(
+        username = this.username,
+        password = this.password,
+    )

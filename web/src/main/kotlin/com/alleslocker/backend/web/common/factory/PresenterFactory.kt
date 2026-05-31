@@ -13,8 +13,9 @@ internal class PresenterFactory(
     private val jacksonConverter: MappingJackson2HttpMessageConverter,
 ) {
     fun <P : JsonRestPresenter<*>> make(presenter: KClass<P>): P {
-        val ctor = presenter.primaryConstructor
-            ?: throw IllegalArgumentException("No primary constructor found for presenter: $presenter")
+        val ctor =
+            presenter.primaryConstructor
+                ?: throw IllegalArgumentException("No primary constructor found for presenter: $presenter")
 
         return ctor.call(httpServletResponse, jacksonConverter)
     }
