@@ -7,7 +7,7 @@ import com.alleslocker.backend.domain.api.AvailableApis
 class GetImplementedApisUseCaseImpl : GetImplementedApisUseCase {
     override fun execute(
         request: Unit,
-        presenter: OutputBoundary<GetImplementedApisResponseDto>
+        presenter: OutputBoundary<GetImplementedApisResponseDto>,
     ) {
         val response = GetImplementedApisResponseDto(apis = AvailableApis.entries.map { it.name })
         presenter.present(response)

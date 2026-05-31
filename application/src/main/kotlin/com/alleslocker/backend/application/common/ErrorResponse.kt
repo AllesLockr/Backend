@@ -1,10 +1,29 @@
 package com.alleslocker.backend.application.common
 
-sealed class ErrorResponse(val message: String) {
-    class NotFound(message: String) : ErrorResponse(message)
-    class Unauthorized(message: String) : ErrorResponse(message)
-    class BadRequest(message: String) : ErrorResponse(message)
-    class AlreadyExists(message: String) : ErrorResponse(message)
-    class InternalServerError(message: String) : ErrorResponse(message)
-    class UnprocessableEntity(message: String) : ErrorResponse(message)
+sealed class ErrorResponse(
+    val message: String,
+) {
+    class NotFound(
+        message: String,
+    ) : ErrorResponse(message)
+
+    class Unauthorized(
+        message: String,
+    ) : ErrorResponse(message)
+
+    class BadRequest(
+        message: String,
+    ) : ErrorResponse(message)
+
+    class AlreadyExists(
+        message: String,
+    ) : ErrorResponse(message)
+
+    class InternalServerError(
+        message: String,
+    ) : ErrorResponse(message)
+
+    class UnprocessableEntity(
+        message: String,
+    ) : ErrorResponse(message)
 }

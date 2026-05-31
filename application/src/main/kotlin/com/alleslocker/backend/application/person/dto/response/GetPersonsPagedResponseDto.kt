@@ -4,5 +4,5 @@ import com.alleslocker.backend.application.common.model.Page
 import com.alleslocker.backend.application.person.dto.PersonDto
 
 data class GetPersonsPagedResponseDto(
-    val page: Page<PersonDto>
+    val page: Page<PersonDto>,
 )

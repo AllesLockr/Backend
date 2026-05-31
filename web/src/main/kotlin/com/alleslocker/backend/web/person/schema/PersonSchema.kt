@@ -8,5 +8,5 @@ data class PersonSchema(
     val lastname: String,
     val email: String,
     val apiIdentities: Set<ExternalApiIdentitySchema>,
-    //TODO: Add roles
+    // TODO: Add roles
 )

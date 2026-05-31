@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserGatewayAdapter(
-    private val repository: UserRepository
+    private val repository: UserRepository,
 ) : UserGateway {
-
     override fun save(entity: User): User {
         val existing = repository.findById(entity.id.value).orElse(null)
         return repository.save(entity.toEntity(existing)).toDomain()
@@ -22,12 +21,9 @@ class UserGatewayAdapter(
         repository.deleteById(id.value)
     }
 
-    override fun findById(id: UserId): User? =
-        repository.findById(id.value).orElse(null)?.toDomain()
+    override fun findById(id: UserId): User? = repository.findById(id.value).orElse(null)?.toDomain()
 
-    override fun exists(id: UserId): Boolean =
-        repository.existsById(id.value)
+    override fun exists(id: UserId): Boolean = repository.existsById(id.value)
 
-    override fun findByUsername(username: String): User? =
-        repository.findByUsername(username)?.toDomain()
+    override fun findByUsername(username: String): User? = repository.findByUsername(username)?.toDomain()
 }

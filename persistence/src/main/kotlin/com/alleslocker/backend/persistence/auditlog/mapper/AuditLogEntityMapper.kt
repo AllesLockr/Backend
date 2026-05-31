@@ -7,12 +7,13 @@ import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.persistence.auditlog.entity.AuditLogEntity
 import com.alleslocker.backend.persistence.user.entity.UserEntity
 
-fun AuditLogEntity.toDomain(): AuditLog = AuditLog(
-    id = AuditLogId(id),
-    message = AuditLogMessage(message),
-    performedByUserId = UserId(this.performedBy.id),
-    createdAt = createdAt
-)
+fun AuditLogEntity.toDomain(): AuditLog =
+    AuditLog(
+        id = AuditLogId(id),
+        message = AuditLogMessage(message),
+        performedByUserId = UserId(this.performedBy.id),
+        createdAt = createdAt,
+    )
 
 fun AuditLog.toEntity(existing: AuditLogEntity? = null): AuditLogEntity {
     val entity = existing ?: AuditLogEntity()

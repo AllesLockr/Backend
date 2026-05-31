@@ -1,9 +1,11 @@
 package com.alleslocker.backend.domain.auditlog
 
-import java.util.*
+import java.util.UUID
 
 @JvmInline
-value class AuditLogId(val value: String) {
+value class AuditLogId(
+    val value: String,
+) {
     init {
         require(value.isNotBlank()) { "AuditLogId cannot be blank" }
     }

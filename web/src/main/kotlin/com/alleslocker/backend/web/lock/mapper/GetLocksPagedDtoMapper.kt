@@ -6,11 +6,13 @@ import com.alleslocker.backend.web.common.mapper.toSchema
 import com.alleslocker.backend.web.lock.schema.request.GetLocksPagedRequestSchema
 import com.alleslocker.backend.web.lock.schema.response.GetLocksPagedResponseSchema
 
-fun GetLocksPagedRequestSchema.toDto() = GetLocksPagedRequestDto(
-    page = this.page,
-    size = this.size,
-)
+fun GetLocksPagedRequestSchema.toDto() =
+    GetLocksPagedRequestDto(
+        page = this.page,
+        size = this.size,
+    )
 
-fun GetLocksPagedResponseDto.toSchema() = GetLocksPagedResponseSchema(
-    page = this.page.toSchema { it.toSchema() }
-)
+fun GetLocksPagedResponseDto.toSchema() =
+    GetLocksPagedResponseSchema(
+        page = this.page.toSchema { it.toSchema() },
+    )

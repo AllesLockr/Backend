@@ -10,9 +10,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 internal class GetLocksPagedPresenter(
     httpServletResponse: HttpServletResponse,
-    jacksonConverter: MappingJackson2HttpMessageConverter
+    jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : JsonRestPresenter<GetLocksPagedResponseDto>(httpServletResponse, jacksonConverter) {
-
     override fun present(response: GetLocksPagedResponseDto) {
         response.toSchema().presentAsJson(HttpStatus.OK)
     }

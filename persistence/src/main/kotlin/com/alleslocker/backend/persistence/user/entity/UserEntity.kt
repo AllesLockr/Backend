@@ -8,7 +8,6 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "user")
 open class UserEntity {
-
     @Id
     @Column(name = "id", nullable = false, unique = true)
     open lateinit var id: String

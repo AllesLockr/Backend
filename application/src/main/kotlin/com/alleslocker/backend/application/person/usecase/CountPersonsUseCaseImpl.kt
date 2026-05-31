@@ -7,18 +7,19 @@ import com.alleslocker.backend.application.person.dto.response.CountPersonsRespo
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 
 internal class CountPersonsUseCaseImpl(
-    private val personGateway: PersonGateway
+    private val personGateway: PersonGateway,
 ) : CountPersonsUseCase {
     override fun execute(
         request: CountPersonsRequestDto,
-        presenter: OutputBoundary<CountPersonsResponseDto>
+        presenter: OutputBoundary<CountPersonsResponseDto>,
     ) {
-        val count = try {
-            personGateway.count()
-        } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to count persons: ${e.message ?: "Unknown error"}"))
-            return
-        }
+        val count =
+            try {
+                personGateway.count()
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to count persons: ${e.message ?: "Unknown error"}"))
+                return
+            }
 
         presenter.present(CountPersonsResponseDto(count))
     }

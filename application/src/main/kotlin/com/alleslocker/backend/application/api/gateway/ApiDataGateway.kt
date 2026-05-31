@@ -7,5 +7,6 @@ import com.alleslocker.backend.domain.api.AvailableApis
 
 interface ApiDataGateway : ReadWriteGateway<ApiData, ApiId> {
     fun findByForApi(forApi: AvailableApis): ApiData?
+
     fun findAll(): List<ApiData>
 }

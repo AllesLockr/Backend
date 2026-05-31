@@ -8,7 +8,9 @@ import com.alleslocker.backend.application.common.IdRequest
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.domain.api.ApiId
 
-class GetApiDataUseCaseImpl(private val apiDataGateway: ApiDataGateway) : GetApiDataUseCase {
+class GetApiDataUseCaseImpl(
+    private val apiDataGateway: ApiDataGateway,
+) : GetApiDataUseCase {
     override fun execute(
         request: IdRequest,
         presenter: OutputBoundary<GetApiDataResponseDto>,

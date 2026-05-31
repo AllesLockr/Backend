@@ -9,12 +9,11 @@ import com.alleslocker.backend.application.user.gateway.UserGateway
 
 internal class LoginUserUseCaseImpl(
     private val passwordHasher: PasswordHasher,
-    private val userGateway: UserGateway
+    private val userGateway: UserGateway,
 ) : LoginUserUseCase {
-
     override fun execute(
         request: LoginUserRequestDto,
-        presenter: OutputBoundary<LoginUserResponseDto>
+        presenter: OutputBoundary<LoginUserResponseDto>,
     ) {
         val user = userGateway.findByUsername(request.username)
         if (user == null) {
@@ -29,8 +28,8 @@ internal class LoginUserUseCaseImpl(
 
         presenter.present(
             LoginUserResponseDto(
-                user.id.value
-            )
+                user.id.value,
+            ),
         )
     }
 }

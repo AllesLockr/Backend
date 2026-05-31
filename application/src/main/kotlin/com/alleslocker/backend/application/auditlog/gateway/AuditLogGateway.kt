@@ -10,6 +10,6 @@ interface AuditLogGateway : ReadWriteGateway<AuditLog, AuditLogId> {
     fun getAllAuditLogsPaged(
         filter: AuditLogFilterDto,
         page: Int,
-        size: Int
+        size: Int,
     ): Page<AuditLog>
 }

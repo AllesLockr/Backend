@@ -10,13 +10,12 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
 ) : OncePerRequestFilter() {
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val header = request.getHeader("Authorization")
         if (header == null || !header.startsWith("Bearer ")) {
@@ -30,16 +29,16 @@ class JwtAuthenticationFilter(
             jwtService.validate(token)
             val userId = jwtService.extractUserId(token)
 
-            val auth = UsernamePasswordAuthenticationToken(
-                userId,
-                null,
-                emptyList()
-            )
+            val auth =
+                UsernamePasswordAuthenticationToken(
+                    userId,
+                    null,
+                    emptyList(),
+                )
 
             val context = SecurityContextHolder.createEmptyContext()
             context.authentication = auth
             SecurityContextHolder.setContext(context)
-
         } catch (_: Exception) {
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.writer.write("""{"message":"Invalid or expired token"}""")

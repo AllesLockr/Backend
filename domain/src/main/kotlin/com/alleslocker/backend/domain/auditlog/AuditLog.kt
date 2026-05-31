@@ -7,5 +7,5 @@ data class AuditLog(
     val id: AuditLogId,
     val message: AuditLogMessage,
     val performedByUserId: UserId,
-    val createdAt: Instant
+    val createdAt: Instant,
 )

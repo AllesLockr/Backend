@@ -6,5 +6,5 @@ data class AddApiDataRequestDto(
     val baseUrl: String,
     val apiKey: String?,
     val apiUsername: String?,
-    val apiPassword: String?
+    val apiPassword: String?,
 )

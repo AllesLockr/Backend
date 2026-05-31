@@ -5,5 +5,5 @@ import java.time.Instant
 data class AuditLogFilterDto(
     val fromDate: Instant? = null,
     val toDate: Instant? = null,
-    val performedByUserId: String? = null
+    val performedByUserId: String? = null,
 )

@@ -9,11 +9,11 @@ import com.alleslocker.backend.application.person.mapper.toDto
 import com.alleslocker.backend.domain.person.Person
 
 internal class GetPersonsPagedUseCaseImpl(
-    private val personGateway: PersonGateway
+    private val personGateway: PersonGateway,
 ) : GetPersonsPagedUseCase {
     override fun execute(
         request: GetPersonsPagedRequestDto,
-        presenter: OutputBoundary<GetPersonsPagedResponseDto>
+        presenter: OutputBoundary<GetPersonsPagedResponseDto>,
     ) {
         if (request.page < 0) {
             presenter.presentFailure(ErrorResponse.BadRequest("Page must be 0 or greater"))
@@ -25,21 +25,22 @@ internal class GetPersonsPagedUseCaseImpl(
             return
         }
 
-        val page = try {
-            personGateway.getAllPersonsPaged(
-                filter = request.filter,
-                page = request.page,
-                size = request.size
-            )
-        } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load persons: ${e.message ?: "Unknown error"}"))
-            return
-        }
+        val page =
+            try {
+                personGateway.getAllPersonsPaged(
+                    filter = request.filter,
+                    page = request.page,
+                    size = request.size,
+                )
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load persons: ${e.message ?: "Unknown error"}"))
+                return
+            }
 
         presenter.present(
             GetPersonsPagedResponseDto(
-                page.map { it.toDto() }
-            )
+                page.map { it.toDto() },
+            ),
         )
     }
 }

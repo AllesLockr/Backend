@@ -18,7 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 open class WebSecurityConfig(
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
 ) {
     @Bean
     open fun corsConfigurationSource(props: CorsProperties): CorsConfigurationSource {
@@ -34,14 +34,11 @@ open class WebSecurityConfig(
     }
 
     @Bean
-    open fun userDetailsService(): UserDetailsService {
-        return InMemoryUserDetailsManager()
-    }
+    open fun userDetailsService(): UserDetailsService = InMemoryUserDetailsManager()
 
     @Bean
-    open fun authenticationManager(authentication: AuthenticationConfiguration): AuthenticationManager {
-        return authentication.authenticationManager
-    }
+    open fun authenticationManager(authentication: AuthenticationConfiguration): AuthenticationManager =
+        authentication.authenticationManager
 
     @Bean
     open fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -50,8 +47,7 @@ open class WebSecurityConfig(
             .csrf { it.disable() }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
-            .authorizeHttpRequests {
+            }.authorizeHttpRequests {
                 it
                     .requestMatchers(
                         "/api/v1/user/auth/login",
@@ -59,13 +55,13 @@ open class WebSecurityConfig(
                         "/swagger-ui/*",
                         "/v3/api-docs/**",
                     ).permitAll()
-                    .anyRequest().authenticated()
-            }
-            .httpBasic { it.disable() }
+                    .anyRequest()
+                    .authenticated()
+            }.httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilterBefore(
                 jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter::class.java
+                UsernamePasswordAuthenticationFilter::class.java,
             )
 
         return http.build()

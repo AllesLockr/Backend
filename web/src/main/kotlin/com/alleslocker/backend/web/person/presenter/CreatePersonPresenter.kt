@@ -10,12 +10,11 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 internal class CreatePersonPresenter(
     httpServletResponse: HttpServletResponse,
-    jacksonConverter: MappingJackson2HttpMessageConverter
+    jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : JsonRestPresenter<CreatePersonResponseDto>(httpServletResponse, jacksonConverter) {
-
     override fun present(response: CreatePersonResponseDto) {
         CreatePersonResponseSchema(
-            response.id
+            response.id,
         ).presentAsJson(HttpStatus.CREATED)
     }
 
@@ -26,5 +25,4 @@ internal class CreatePersonPresenter(
             else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-
 }

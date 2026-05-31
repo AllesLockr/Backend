@@ -25,40 +25,47 @@ import org.springframework.web.bind.annotation.RestController
 class LockController(
     private val useCaseFactory: UseCaseFactory,
     private val httpServletResponse: HttpServletResponse,
-    private val jacksonConverter: MappingJackson2HttpMessageConverter
+    private val jacksonConverter: MappingJackson2HttpMessageConverter,
 ) {
-
     @Operation(
         summary = "Get all locks paginated.",
         responses = [
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = GetLocksPagedResponseSchema::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetLocksPagedResponseSchema::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid page or size.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong...rip",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
-        ]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
     )
     @PostMapping("/all")
-    fun getLocksPaged(@RequestBody request: GetLocksPagedRequestSchema) {
+    fun getLocksPaged(
+        @RequestBody request: GetLocksPagedRequestSchema,
+    ) {
         val presenter = GetLocksPagedPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetLocksPagedUseCase::class).execute(request.toDto(), presenter)
     }

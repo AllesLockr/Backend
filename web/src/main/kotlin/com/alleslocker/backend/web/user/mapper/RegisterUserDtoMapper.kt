@@ -5,7 +5,8 @@ import com.alleslocker.backend.application.user.dto.response.RegisterUserRespons
 import com.alleslocker.backend.web.user.schema.request.RegisterUserRequestSchema
 import com.alleslocker.backend.web.user.schema.response.RegisterUserResponseSchema
 
-fun RegisterUserRequestSchema.toDto() = RegisterUserRequestDto(
-    username = this.username,
-    password = this.password
-)
+fun RegisterUserRequestSchema.toDto() =
+    RegisterUserRequestDto(
+        username = this.username,
+        password = this.password,
+    )

@@ -3,7 +3,8 @@ package com.alleslocker.backend.web.person.mapper
 import com.alleslocker.backend.application.person.dto.request.DeletePersonRequestDto
 import com.alleslocker.backend.web.person.schema.request.DeletePersonRequestSchema
 
-fun DeletePersonRequestSchema.toDto(requesterId: String) = DeletePersonRequestDto(
-    requesterId = requesterId,
-    id = this.id
-)
+fun DeletePersonRequestSchema.toDto(requesterId: String) =
+    DeletePersonRequestDto(
+        requesterId = requesterId,
+        id = this.id,
+    )

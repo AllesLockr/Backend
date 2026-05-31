@@ -21,12 +21,12 @@ import com.alleslocker.backend.web.person.schema.response.DeletePersonResponseSc
 import com.alleslocker.backend.web.person.schema.response.GetPersonsPagedResponseSchema
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
-import org.springframework.security.core.annotation.AuthenticationPrincipal
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -39,48 +39,58 @@ import org.springframework.web.bind.annotation.RestController
 class PersonController(
     private val useCaseFactory: UseCaseFactory,
     private val httpServletResponse: HttpServletResponse,
-    private val jacksonConverter: MappingJackson2HttpMessageConverter
+    private val jacksonConverter: MappingJackson2HttpMessageConverter,
 ) {
-
     @Operation(
         summary = "Create a new person that can be assigned to locks, roles, etc.",
         responses = [
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = CreatePersonResponseSchema::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = CreatePersonResponseSchema::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "409",
                 description = "The email is already taken.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid email, first name or last name.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong...rip",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
-        ]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
     )
     @PostMapping("/create")
-    fun createPerson(@AuthenticationPrincipal requesterId: String, @RequestBody request: CreatePersonRequestSchema) {
+    fun createPerson(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: CreatePersonRequestSchema,
+    ) {
         val presenter = CreatePersonPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(CreatePersonUseCase::class).execute(request.toDto(requesterId), presenter)
     }
@@ -91,39 +101,50 @@ class PersonController(
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = DeletePersonResponseSchema::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = DeletePersonResponseSchema::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "Person not found.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Not a valid person id.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong...rip",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
-        ]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
     )
     @PostMapping("/delete")
-    fun deletePerson(@AuthenticationPrincipal requesterId: String, @RequestBody request: DeletePersonRequestSchema) {
+    fun deletePerson(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: DeletePersonRequestSchema,
+    ) {
         val presenter = DeletePersonPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(DeletePersonUseCase::class).execute(request.toDto(requesterId), presenter)
     }
@@ -134,33 +155,39 @@ class PersonController(
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = GetPersonsPagedResponseSchema::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetPersonsPagedResponseSchema::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid page or size.",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong...rip",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
 
-        ]
+        ],
     )
     @PostMapping("/all")
     fun getPersonsPaged(
-        @RequestBody request: GetPersonsPagedRequestSchema
+        @RequestBody request: GetPersonsPagedRequestSchema,
     ) {
         val presenter = GetPersonsPagedPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetPersonsPagedUseCase::class).execute(request.toDto(), presenter)
@@ -172,20 +199,24 @@ class PersonController(
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = CountPersonsResponseSchema::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = CountPersonsResponseSchema::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong...rip",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponse::class)
-                )]
-            )
-        ]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
     )
     @GetMapping("/count")
     fun getPersonsCount() {

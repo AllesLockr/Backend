@@ -11,7 +11,6 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "locks")
 open class LockEntity {
-
     @Id
     @Column(name = "id", nullable = false, unique = true)
     open lateinit var id: String

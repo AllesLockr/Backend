@@ -17,25 +17,23 @@ import org.springframework.stereotype.Component
 internal class PersonAdapterImpl(
     private val restClient: GenericRestClient,
     private val tokenProvider: IseoTokenProvider,
-    private val configProvider: ConfigProvider
+    private val configProvider: ConfigProvider,
 ) : PersonAdapter {
-
     private val iMoqClient: PersonClient = IMoqPersonClientImpl(restClient)
     private val assaClient: PersonClient = AssaPersonClientImpl(restClient)
     private val iseoClient: PersonClient = IseoPersonClientImpl(restClient, tokenProvider, configProvider)
 
     override fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse {
         val merged = mutableMapOf<AvailableApis, String>()
-        /* iMoqClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value } */
-        /* assaClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value } */
+        // iMoqClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value }
+        // assaClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value }
         iseoClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value }
         return AddPersonAdapterResponse(externalIds = merged)
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
-        /* iMoqClient.deletePerson(request) */
-        /* assaClient.deletePerson(request) */
+        // iMoqClient.deletePerson(request)
+        // assaClient.deletePerson(request)
         iseoClient.deletePerson(request)
     }
-
 }

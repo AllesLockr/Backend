@@ -1,9 +1,11 @@
 package com.alleslocker.backend.domain.role
 
-import java.util.*
+import java.util.UUID
 
 @JvmInline
-value class RoleId(val value: String) {
+value class RoleId(
+    val value: String,
+) {
     init {
         require(value.isNotBlank()) { "RoleId cannot be blank" }
     }

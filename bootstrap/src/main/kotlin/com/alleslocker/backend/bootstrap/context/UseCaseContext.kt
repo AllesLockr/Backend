@@ -16,11 +16,12 @@ internal open class UseCaseContext {
         gatewayFactory: GatewayFactory,
         adapterFactory: AdapterFactory,
         passwordHasher: PasswordHasher,
-        logger: Logger
-    ): UseCaseFactory = UseCaseFactoryImpl(
-        gatewayFactory,
-        adapterFactory,
-        passwordHasher,
-        logger
-    )
+        logger: Logger,
+    ): UseCaseFactory =
+        UseCaseFactoryImpl(
+            gatewayFactory,
+            adapterFactory,
+            passwordHasher,
+            logger,
+        )
 }

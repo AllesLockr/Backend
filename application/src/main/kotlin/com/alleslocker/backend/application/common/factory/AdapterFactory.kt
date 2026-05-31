@@ -5,5 +5,6 @@ import kotlin.reflect.KClass
 
 interface AdapterFactory {
     fun <T : Adapter> make(adapter: KClass<out T>): T
+
     operator fun <T : Adapter> get(adapter: KClass<out T>) = make(adapter)
 }

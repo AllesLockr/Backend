@@ -11,21 +11,23 @@ import java.io.IOException
 
 internal abstract class JsonRestPresenter<R>(
     private val httpServletResponse: HttpServletResponse,
-    private val jacksonConverter: MappingJackson2HttpMessageConverter
+    private val jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : OutputBoundary<R> {
-
     fun Any.presentAsJson(status: HttpStatus = HttpStatus.OK) {
         writeJson(this, status)
     }
 
-    private fun writeJson(obj: Any, status: HttpStatus) {
+    private fun writeJson(
+        obj: Any,
+        status: HttpStatus,
+    ) {
         val outputMessage = DelegatingServerHttpResponse(ServletServerHttpResponse(httpServletResponse))
         httpServletResponse.status = status.value()
         try {
             jacksonConverter.write(
                 obj,
                 MediaType.APPLICATION_JSON,
-                outputMessage
+                outputMessage,
             )
         } catch (e: IOException) {
             throw RuntimeException(e)

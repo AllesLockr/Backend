@@ -4,5 +4,5 @@ data class GetAuditLogResponseDto(
     val id: String,
     val message: String,
     val performedByUserId: String,
-    val createdAt: String
+    val createdAt: String,
 )
