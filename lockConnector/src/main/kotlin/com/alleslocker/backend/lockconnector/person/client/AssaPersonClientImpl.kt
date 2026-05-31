@@ -17,7 +17,7 @@ class AssaPersonClientImpl(private val restClient: GenericRestClient) : PersonCl
         restClient.post("http://localhost:8067/user", transformedRequest)
 
         //TODO assa only saves ids. Save the response with the id in our db
-        return AddPersonAdapterResponse(id = null)
+        return AddPersonAdapterResponse(externalIds = emptyMap())
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {

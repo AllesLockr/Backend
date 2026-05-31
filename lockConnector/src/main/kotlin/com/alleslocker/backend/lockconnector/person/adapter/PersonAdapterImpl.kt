@@ -4,6 +4,7 @@ import com.alleslocker.backend.application.person.adapter.PersonAdapter
 import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
+import com.alleslocker.backend.domain.api.AvailableApis
 import com.alleslocker.backend.lockconnector.iseo.client.IseoTokenProvider
 import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.person.client.AssaPersonClientImpl
@@ -24,13 +25,16 @@ internal class PersonAdapterImpl(
     private val iseoClient: PersonClient = IseoPersonClientImpl(restClient, tokenProvider, configProvider)
 
     override fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse {
-
-       /* iMoqClient.addPerson(request)*/
-        /*assaClient.addPerson(request)*/
-        return iseoClient.addPerson(request)
+        val merged = mutableMapOf<AvailableApis, String>()
+        /* iMoqClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value } */
+        /* assaClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value } */
+        iseoClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value }
+        return AddPersonAdapterResponse(externalIds = merged)
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
+        /* iMoqClient.deletePerson(request) */
+        /* assaClient.deletePerson(request) */
         iseoClient.deletePerson(request)
     }
 

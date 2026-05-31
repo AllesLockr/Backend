@@ -7,11 +7,20 @@ import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonA
 import com.alleslocker.backend.application.person.dto.request.CreatePersonRequestDto
 import com.alleslocker.backend.application.person.dto.response.CreatePersonResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway
+import com.alleslocker.backend.domain.api.ExternalApiIdentity
+import com.alleslocker.backend.domain.api.ExternalId
+import com.alleslocker.backend.application.common.Logger
+import com.alleslocker.backend.domain.auditlog.AuditLog
+import com.alleslocker.backend.domain.auditlog.AuditLogId
+import com.alleslocker.backend.domain.auditlog.AuditLogMessage
 import com.alleslocker.backend.domain.person.*
+import com.alleslocker.backend.domain.user.UserId
+import java.time.Instant
 
 internal class CreatePersonUseCaseImpl(
     private val personGateway: PersonGateway,
-    private val personAdapter: PersonAdapter
+    private val personAdapter: PersonAdapter,
+    private val logger: Logger,
 ) : CreatePersonUseCase {
 
     override fun execute(
@@ -72,22 +81,38 @@ internal class CreatePersonUseCaseImpl(
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to send to API: ${e.message ?: "Unknown error"}"))
             return
         }
-        val apiId = adapterResponse.id
-        if (apiId == null) {
+        val apiIdentities = try {
+            adapterResponse.externalIds
+                .map { (api, id) -> ExternalApiIdentity(api, ExternalId(id)) }
+                .toSet()
+        } catch (e: IllegalArgumentException) {
             personGateway.deleteById(saved.id)
-            presenter.presentFailure(ErrorResponse.InternalServerError("External API did not return person with id"))
+            presenter.presentFailure(ErrorResponse.InternalServerError("External API returned invalid person IDs"))
             return
         }
-
+        if (apiIdentities.isEmpty()) {
+            personGateway.deleteById(saved.id)
+            presenter.presentFailure(ErrorResponse.InternalServerError("External API did not return any person IDs"))
+            return
+        }
 
         try {
-            personGateway.save(saved.copy(apiId = apiId))
+            personGateway.save(saved.copy(apiIdentities = apiIdentities))
         } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save API ID: ${e.message ?: "Unknown error"}"))
+            personGateway.deleteById(saved.id)
+            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save external IDs"))
             return
         }
 
 
+        logger.audit(
+            AuditLog(
+                id = AuditLogId.generate(),
+                message = AuditLogMessage("Created person ${saved.id.value} (${firstname.value} ${lastname.value})"),
+                performedByUserId = UserId(request.requesterId),
+                createdAt = Instant.now(),
+            )
+        )
         presenter.present(
             CreatePersonResponseDto(
                 id = saved.id.value

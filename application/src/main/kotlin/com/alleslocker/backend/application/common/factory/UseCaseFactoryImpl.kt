@@ -8,6 +8,9 @@ import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPaged
 import com.alleslocker.backend.application.common.InputBoundary
 import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.security.PasswordHasher
+import com.alleslocker.backend.application.lock.gateway.LockGateway
+import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
+import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCaseImpl
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.application.person.usecase.*
@@ -29,17 +32,22 @@ class UseCaseFactoryImpl(
         mapOf(
             CreatePersonUseCase::class to CreatePersonUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
-                personAdapter = adapterFactory[PersonAdapter::class]
+                personAdapter = adapterFactory[PersonAdapter::class],
+                logger = logger,
             ),
             DeletePersonUseCase::class to DeletePersonUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
-                personAdapter = adapterFactory[PersonAdapter::class]
+                personAdapter = adapterFactory[PersonAdapter::class],
+                logger = logger,
             ),
             GetPersonsPagedUseCase::class to GetPersonsPagedUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
             ),
             CountPersonsUseCase::class to CountPersonsUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
+            ),
+            GetLocksPagedUseCase::class to GetLocksPagedUseCaseImpl(
+                lockGateway = gatewayFactory[LockGateway::class],
             ),
             RegisterUserUseCase::class to RegisterUserUseCaseImpl(
                 passwordHasher = passwordHasher,

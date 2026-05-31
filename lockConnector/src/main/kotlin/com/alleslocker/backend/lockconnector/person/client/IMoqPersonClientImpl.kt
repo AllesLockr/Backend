@@ -22,7 +22,7 @@ class IMoqPersonClientImpl(private val restClient: GenericRestClient) : PersonCl
         )
 
         restClient.post("http://localhost:8089/api/v2/users", transformedRequest)
-        return AddPersonAdapterResponse(id = null)
+        return AddPersonAdapterResponse(externalIds = emptyMap())
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
