@@ -1,6 +1,11 @@
 package com.alleslocker.backend.persistence.api.mapper
 
-import com.alleslocker.backend.domain.api.*
+import com.alleslocker.backend.domain.api.ApiAuthentication
+import com.alleslocker.backend.domain.api.ApiData
+import com.alleslocker.backend.domain.api.ApiId
+import com.alleslocker.backend.domain.api.ApiPassword
+import com.alleslocker.backend.domain.api.ApiUsername
+import com.alleslocker.backend.domain.api.AvailableApis
 import com.alleslocker.backend.persistence.api.entity.ApiDataEntity
 import java.net.URI
 

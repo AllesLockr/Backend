@@ -1,6 +1,6 @@
 package com.alleslocker.backend.domain.person
 
-import java.util.*
+import java.util.UUID
 
 @JvmInline
 value class PersonId(

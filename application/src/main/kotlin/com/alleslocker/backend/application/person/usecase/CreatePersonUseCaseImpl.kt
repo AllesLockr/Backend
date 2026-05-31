@@ -13,7 +13,11 @@ import com.alleslocker.backend.domain.api.ExternalId
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
 import com.alleslocker.backend.domain.auditlog.AuditLogMessage
-import com.alleslocker.backend.domain.person.*
+import com.alleslocker.backend.domain.person.Person
+import com.alleslocker.backend.domain.person.PersonEmail
+import com.alleslocker.backend.domain.person.PersonFirstname
+import com.alleslocker.backend.domain.person.PersonId
+import com.alleslocker.backend.domain.person.PersonLastname
 import com.alleslocker.backend.domain.user.UserId
 import java.time.Instant
 

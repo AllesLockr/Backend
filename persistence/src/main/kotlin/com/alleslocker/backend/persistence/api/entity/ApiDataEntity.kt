@@ -1,7 +1,11 @@
 package com.alleslocker.backend.persistence.api.entity
 
 import com.alleslocker.backend.persistence.converter.CryptionConverter
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Convert
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "api_data")

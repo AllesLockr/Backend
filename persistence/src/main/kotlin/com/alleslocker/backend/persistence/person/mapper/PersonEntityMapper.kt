@@ -2,7 +2,11 @@ package com.alleslocker.backend.persistence.person.mapper
 
 import com.alleslocker.backend.domain.api.ExternalApiIdentity
 import com.alleslocker.backend.domain.api.ExternalId
-import com.alleslocker.backend.domain.person.*
+import com.alleslocker.backend.domain.person.Person
+import com.alleslocker.backend.domain.person.PersonEmail
+import com.alleslocker.backend.domain.person.PersonFirstname
+import com.alleslocker.backend.domain.person.PersonId
+import com.alleslocker.backend.domain.person.PersonLastname
 import com.alleslocker.backend.persistence.person.entity.PersonEntity
 
 fun PersonEntity.toDomain(): Person =
