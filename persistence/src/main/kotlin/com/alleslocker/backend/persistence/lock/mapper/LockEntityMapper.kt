@@ -9,15 +9,20 @@ import com.alleslocker.backend.domain.lock.LockSerialNumber
 import com.alleslocker.backend.domain.lock.LockTagId
 import com.alleslocker.backend.persistence.lock.entity.LockEntity
 
-fun LockEntity.toDomain(): Lock = Lock(
-    id = LockId(this.id),
-    name = LockName(this.name),
-    serialNumber = LockSerialNumber(this.serialNumber),
-    lockTagId = this.tagId?.let { LockTagId(it) },
-    apiIdentity = if (this.externalApi != null && this.externalId != null)
-        ExternalApiIdentity(this.externalApi!!, ExternalId(this.externalId!!))
-    else null,
-)
+fun LockEntity.toDomain(): Lock {
+    val api = externalApi
+    val id = externalId
+    check((api == null) == (id == null)) {
+        "Invalid lock external identity state: externalApi/externalId must both be set or both be null"
+    }
+    return Lock(
+        id = LockId(this.id),
+        name = LockName(this.name),
+        serialNumber = LockSerialNumber(this.serialNumber),
+        lockTagId = this.tagId?.let { LockTagId(it) },
+        apiIdentity = if (api != null && id != null) ExternalApiIdentity(api, ExternalId(id)) else null,
+    )
+}
 
 fun Lock.toEntity(existing: LockEntity? = null): LockEntity {
     val entity = existing ?: LockEntity()

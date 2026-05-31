@@ -1,6 +1,7 @@
 package com.alleslocker.backend.web.lock.mapper
 
 import com.alleslocker.backend.application.lock.dto.LockDto
+import com.alleslocker.backend.web.common.schema.ExternalApiIdentitySchema
 import com.alleslocker.backend.web.lock.schema.LockSchema
 
 fun LockDto.toSchema() = LockSchema(
@@ -8,6 +9,5 @@ fun LockDto.toSchema() = LockSchema(
     name = this.name,
     serialNumber = this.serialNumber,
     tagId = this.tagId,
-    externalApi = this.externalApi,
-    externalId = this.externalId,
+    apiIdentity = this.apiIdentity?.let { ExternalApiIdentitySchema(api = it.api, externalId = it.externalId) },
 )
