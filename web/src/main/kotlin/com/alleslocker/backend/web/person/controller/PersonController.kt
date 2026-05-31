@@ -21,6 +21,7 @@ import com.alleslocker.backend.web.person.schema.response.DeletePersonResponseSc
 import com.alleslocker.backend.web.person.schema.response.GetPersonsPagedResponseSchema
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -79,9 +80,9 @@ class PersonController(
         ]
     )
     @PostMapping("/create")
-    fun createPerson(@RequestBody request: CreatePersonRequestSchema) {
+    fun createPerson(@AuthenticationPrincipal requesterId: String, @RequestBody request: CreatePersonRequestSchema) {
         val presenter = CreatePersonPresenter(httpServletResponse, jacksonConverter)
-        useCaseFactory.make(CreatePersonUseCase::class).execute(request.toDto(), presenter)
+        useCaseFactory.make(CreatePersonUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 
     @Operation(
@@ -122,9 +123,9 @@ class PersonController(
         ]
     )
     @PostMapping("/delete")
-    fun deletePerson(@RequestBody request: DeletePersonRequestSchema) {
+    fun deletePerson(@AuthenticationPrincipal requesterId: String, @RequestBody request: DeletePersonRequestSchema) {
         val presenter = DeletePersonPresenter(httpServletResponse, jacksonConverter)
-        useCaseFactory.make(DeletePersonUseCase::class).execute(request.toDto(), presenter)
+        useCaseFactory.make(DeletePersonUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 
     @Operation(

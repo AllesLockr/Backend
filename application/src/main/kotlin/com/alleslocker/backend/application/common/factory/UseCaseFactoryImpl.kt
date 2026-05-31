@@ -32,11 +32,13 @@ class UseCaseFactoryImpl(
         mapOf(
             CreatePersonUseCase::class to CreatePersonUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
-                personAdapter = adapterFactory[PersonAdapter::class]
+                personAdapter = adapterFactory[PersonAdapter::class],
+                logger = logger,
             ),
             DeletePersonUseCase::class to DeletePersonUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],
-                personAdapter = adapterFactory[PersonAdapter::class]
+                personAdapter = adapterFactory[PersonAdapter::class],
+                logger = logger,
             ),
             GetPersonsPagedUseCase::class to GetPersonsPagedUseCaseImpl(
                 personGateway = gatewayFactory[PersonGateway::class],

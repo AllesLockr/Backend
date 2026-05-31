@@ -7,11 +7,18 @@ import com.alleslocker.backend.application.person.dto.request.adapter.DeletePers
 import com.alleslocker.backend.application.person.dto.request.DeletePersonRequestDto
 import com.alleslocker.backend.application.person.dto.response.DeletePersonResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway
+import com.alleslocker.backend.application.common.Logger
+import com.alleslocker.backend.domain.auditlog.AuditLog
+import com.alleslocker.backend.domain.auditlog.AuditLogId
+import com.alleslocker.backend.domain.auditlog.AuditLogMessage
 import com.alleslocker.backend.domain.person.PersonId
+import com.alleslocker.backend.domain.user.UserId
+import java.time.Instant
 
 internal class DeletePersonUseCaseImpl(
     private val personGateway: PersonGateway,
-    private val personAdapter: PersonAdapter
+    private val personAdapter: PersonAdapter,
+    private val logger: Logger,
 ) : DeletePersonUseCase {
 
     override fun execute(
@@ -47,12 +54,18 @@ internal class DeletePersonUseCaseImpl(
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete person: ${e.message ?: "Unknown error"}"))
             return
         }
+        logger.audit(
+            AuditLog(
+                id = AuditLogId.generate(),
+                message = AuditLogMessage("Deleted person ${id.value}"),
+                performedByUserId = UserId(request.requesterId),
+                createdAt = Instant.now(),
+            )
+        )
         presenter.present(
             DeletePersonResponseDto(
                 id = id.value
             )
         )
     }
-
-
 }

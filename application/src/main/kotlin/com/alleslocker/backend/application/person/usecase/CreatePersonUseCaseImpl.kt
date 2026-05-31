@@ -9,11 +9,18 @@ import com.alleslocker.backend.application.person.dto.response.CreatePersonRespo
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.domain.api.ExternalApiIdentity
 import com.alleslocker.backend.domain.api.ExternalId
+import com.alleslocker.backend.application.common.Logger
+import com.alleslocker.backend.domain.auditlog.AuditLog
+import com.alleslocker.backend.domain.auditlog.AuditLogId
+import com.alleslocker.backend.domain.auditlog.AuditLogMessage
 import com.alleslocker.backend.domain.person.*
+import com.alleslocker.backend.domain.user.UserId
+import java.time.Instant
 
 internal class CreatePersonUseCaseImpl(
     private val personGateway: PersonGateway,
-    private val personAdapter: PersonAdapter
+    private val personAdapter: PersonAdapter,
+    private val logger: Logger,
 ) : CreatePersonUseCase {
 
     override fun execute(
@@ -98,6 +105,14 @@ internal class CreatePersonUseCaseImpl(
         }
 
 
+        logger.audit(
+            AuditLog(
+                id = AuditLogId.generate(),
+                message = AuditLogMessage("Created person ${saved.id.value} (${firstname.value} ${lastname.value})"),
+                performedByUserId = UserId(request.requesterId),
+                createdAt = Instant.now(),
+            )
+        )
         presenter.present(
             CreatePersonResponseDto(
                 id = saved.id.value
