@@ -3,4 +3,3 @@
 interface TokenClient {
     fun getToken(): TokenResponse
 }
-

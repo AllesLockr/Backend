@@ -9,6 +9,7 @@ class TokenProvider(
         val token: String,
         val expiresAt: Instant,
     )
+
     private var cachedToken: CachedToken? = null
 
     @Synchronized
