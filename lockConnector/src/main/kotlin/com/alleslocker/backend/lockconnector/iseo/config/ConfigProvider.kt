@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component
 class ConfigProvider(
     private val apiGateway: ApiDataGateway,
 ) {
-    data class IseoCredentials(
+    data class ApiCredentials(
         val baseUrl: String,
         val username: String,
         val password: String,
     )
 
-    fun load(): IseoCredentials {
-        val apiData = apiGateway.findByForApi(AvailableApis.ISEO) ?: throw IllegalStateException("ISEO API data not found")
+    fun load(api: AvailableApis): ApiCredentials {
+        val apiData = apiGateway.findByForApi(api) ?: throw IllegalStateException("$api API data not found")
         val auth = apiData.apiAuthentication
-        require(auth is ApiAuthentication.BaseAuth) { "ISEO API data must use base auth" }
-        return IseoCredentials(
+        require(auth is ApiAuthentication.BaseAuth) { "$api API data must use base auth" }
+        return ApiCredentials(
             baseUrl = apiData.baseUrl.toString(),
             username = auth.username.value,
             password = auth.password.value,
