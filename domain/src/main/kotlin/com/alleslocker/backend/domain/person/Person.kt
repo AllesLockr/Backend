@@ -1,7 +1,7 @@
 package com.alleslocker.backend.domain.person
 
-import com.alleslocker.backend.domain.api.ExternalApiIdentity
 import com.alleslocker.backend.domain.role.Role
+import com.alleslocker.backend.domain.vendor.ExternalApiIdentity
 
 data class Person(
     val id: PersonId,

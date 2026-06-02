@@ -1,7 +1,7 @@
 package com.alleslocker.backend.application.person.dto.response
 
-import com.alleslocker.backend.domain.api.AvailableApis
+import com.alleslocker.backend.domain.vendor.AvailableVendors
 
 data class AddPersonAdapterResponse(
-    val externalIds: Map<AvailableApis, String>,
+    val externalIds: Map<AvailableVendors, String>,
 )

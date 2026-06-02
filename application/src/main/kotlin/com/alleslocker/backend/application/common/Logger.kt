@@ -11,4 +11,6 @@ interface Logger {
     )
 
     fun audit(auditLog: AuditLog)
+
+    fun debug(message: String)
 }

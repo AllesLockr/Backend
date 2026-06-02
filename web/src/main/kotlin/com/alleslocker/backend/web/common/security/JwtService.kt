@@ -1,15 +1,17 @@
 package com.alleslocker.backend.web.common.security
 
+import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.web.common.config.JwtProperties
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
-import java.util.Date
+import java.util.*
 
 @Component
 class JwtService(
     private val jwtProperties: JwtProperties,
+    private val logger: Logger
 ) {
     private val key by lazy {
         Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray())
@@ -36,9 +38,9 @@ class JwtService(
                     .build()
 
             val claims = parser.parseClaimsJws(token)
-            println("JWT VALIDATED OK. Claims: " + claims.body)
+            logger.debug("JWT VALIDATED OK. Claims: " + claims.body)
         } catch (ex: Exception) {
-            println("JWT ERROR: ${ex::class.simpleName} -> ${ex.message}")
+            logger.error("JWT ERROR: ${ex::class.simpleName} -> ${ex.message}", ex)
             throw ex
         }
     }

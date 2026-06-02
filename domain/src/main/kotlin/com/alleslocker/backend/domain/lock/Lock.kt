@@ -1,6 +1,6 @@
 package com.alleslocker.backend.domain.lock
 
-import com.alleslocker.backend.domain.api.ExternalApiIdentity
+import com.alleslocker.backend.domain.vendor.ExternalApiIdentity
 
 data class Lock(
     val id: LockId,

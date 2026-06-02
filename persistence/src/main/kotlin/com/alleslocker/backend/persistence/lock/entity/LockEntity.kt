@@ -1,12 +1,7 @@
 package com.alleslocker.backend.persistence.lock.entity
 
-import com.alleslocker.backend.domain.api.AvailableApis
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import com.alleslocker.backend.domain.vendor.AvailableVendors
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "locks")
@@ -26,7 +21,7 @@ open class LockEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "external_api", nullable = true)
-    open var externalApi: AvailableApis? = null
+    open var externalApi: AvailableVendors? = null
 
     @Column(name = "external_id", nullable = true)
     open var externalId: String? = null
