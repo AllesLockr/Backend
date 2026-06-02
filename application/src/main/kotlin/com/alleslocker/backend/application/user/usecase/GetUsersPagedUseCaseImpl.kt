@@ -20,17 +20,6 @@ class GetUsersPagedUseCaseImpl(
         request: GetUsersPagedRequestDto,
         presenter: OutputBoundary<GetUsersPagedResponseDto>,
     ) {
-        val requester = userGateway.findById(UserId(request.requesterId))
-        if (requester == null) {
-            presenter.presentFailure(ErrorResponse.Unauthorized("Could not find user with id ${request.requesterId}"))
-            return
-        }
-
-        if (requester.role != UserRole.ADMIN) {
-            presenter.presentFailure(ErrorResponse.Unauthorized("User role ${requester.role} doesn't match required roles"))
-            return
-        }
-
         if (request.page < 0) {
             presenter.presentFailure(ErrorResponse.BadRequest("Page must be 0 or greater"))
             return

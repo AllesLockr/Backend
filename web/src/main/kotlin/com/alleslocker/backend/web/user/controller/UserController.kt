@@ -91,16 +91,6 @@ class UserController(
                 ],
             ),
             ApiResponse(
-                responseCode = "401",
-                description = "Requestor is unauthorized.",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ErrorResponse::class),
-                    ),
-                ],
-            ),
-            ApiResponse(
                 responseCode = "400",
                 description = "Invalid page or size.",
                 content = [

@@ -20,7 +20,6 @@ internal class GetUsersPagedPresenter(
 
     override fun presentFailure(error: ErrorResponse) {
         when (error) {
-            is ErrorResponse.Unauthorized -> error.presentAsJson(HttpStatus.UNAUTHORIZED)
             is ErrorResponse.BadRequest -> error.presentAsJson(HttpStatus.BAD_REQUEST)
             else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
         }
