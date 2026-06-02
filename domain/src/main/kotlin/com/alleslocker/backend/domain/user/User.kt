@@ -7,4 +7,5 @@ data class User(
     val username: Username,
     val email: UserEmail,
     val passwordHash: PasswordHash,
+    val isActive: Boolean,
 )

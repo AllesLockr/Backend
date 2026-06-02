@@ -4,6 +4,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import kotlin.properties.Delegates
 
 @Entity
 @Table(name = "user")
@@ -26,4 +27,7 @@ open class UserEntity {
 
     @Column(name = "password_hash", nullable = false)
     open lateinit var passwordHash: String
+
+    @Column(name = "is_active", nullable = false)
+    open var isActive: Boolean = true
 }
