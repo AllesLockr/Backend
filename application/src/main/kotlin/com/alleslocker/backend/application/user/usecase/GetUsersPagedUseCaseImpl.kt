@@ -14,11 +14,11 @@ import com.alleslocker.backend.domain.user.UserRole
 
 class GetUsersPagedUseCaseImpl(
     private val userGateway: UserGateway,
-    private val logger: Logger
+    private val logger: Logger,
 ) : GetUsersPagedUseCase {
     override fun execute(
         request: GetUsersPagedRequestDto,
-        presenter: OutputBoundary<GetUsersPagedResponseDto>
+        presenter: OutputBoundary<GetUsersPagedResponseDto>,
     ) {
         val requester = userGateway.findById(UserId(request.requesterId))
         if (requester == null) {
