@@ -1,11 +1,16 @@
 package com.alleslocker.backend.persistence.lock.entity
 
 import com.alleslocker.backend.domain.api.AvailableApis
+import com.alleslocker.backend.persistence.shared.entity.MetadataEntryEntity
+import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
 
 @Entity
@@ -21,13 +26,14 @@ open class LockEntity {
     @Column(name = "serial_number", nullable = false, unique = true)
     open lateinit var serialNumber: String
 
-    @Column(name = "tag_id", nullable = true, unique = false)
-    open var tagId: Long? = null
-
     @Enumerated(EnumType.STRING)
     @Column(name = "external_api", nullable = true)
     open var externalApi: AvailableApis? = null
 
     @Column(name = "external_id", nullable = true)
     open var externalId: String? = null
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "lock_metadata", joinColumns = [JoinColumn(name = "lock_id")])
+    open var metadata: MutableSet<MetadataEntryEntity> = mutableSetOf()
 }
