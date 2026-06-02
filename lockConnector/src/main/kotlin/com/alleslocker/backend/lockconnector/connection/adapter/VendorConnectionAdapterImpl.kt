@@ -22,9 +22,7 @@ class VendorConnectionAdapterImpl(
     private val iseoVendorConnectionClient: IseoVendorConnectionClientImpl =
         IseoVendorConnectionClientImpl(restClient, tokenProvider, configProvider)
 
-    override fun check(
-        vendor: AvailableVendors
-    ): VendorState =
+    override fun check(vendor: AvailableVendors): VendorState =
         when (vendor) {
             AvailableVendors.ISEO -> iseoVendorConnectionClient.check(vendor)
             else -> VendorState(VendorConnectionState.DISCONNECTED, Instant.now())
