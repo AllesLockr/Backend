@@ -79,7 +79,7 @@ class AddVendorDataUseCaseImpl(
             }
 
         try {
-            val vendorState = vendorConnectionAdapter.check(forApi, null)
+            val vendorState = vendorConnectionAdapter.check(forApi)
             vendorDataGateway.save(saved.copy(vendorState = vendorState))
         } catch (e: Exception) {
             return presenter.presentFailure(ErrorResponse.InternalServerError("Could not update connection state: ${e.message}"))

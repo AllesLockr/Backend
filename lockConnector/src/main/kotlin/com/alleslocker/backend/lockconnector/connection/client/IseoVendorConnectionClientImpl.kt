@@ -16,12 +16,8 @@ class IseoVendorConnectionClientImpl(
     private val configProvider: ConfigProvider,
 ) : VendorConnectionClient {
     override fun check(
-        vendor: AvailableVendors,
-        state: VendorState?,
+        vendor: AvailableVendors
     ): VendorState {
-        if (state != null && state.lastChecked > Instant.now().minusSeconds(180)) {
-            return state
-        }
 
         val token = tokenProvider.getValidToken()
         val baseUrl = configProvider.load(vendor).baseUrl
