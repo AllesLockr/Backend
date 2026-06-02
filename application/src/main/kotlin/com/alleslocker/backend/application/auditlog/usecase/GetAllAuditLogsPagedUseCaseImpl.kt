@@ -45,7 +45,7 @@ class GetAllAuditLogsPagedUseCaseImpl(
         if (request.filter != null) {
             filter = request.filter
 
-            if (filter.toDate != null && filter.toDate.isBefore(filter.fromDate)) {
+            if (filter.toDate != null && filter.fromDate != null && filter.toDate.isBefore(filter.fromDate)) {
                 presenter.presentFailure(ErrorResponse.BadRequest("fromDate must be before toDate"))
                 return
             }
