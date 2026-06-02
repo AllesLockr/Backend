@@ -5,8 +5,5 @@ import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.domain.vendor.VendorState
 
 interface VendorConnectionAdapter : Adapter {
-    fun check(
-        vendor: AvailableVendors,
-        state: VendorState?,
-    ): VendorState
+    fun check(vendor: AvailableVendors): VendorState
 }

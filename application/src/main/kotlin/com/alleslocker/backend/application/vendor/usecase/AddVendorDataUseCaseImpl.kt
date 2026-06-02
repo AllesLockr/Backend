@@ -15,8 +15,10 @@ import com.alleslocker.backend.domain.vendor.ApiPassword
 import com.alleslocker.backend.domain.vendor.ApiUsername
 import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.domain.vendor.VendorAuthentication
+import com.alleslocker.backend.domain.vendor.VendorConnectionState
 import com.alleslocker.backend.domain.vendor.VendorData
 import com.alleslocker.backend.domain.vendor.VendorId
+import com.alleslocker.backend.domain.vendor.VendorState
 import java.net.URI
 import java.net.URISyntaxException
 import java.time.Instant
@@ -60,15 +62,13 @@ class AddVendorDataUseCaseImpl(
                 }
             }
 
-        val vendorState = vendorConnectionAdapter.check(forApi, null)
-
         val vendorData =
             VendorData(
                 id = VendorId.generate(),
                 forVendor = forApi,
                 baseUrl = baseUrl,
                 vendorAuthentication = vendorAuthentication,
-                vendorState = vendorState,
+                vendorState = VendorState(VendorConnectionState.DISCONNECTED, Instant.now()),
             )
 
         val saved =
@@ -77,6 +77,13 @@ class AddVendorDataUseCaseImpl(
             } catch (e: Exception) {
                 return presenter.presentFailure(ErrorResponse.InternalServerError("Could not save api to db: ${e.message}"))
             }
+
+        try {
+            val vendorState = vendorConnectionAdapter.check(forApi)
+            vendorDataGateway.save(saved.copy(vendorState = vendorState))
+        } catch (e: Exception) {
+            return presenter.presentFailure(ErrorResponse.InternalServerError("Could not update connection state: ${e.message}"))
+        }
         logger.audit(
             AuditLog(
                 id = AuditLogId.generate(),
