@@ -23,6 +23,8 @@ import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImp
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCaseImpl
 import com.alleslocker.backend.application.user.gateway.UserGateway
+import com.alleslocker.backend.application.user.usecase.GetUserUseCase
+import com.alleslocker.backend.application.user.usecase.GetUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
@@ -84,6 +86,11 @@ class UseCaseFactoryImpl(
                 ),
             GetUsersPagedUseCase::class to
                 GetUsersPagedUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    logger = logger,
+                ),
+            GetUserUseCase::class to
+                GetUserUseCaseImpl(
                     userGateway = gatewayFactory[UserGateway::class],
                     logger = logger,
                 ),
