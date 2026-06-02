@@ -5,6 +5,7 @@ import com.alleslocker.backend.application.person.dto.request.adapter.DeletePers
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
 import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.lockconnector.iseo.client.IseoTokenProvider
+import com.alleslocker.backend.lockconnector.client.TokenProvider
 import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.person.adapter.PersonClient
 import com.alleslocker.backend.lockconnector.rest.GenericRestClient
@@ -12,7 +13,7 @@ import org.springframework.http.MediaType
 
 class IseoPersonClientImpl(
     private val restClient: GenericRestClient,
-    private val tokenProvider: IseoTokenProvider,
+    private val tokenProvider: TokenProvider,
     private val configProvider: ConfigProvider,
 ) : PersonClient {
     private data class IseoCreateUserResponse(
@@ -31,7 +32,7 @@ class IseoPersonClientImpl(
             )
 
         val token = tokenProvider.getValidToken()
-        val baseUrl = configProvider.load().baseUrl
+        val baseUrl = configProvider.load(AvailableVendors.ISEO).baseUrl
 
         val response =
             restClient
@@ -46,21 +47,23 @@ class IseoPersonClientImpl(
                 ).body(IseoCreateUserResponse::class.java)
                 ?: throw IllegalStateException("ISEO returned empty response body")
 
-        val enableUser =
-            try {
-                restClient
-                    .postForResponse(
-                        endpoint = "$baseUrl/api/v2/users/${response.id}/enable",
-                        headers = mapOf("Authorization" to "Bearer $token"),
-                        contentType = MediaType.APPLICATION_JSON,
-                        body = emptyMap<String, Any>(),
-                    ).body(IseoCreateUserResponse::class.java)
-                    ?: throw IllegalStateException("ISEO returned empty response body")
-            } catch (e: Exception) {
-                // TODO: Better error handling
-                throw e
-            }
-        return AddPersonAdapterResponse(externalIds = mapOf(AvailableVendors.ISEO to response.id.toString()))
+        try {
+            restClient.post(
+                endpoint = "$baseUrl/api/v2/users/${response.id}/enable",
+                body = emptyMap<String, Any>(),
+                headers = mapOf("Authorization" to "Bearer $token"),
+            )
+        } catch (e: Exception) {
+            runCatching {
+                restClient.delete(
+                    endpoint = "$baseUrl/api/v2/users/${response.id}",
+                    headers = mapOf("Authorization" to "Bearer $token"),
+                )
+            }.onFailure { e.addSuppressed(it) }
+
+            throw e
+        }
+        return AddPersonAdapterResponse(externalIds = mapOf(AvailableApis.ISEO to response.id.toString()))
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
@@ -68,8 +71,9 @@ class IseoPersonClientImpl(
             request.externalIds[AvailableVendors.ISEO]
                 ?: throw IllegalStateException("Cannot delete person from ISEO: no ISEO external ID present")
         val token = tokenProvider.getValidToken()
+        val baseUrl = configProvider.load(AvailableApis.ISEO).baseUrl
         restClient.delete(
-            endpoint = "${configProvider.load().baseUrl}/api/v2/users/$iseoId",
+            endpoint = "$baseUrl/api/v2/users/$iseoId",
             headers = mapOf("Authorization" to "Bearer $token"),
         )
     }

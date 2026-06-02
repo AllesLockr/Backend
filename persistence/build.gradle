@@ -4,4 +4,5 @@ dependencies {
     implementation(platform(libs.bom.spring.boot))
     implementation(libs.spring.boot.jpa)
     implementation(libs.bundles.kotlin)
+    implementation(libs.jackson.kotlin)
 }
