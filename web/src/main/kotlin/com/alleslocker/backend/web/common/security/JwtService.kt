@@ -31,14 +31,12 @@ class JwtService(
 
     fun validate(token: String) {
         try {
-            val parser =
-                Jwts
-                    .parserBuilder()
-                    .setSigningKey(key)
-                    .build()
+            Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
 
-            val claims = parser.parseClaimsJws(token)
-            logger.debug("JWT VALIDATED OK. Claims: " + claims.body)
+            logger.debug("JWT VALIDATED OK")
         } catch (ex: Exception) {
             logger.error("JWT ERROR: ${ex::class.simpleName} -> ${ex.message}", ex)
             throw ex
