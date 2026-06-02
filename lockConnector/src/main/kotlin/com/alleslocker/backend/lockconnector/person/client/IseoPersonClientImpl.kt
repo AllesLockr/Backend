@@ -46,11 +46,15 @@ class IseoPersonClientImpl(
                 ).body(IseoCreateUserResponse::class.java)
                 ?: throw IllegalStateException("ISEO returned empty response body")
 
-        restClient.post(
-            endpoint = "$baseUrl/api/v2/users/${response.id}/enable",
-            body = emptyMap<String, Any>(),
-            headers = mapOf("Authorization" to "Bearer $token"),
-        )
+        try {
+            restClient.post(
+                endpoint = "$baseUrl/api/v2/users/${response.id}/enable",
+                body = emptyMap<String, Any>(),
+                headers = mapOf("Authorization" to "Bearer $token"),
+            )
+        } catch (e: Exception) {
+            throw e
+        }
         return AddPersonAdapterResponse(externalIds = mapOf(AvailableApis.ISEO to response.id.toString()))
     }
 
