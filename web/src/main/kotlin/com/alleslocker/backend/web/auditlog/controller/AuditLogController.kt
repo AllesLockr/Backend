@@ -1,13 +1,12 @@
 package com.alleslocker.backend.web.auditlog.controller
 
 import com.alleslocker.backend.application.auditlog.dto.request.GetAllAuditLogsPagedRequestDto
-import com.alleslocker.backend.application.auditlog.dto.response.GetAuditLogResponseDto
+import com.alleslocker.backend.application.auditlog.dto.response.GetAuditLogsPagedResponseDto
 import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPagedUseCase
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.web.auditlog.presenter.GetAllAuditLogsPagedPresenter
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -36,7 +35,7 @@ class AuditLogController(
                 content = [
                     Content(
                         mediaType = "application/json",
-                        array = ArraySchema(Schema(implementation = GetAuditLogResponseDto::class)),
+                        schema = Schema(implementation = GetAuditLogsPagedResponseDto::class),
                     ),
                 ],
             ),

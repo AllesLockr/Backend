@@ -8,8 +8,6 @@ import com.alleslocker.backend.application.person.dto.request.CreatePersonReques
 import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.CreatePersonResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway
-import com.alleslocker.backend.domain.api.ExternalApiIdentity
-import com.alleslocker.backend.domain.api.ExternalId
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
 import com.alleslocker.backend.domain.auditlog.AuditLogMessage
@@ -19,6 +17,8 @@ import com.alleslocker.backend.domain.person.PersonFirstname
 import com.alleslocker.backend.domain.person.PersonId
 import com.alleslocker.backend.domain.person.PersonLastname
 import com.alleslocker.backend.domain.user.UserId
+import com.alleslocker.backend.domain.vendor.ExternalApiIdentity
+import com.alleslocker.backend.domain.vendor.ExternalId
 import java.time.Instant
 
 internal class CreatePersonUseCaseImpl(

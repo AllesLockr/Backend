@@ -42,4 +42,8 @@ class SpringLogger(
             log().error("[AUDIT] ${auditLog.message}", e)
         }
     }
+
+    override fun debug(message: String) {
+        log().debug(message)
+    }
 }

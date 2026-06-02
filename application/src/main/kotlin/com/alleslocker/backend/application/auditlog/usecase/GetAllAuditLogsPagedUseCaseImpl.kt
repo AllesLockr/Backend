@@ -3,6 +3,7 @@ package com.alleslocker.backend.application.auditlog.usecase
 import com.alleslocker.backend.application.auditlog.dto.filter.AuditLogFilterDto
 import com.alleslocker.backend.application.auditlog.dto.request.GetAllAuditLogsPagedRequestDto
 import com.alleslocker.backend.application.auditlog.dto.response.GetAuditLogResponseDto
+import com.alleslocker.backend.application.auditlog.dto.response.GetAuditLogsPagedResponseDto
 import com.alleslocker.backend.application.auditlog.gateway.AuditLogGateway
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.Logger
@@ -16,7 +17,7 @@ class GetAllAuditLogsPagedUseCaseImpl(
 ) : GetAllAuditLogsPagedUseCase {
     override fun execute(
         request: GetAllAuditLogsPagedRequestDto,
-        presenter: OutputBoundary<Page<GetAuditLogResponseDto>>,
+        presenter: OutputBoundary<GetAuditLogsPagedResponseDto>,
     ) {
         var pageNum = 0
         var pageSize = 10
@@ -59,7 +60,7 @@ class GetAllAuditLogsPagedUseCaseImpl(
                 return
             }
 
-        presenter.present(
+        val pageDto =
             page.map {
                 GetAuditLogResponseDto(
                     it.id.value,
@@ -67,7 +68,9 @@ class GetAllAuditLogsPagedUseCaseImpl(
                     performedByUserId = it.performedByUserId.value,
                     createdAt = it.createdAt.toString(),
                 )
-            },
+            }
+        presenter.present(
+            GetAuditLogsPagedResponseDto(pageDto),
         )
     }
 }
