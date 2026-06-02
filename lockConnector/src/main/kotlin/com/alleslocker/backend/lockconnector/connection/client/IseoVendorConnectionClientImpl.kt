@@ -19,12 +19,12 @@ class IseoVendorConnectionClientImpl(
         vendor: AvailableVendors,
         state: VendorState?,
     ): VendorState {
-        val token = tokenProvider.getValidToken()
-        val baseUrl = configProvider.load(vendor).baseUrl
-
         if (state != null && state.lastChecked > Instant.now().minusSeconds(180)) {
             return state
         }
+
+        val token = tokenProvider.getValidToken()
+        val baseUrl = configProvider.load(vendor).baseUrl
 
         val response =
             restClient.getBodiless(
