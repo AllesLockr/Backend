@@ -48,8 +48,10 @@ open class LockGatewayAdapter(
 
     override fun findBySerialNumber(serialNumber: LockSerialNumber): Lock? = repository.findBySerialNumber(serialNumber.value)?.toDomain()
 
-    override fun findBySerialNumbers(serialNumbers: Set<LockSerialNumber>): List<Lock> =
-        repository.findBySerialNumberIn(serialNumbers.map { it.value }).map { it.toDomain() }
+    override fun findBySerialNumbers(serialNumbers: Set<LockSerialNumber>): List<Lock> {
+        if (serialNumbers.isEmpty()) return emptyList()
+        return repository.findBySerialNumberIn(serialNumbers.map { it.value }).map { it.toDomain() }
+    }
 
     override fun findAll(): List<Lock> = repository.findAll().map { it.toDomain() }
 
