@@ -2,7 +2,7 @@ package com.alleslocker.backend.lockconnector.lock.client
 
 import com.alleslocker.backend.application.lock.dto.response.FetchLocksAdapterResponse
 import com.alleslocker.backend.application.lock.dto.response.FetchedLockDto
-import com.alleslocker.backend.domain.api.AvailableApis
+import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.lockconnector.client.TokenProvider
 import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.rest.GenericRestClient
@@ -30,7 +30,7 @@ class IseoLockClientImpl(
 
     fun fetchAll(): FetchLocksAdapterResponse {
         val token = tokenProvider.getValidToken()
-        val baseUrl = configProvider.load(AvailableApis.ISEO).baseUrl
+        val baseUrl = configProvider.load(AvailableVendors.ISEO).baseUrl
         val locks = mutableListOf<FetchedLockDto>()
         var page = 0
 
