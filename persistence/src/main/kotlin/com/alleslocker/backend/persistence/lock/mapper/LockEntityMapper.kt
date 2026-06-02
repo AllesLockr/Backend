@@ -6,7 +6,6 @@ import com.alleslocker.backend.domain.lock.Lock
 import com.alleslocker.backend.domain.lock.LockId
 import com.alleslocker.backend.domain.lock.LockName
 import com.alleslocker.backend.domain.lock.LockSerialNumber
-import com.alleslocker.backend.domain.lock.LockTagId
 import com.alleslocker.backend.persistence.lock.entity.LockEntity
 import com.alleslocker.backend.persistence.shared.mapper.toDomain
 import com.alleslocker.backend.persistence.shared.mapper.toEntity

@@ -1,7 +1,7 @@
 package com.alleslocker.backend.persistence.lock.entity
 
 import com.alleslocker.backend.domain.api.AvailableApis
-import com.alleslocker.backend.persistence.shared.entity.MetadataEntity
+import com.alleslocker.backend.persistence.shared.entity.MetadataEntryEntity
 import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
 import jakarta.persistence.ElementCollection
@@ -35,5 +35,5 @@ open class LockEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "lock_metadata", joinColumns = [JoinColumn(name = "lock_id")])
-    open var metadata: MutableSet<MetadataEntity> = mutableSetOf()
+    open var metadata: MutableSet<MetadataEntryEntity> = mutableSetOf()
 }

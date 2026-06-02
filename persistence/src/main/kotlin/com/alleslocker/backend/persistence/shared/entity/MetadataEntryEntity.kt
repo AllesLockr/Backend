@@ -4,8 +4,8 @@ import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 
 @Embeddable
-class MetadataEntity(
+data class MetadataEntryEntity(
     @Column(name = "meta_key")
-    var key: String = "",
-    var value: String = "",
+    val key: String = "",
+    val value: String = "",
 )
