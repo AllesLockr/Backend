@@ -1,11 +1,12 @@
 package com.alleslocker.backend.domain.lock
 
 import com.alleslocker.backend.domain.api.ExternalApiIdentity
+import com.alleslocker.backend.domain.shared.MetadataEntry
 
 data class Lock(
     val id: LockId,
     val name: LockName,
     val serialNumber: LockSerialNumber,
-    val lockTagId: LockTagId? = null,
+    val metadata: Set<MetadataEntry> = emptySet(),
     val apiIdentity: ExternalApiIdentity? = null,
 )
