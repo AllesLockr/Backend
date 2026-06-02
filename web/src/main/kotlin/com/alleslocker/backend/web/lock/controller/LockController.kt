@@ -2,11 +2,15 @@ package com.alleslocker.backend.web.lock.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
+import com.alleslocker.backend.application.lock.dto.request.SyncLocksRequestDto
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
+import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCase
 import com.alleslocker.backend.web.lock.mapper.toDto
 import com.alleslocker.backend.web.lock.presenter.GetLocksPagedPresenter
+import com.alleslocker.backend.web.lock.presenter.SyncLocksPresenter
 import com.alleslocker.backend.web.lock.schema.request.GetLocksPagedRequestSchema
 import com.alleslocker.backend.web.lock.schema.response.GetLocksPagedResponseSchema
+import com.alleslocker.backend.web.lock.schema.response.SyncLocksResponseSchema
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -14,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -68,5 +73,38 @@ class LockController(
     ) {
         val presenter = GetLocksPagedPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetLocksPagedUseCase::class).execute(request.toDto(), presenter)
+    }
+
+    @Operation(
+        summary = "Sync locks from ISEO. Creates/updates local locks and removes those no longer in ISEO.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Sync completed successfully.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = SyncLocksResponseSchema::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Something went wrong.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @PostMapping("/sync")
+    fun syncLocks(
+        @AuthenticationPrincipal requesterId: String,
+    ) {
+        val presenter = SyncLocksPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(SyncLocksUseCase::class).execute(SyncLocksRequestDto(requesterId), presenter)
     }
 }

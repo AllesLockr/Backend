@@ -6,9 +6,12 @@ import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPaged
 import com.alleslocker.backend.application.common.InputBoundary
 import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.security.PasswordHasher
+import com.alleslocker.backend.application.lock.adapter.LockAdapter
 import com.alleslocker.backend.application.lock.gateway.LockGateway
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCaseImpl
+import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCase
+import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCaseImpl
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.application.person.usecase.CountPersonsUseCase
@@ -67,6 +70,12 @@ class UseCaseFactoryImpl(
             GetLocksPagedUseCase::class to
                 GetLocksPagedUseCaseImpl(
                     lockGateway = gatewayFactory[LockGateway::class],
+                ),
+            SyncLocksUseCase::class to
+                SyncLocksUseCaseImpl(
+                    lockGateway = gatewayFactory[LockGateway::class],
+                    lockAdapter = adapterFactory[LockAdapter::class],
+                    logger = logger,
                 ),
             LoginUserUseCase::class to
                 LoginUserUseCaseImpl(

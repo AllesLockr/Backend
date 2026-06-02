@@ -13,9 +13,6 @@ import com.alleslocker.backend.persistence.shared.mapper.toEntity
 fun LockEntity.toDomain(): Lock {
     val api = externalApi
     val id = externalId
-    check((api == null) == (id == null)) {
-        "Invalid lock external identity state: externalApi/externalId must both be set or both be null"
-    }
     return Lock(
         id = LockId(this.id),
         name = LockName(this.name),
