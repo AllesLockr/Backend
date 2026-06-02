@@ -92,7 +92,7 @@ class UserController(
             ),
             ApiResponse(
                 responseCode = "401",
-                description = "Requestor ist unauthorized.",
+                description = "Requestor is unauthorized.",
                 content = [
                     Content(
                         mediaType = "application/json",
