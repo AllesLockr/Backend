@@ -2,14 +2,18 @@ package com.alleslocker.backend.web.user.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
+import com.alleslocker.backend.application.user.usecase.GetUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.web.common.security.JwtService
 import com.alleslocker.backend.web.user.mapper.toDto
+import com.alleslocker.backend.web.user.presenter.GetUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUsersPagedPresenter
 import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
+import com.alleslocker.backend.web.user.schema.request.GetUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUsersPagedRequestSchema
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
+import com.alleslocker.backend.web.user.schema.response.GetUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.GetUsersPagedResponseSchema
 import com.alleslocker.backend.web.user.schema.response.LoginUserResponseSchema
 import io.swagger.v3.oas.annotations.Operation
@@ -20,6 +24,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -120,5 +126,60 @@ class UserController(
     ) {
         val presenter = GetUsersPagedPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetUsersPagedUseCase::class).execute(request.toDto(requesterId), presenter)
+    }
+
+    @Operation(
+        summary = "Get a user by id.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetUserResponseSchema::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid id.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "User not found.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Something went wrong...rip",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+
+        ],
+    )
+    @GetMapping("/{id}")
+    fun getUser(
+        @PathVariable id: String,
+    ) {
+        val request = GetUserRequestSchema(id)
+        val presenter = GetUserPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(GetUserUseCase::class).execute(request.toDto(), presenter)
     }
 }
