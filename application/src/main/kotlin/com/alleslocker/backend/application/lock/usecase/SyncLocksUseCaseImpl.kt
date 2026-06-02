@@ -16,6 +16,8 @@ import com.alleslocker.backend.domain.lock.LockName
 import com.alleslocker.backend.domain.lock.LockSerialNumber
 import com.alleslocker.backend.domain.shared.MetadataEntry
 import com.alleslocker.backend.domain.user.UserId
+import com.alleslocker.backend.domain.vendor.ExternalApiIdentity
+import com.alleslocker.backend.domain.vendor.ExternalId
 import java.time.Instant
 
 internal class SyncLocksUseCaseImpl(
@@ -52,6 +54,7 @@ internal class SyncLocksUseCaseImpl(
                         name = LockName(fetchedLock.name),
                         serialNumber = LockSerialNumber(fetchedLock.serialNumber),
                         metadata = metadata,
+                        apiIdentity = ExternalApiIdentity(fetchedLock.vendor, ExternalId(fetchedLock.externalId)),
                     ),
                 )
                 synced++

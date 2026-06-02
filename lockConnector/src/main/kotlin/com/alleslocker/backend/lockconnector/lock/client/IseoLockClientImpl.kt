@@ -47,6 +47,8 @@ class IseoLockClientImpl(
                         name = item.name,
                         serialNumber = item.serialNumber,
                         tagId = item.tags.firstOrNull()?.id,
+                        vendor = AvailableVendors.ISEO,
+                        externalId = item.serialNumber,
                     )
             }
 
