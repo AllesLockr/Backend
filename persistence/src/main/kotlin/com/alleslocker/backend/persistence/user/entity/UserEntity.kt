@@ -1,7 +1,10 @@
 package com.alleslocker.backend.persistence.user.entity
 
+import com.alleslocker.backend.domain.user.UserRole
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kotlin.properties.Delegates
@@ -12,6 +15,10 @@ open class UserEntity {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     open lateinit var id: String
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    open lateinit var role: UserRole
 
     @Column(name = "firstname", nullable = false)
     open lateinit var firstname: String
