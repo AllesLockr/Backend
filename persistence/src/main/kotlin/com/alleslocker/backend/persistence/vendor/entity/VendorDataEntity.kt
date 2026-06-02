@@ -17,10 +17,10 @@ open class VendorDataEntity {
     @Column(name = "baseUrl", nullable = false, unique = true)
     open lateinit var baseUrl: String
 
-    @Column(name = "vendor_connection_state", nullable = false, unique = true)
+    @Column(name = "vendor_connection_state", nullable = false)
     open lateinit var vendorConnectionState: String
 
-    @Column(name = "last_checked", nullable = false, unique = true)
+    @Column(name = "last_checked", nullable = false)
     open lateinit var lastChecked: Instant
 
     @Convert(converter = CryptionConverter::class)
