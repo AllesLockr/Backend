@@ -5,8 +5,8 @@ import com.alleslocker.backend.web.user.schema.UserRoleSchema
 
 fun UserRoleDto.toSchema() =
     when (this) {
-        UserRoleDto.ADMIN -> UserRoleDto.ADMIN
-        UserRoleDto.USER -> UserRoleDto.USER
+        UserRoleDto.ADMIN -> UserRoleSchema.ADMIN
+        UserRoleDto.USER -> UserRoleSchema.USER
     }
 
 fun UserRoleSchema.toDto() =
