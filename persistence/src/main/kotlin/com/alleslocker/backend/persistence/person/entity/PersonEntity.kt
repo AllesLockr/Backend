@@ -1,18 +1,8 @@
 package com.alleslocker.backend.persistence.person.entity
 
-import com.alleslocker.backend.domain.api.AvailableApis
+import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.persistence.shared.entity.MetadataEntryEntity
-import jakarta.persistence.CollectionTable
-import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.FetchType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.MapKeyColumn
-import jakarta.persistence.MapKeyEnumerated
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "person")
@@ -35,7 +25,7 @@ open class PersonEntity {
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "api")
     @Column(name = "external_id", nullable = false)
-    open var externalIds: MutableMap<AvailableApis, String> = mutableMapOf()
+    open var externalIds: MutableMap<AvailableVendors, String> = mutableMapOf()
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "person_metadata", joinColumns = [JoinColumn(name = "person_id")])
