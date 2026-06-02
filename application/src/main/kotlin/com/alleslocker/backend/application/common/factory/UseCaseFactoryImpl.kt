@@ -33,8 +33,6 @@ import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
-import com.alleslocker.backend.application.user.usecase.RegisterUserUseCase
-import com.alleslocker.backend.application.user.usecase.RegisterUserUseCaseImpl
 import kotlin.reflect.KClass
 
 class UseCaseFactoryImpl(
@@ -68,11 +66,6 @@ class UseCaseFactoryImpl(
             GetLocksPagedUseCase::class to
                 GetLocksPagedUseCaseImpl(
                     lockGateway = gatewayFactory[LockGateway::class],
-                ),
-            RegisterUserUseCase::class to
-                RegisterUserUseCaseImpl(
-                    passwordHasher = passwordHasher,
-                    userGateway = gatewayFactory[UserGateway::class],
                 ),
             LoginUserUseCase::class to
                 LoginUserUseCaseImpl(

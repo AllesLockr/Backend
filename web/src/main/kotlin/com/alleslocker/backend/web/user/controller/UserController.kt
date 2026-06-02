@@ -2,22 +2,14 @@ package com.alleslocker.backend.web.user.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
-import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
-import com.alleslocker.backend.application.user.usecase.RegisterUserUseCase
 import com.alleslocker.backend.web.common.security.JwtService
-import com.alleslocker.backend.web.person.mapper.toDto
-import com.alleslocker.backend.web.person.presenter.GetPersonsPagedPresenter
-import com.alleslocker.backend.web.person.schema.request.GetPersonsPagedRequestSchema
-import com.alleslocker.backend.web.person.schema.response.GetPersonsPagedResponseSchema
 import com.alleslocker.backend.web.user.mapper.toDto
 import com.alleslocker.backend.web.user.presenter.GetUsersPagedPresenter
 import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
-import com.alleslocker.backend.web.user.presenter.RegisterUserPresenter
 import com.alleslocker.backend.web.user.schema.request.GetUsersPagedRequestSchema
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
-import com.alleslocker.backend.web.user.schema.request.RegisterUserRequestSchema
 import com.alleslocker.backend.web.user.schema.response.GetUsersPagedResponseSchema
 import com.alleslocker.backend.web.user.schema.response.LoginUserResponseSchema
 import io.swagger.v3.oas.annotations.Operation
@@ -42,14 +34,6 @@ class UserController(
     private val jacksonConverter: MappingJackson2HttpMessageConverter,
     private val jwtService: JwtService,
 ) {
-    @PostMapping("/auth/register")
-    fun register(
-        @RequestBody request: RegisterUserRequestSchema,
-    ) {
-        val presenter = RegisterUserPresenter(httpServletResponse, jacksonConverter, jwtService)
-        useCaseFactory.make(RegisterUserUseCase::class).execute(request.toDto(), presenter)
-    }
-
     @Operation(
         summary = "Login a user.",
         responses = [
