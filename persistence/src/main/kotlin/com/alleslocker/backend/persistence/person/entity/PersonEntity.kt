@@ -2,7 +2,17 @@ package com.alleslocker.backend.persistence.person.entity
 
 import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.persistence.shared.entity.MetadataEntryEntity
-import jakarta.persistence.*
+import jakarta.persistence.CollectionTable
+import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.FetchType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.MapKeyColumn
+import jakarta.persistence.MapKeyEnumerated
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "person")

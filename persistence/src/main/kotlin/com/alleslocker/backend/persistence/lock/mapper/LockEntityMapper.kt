@@ -1,6 +1,9 @@
 package com.alleslocker.backend.persistence.lock.mapper
 
-import com.alleslocker.backend.domain.lock.*
+import com.alleslocker.backend.domain.lock.Lock
+import com.alleslocker.backend.domain.lock.LockId
+import com.alleslocker.backend.domain.lock.LockName
+import com.alleslocker.backend.domain.lock.LockSerialNumber
 import com.alleslocker.backend.domain.vendor.ExternalApiIdentity
 import com.alleslocker.backend.domain.vendor.ExternalId
 import com.alleslocker.backend.persistence.lock.entity.LockEntity

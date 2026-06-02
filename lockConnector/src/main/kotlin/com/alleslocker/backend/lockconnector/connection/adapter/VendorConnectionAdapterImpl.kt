@@ -20,10 +20,12 @@ class VendorConnectionAdapterImpl(
     private val iseoVendorConnectionClient: IseoVendorConnectionClientImpl =
         IseoVendorConnectionClientImpl(restClient, tokenProvider, configProvider)
 
-    override fun check(vendor: AvailableVendors, state: VendorState?): VendorState {
-        return when (vendor) {
+    override fun check(
+        vendor: AvailableVendors,
+        state: VendorState?,
+    ): VendorState =
+        when (vendor) {
             AvailableVendors.ISEO -> iseoVendorConnectionClient.check(vendor, state)
             else -> TODO()
         }
-    }
 }

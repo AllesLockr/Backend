@@ -1,6 +1,6 @@
 package com.alleslocker.backend.domain.vendor
 
-import java.util.*
+import java.util.UUID
 
 @JvmInline
 value class VendorId(

@@ -8,5 +8,5 @@ data class GetVendorDataResponseDto(
     val apiUsername: String?,
     val apiPassword: String?,
     val vendorConnectionState: String,
-    val lastChecked: Long
+    val lastChecked: Long,
 )

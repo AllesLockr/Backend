@@ -1,6 +1,14 @@
 package com.alleslocker.backend.persistence.vendor.mapper
 
-import com.alleslocker.backend.domain.vendor.*
+import com.alleslocker.backend.domain.vendor.ApiPassword
+import com.alleslocker.backend.domain.vendor.ApiUsername
+import com.alleslocker.backend.domain.vendor.AvailableVendors
+import com.alleslocker.backend.domain.vendor.VendorAuthentication
+import com.alleslocker.backend.domain.vendor.VendorAuthentication.BaseAuth
+import com.alleslocker.backend.domain.vendor.VendorConnectionState
+import com.alleslocker.backend.domain.vendor.VendorData
+import com.alleslocker.backend.domain.vendor.VendorId
+import com.alleslocker.backend.domain.vendor.VendorState
 import com.alleslocker.backend.persistence.vendor.entity.VendorDataEntity
 import java.net.URI
 
@@ -9,7 +17,7 @@ fun VendorDataEntity.toDomain(): VendorData {
         if (!this.apiKey.isNullOrBlank()) {
             VendorAuthentication.ApiKey(this.apiKey!!)
         } else if (!this.apiUsername.isNullOrBlank() && !this.apiPassword.isNullOrBlank()) {
-            VendorAuthentication.BaseAuth(
+            BaseAuth(
                 ApiUsername(this.apiUsername!!),
                 ApiPassword(this.apiPassword!!),
             )
@@ -42,7 +50,7 @@ fun VendorData.toEntity(existing: VendorDataEntity? = null): VendorDataEntity {
             entity.apiPassword = null
         }
 
-        is VendorAuthentication.BaseAuth -> {
+        is BaseAuth -> {
             entity.apiKey = null
             entity.apiUsername = auth.username.value
             entity.apiPassword = auth.password.value

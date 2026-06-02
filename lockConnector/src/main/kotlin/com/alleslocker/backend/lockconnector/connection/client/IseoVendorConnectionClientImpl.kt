@@ -15,26 +15,32 @@ class IseoVendorConnectionClientImpl(
     private val tokenProvider: TokenProvider,
     private val configProvider: ConfigProvider,
 ) : VendorConnectionClient {
-
-    override fun check(vendor: AvailableVendors, state: VendorState?): VendorState {
+    override fun check(
+        vendor: AvailableVendors,
+        state: VendorState?,
+    ): VendorState {
         val token = tokenProvider.getValidToken()
         val baseUrl = configProvider.load(vendor).baseUrl
 
-        if (state != null && state.lastChecked > Instant.now().minusSeconds(180))
+        if (state != null && state.lastChecked > Instant.now().minusSeconds(180)) {
             return state
-
-        val response = restClient.getBodiless(
-            endpoint = "$baseUrl/api/v2/users/me",
-            headers = mapOf(
-                ("Authorization" to "Bearer $token"),
-            ),
-        )
-
-        val connectionState = when (response.statusCode) {
-            HttpStatus.OK -> VendorConnectionState.CONNECTED
-            HttpStatus.FORBIDDEN -> VendorConnectionState.AUTH_FAILED
-            else -> VendorConnectionState.DISCONNECTED
         }
+
+        val response =
+            restClient.getBodiless(
+                endpoint = "$baseUrl/api/v2/users/me",
+                headers =
+                    mapOf(
+                        ("Authorization" to "Bearer $token"),
+                    ),
+            )
+
+        val connectionState =
+            when (response.statusCode) {
+                HttpStatus.OK -> VendorConnectionState.CONNECTED
+                HttpStatus.FORBIDDEN -> VendorConnectionState.AUTH_FAILED
+                else -> VendorConnectionState.DISCONNECTED
+            }
 
         return VendorState(connectionState, Instant.now())
     }

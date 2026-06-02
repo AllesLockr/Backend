@@ -60,16 +60,17 @@ class GetAllAuditLogsPagedUseCaseImpl(
                 return
             }
 
-        val pageDto = page.map {
-            GetAuditLogResponseDto(
-                it.id.value,
-                message = it.message.value,
-                performedByUserId = it.performedByUserId.value,
-                createdAt = it.createdAt.toString(),
-            )
-        }
+        val pageDto =
+            page.map {
+                GetAuditLogResponseDto(
+                    it.id.value,
+                    message = it.message.value,
+                    performedByUserId = it.performedByUserId.value,
+                    createdAt = it.createdAt.toString(),
+                )
+            }
         presenter.present(
-            GetAuditLogsPagedResponseDto(pageDto)
+            GetAuditLogsPagedResponseDto(pageDto),
         )
     }
 }

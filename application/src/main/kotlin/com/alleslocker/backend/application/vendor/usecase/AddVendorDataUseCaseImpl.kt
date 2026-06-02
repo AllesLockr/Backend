@@ -11,7 +11,12 @@ import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
 import com.alleslocker.backend.domain.auditlog.AuditLogMessage
 import com.alleslocker.backend.domain.user.UserId
-import com.alleslocker.backend.domain.vendor.*
+import com.alleslocker.backend.domain.vendor.ApiPassword
+import com.alleslocker.backend.domain.vendor.ApiUsername
+import com.alleslocker.backend.domain.vendor.AvailableVendors
+import com.alleslocker.backend.domain.vendor.VendorAuthentication
+import com.alleslocker.backend.domain.vendor.VendorData
+import com.alleslocker.backend.domain.vendor.VendorId
 import java.net.URI
 import java.net.URISyntaxException
 import java.time.Instant
@@ -63,7 +68,7 @@ class AddVendorDataUseCaseImpl(
                 forVendor = forApi,
                 baseUrl = baseUrl,
                 vendorAuthentication = vendorAuthentication,
-                vendorState = vendorState
+                vendorState = vendorState,
             )
 
         val saved =

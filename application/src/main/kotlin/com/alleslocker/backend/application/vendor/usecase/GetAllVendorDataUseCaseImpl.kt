@@ -9,7 +9,7 @@ import com.alleslocker.backend.application.vendor.mapper.toDto
 
 class GetAllVendorDataUseCaseImpl(
     private val apiGateway: VendorDataGateway,
-    private val logger: Logger
+    private val logger: Logger,
 ) : GetAllVendorDataUseCase {
     override fun execute(
         request: Unit,

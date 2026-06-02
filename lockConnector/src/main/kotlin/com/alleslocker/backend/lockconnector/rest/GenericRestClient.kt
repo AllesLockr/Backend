@@ -77,8 +77,8 @@ class GenericRestClient {
     fun getBodiless(
         endpoint: String,
         headers: Map<String, String> = emptyMap(),
-    ): ResponseEntity<Void> {
-        return client
+    ): ResponseEntity<Void> =
+        client
             .get()
             .uri(endpoint)
             .headers { header ->
@@ -86,5 +86,4 @@ class GenericRestClient {
             }.accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .toBodilessEntity()
-    }
 }

@@ -6,12 +6,12 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Date
 
 @Component
 class JwtService(
     private val jwtProperties: JwtProperties,
-    private val logger: Logger
+    private val logger: Logger,
 ) {
     private val key by lazy {
         Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray())
