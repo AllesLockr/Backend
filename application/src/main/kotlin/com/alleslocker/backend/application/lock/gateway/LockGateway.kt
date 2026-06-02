@@ -14,5 +14,12 @@ interface LockGateway : ReadWriteGateway<Lock, LockId> {
 
     fun findBySerialNumber(serialNumber: LockSerialNumber): Lock?
 
+    fun findBySerialNumbers(serialNumbers: Set<LockSerialNumber>): List<Lock>
+
     fun findAll(): List<Lock>
+
+    fun syncLocks(
+        toUpsert: List<Lock>,
+        toDeleteIds: List<LockId>,
+    )
 }

@@ -11,9 +11,10 @@ import com.alleslocker.backend.persistence.lock.repository.LockRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
-class LockGatewayAdapter(
+open class LockGatewayAdapter(
     private val repository: LockRepository,
 ) : LockGateway {
     override fun getAllLocksPaged(
@@ -47,5 +48,20 @@ class LockGatewayAdapter(
 
     override fun findBySerialNumber(serialNumber: LockSerialNumber): Lock? = repository.findBySerialNumber(serialNumber.value)?.toDomain()
 
+    override fun findBySerialNumbers(serialNumbers: Set<LockSerialNumber>): List<Lock> =
+        repository.findBySerialNumberIn(serialNumbers.map { it.value }).map { it.toDomain() }
+
     override fun findAll(): List<Lock> = repository.findAll().map { it.toDomain() }
+
+    @Transactional
+    open override fun syncLocks(
+        toUpsert: List<Lock>,
+        toDeleteIds: List<LockId>,
+    ) {
+        toUpsert.forEach { lock ->
+            val existing = repository.findById(lock.id.value).orElse(null)
+            repository.save(lock.toEntity(existing))
+        }
+        toDeleteIds.forEach { repository.deleteById(it.value) }
+    }
 }

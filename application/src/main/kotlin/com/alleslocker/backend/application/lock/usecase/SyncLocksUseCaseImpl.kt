@@ -16,6 +16,7 @@ import com.alleslocker.backend.domain.lock.LockName
 import com.alleslocker.backend.domain.lock.LockSerialNumber
 import com.alleslocker.backend.domain.shared.MetadataEntry
 import com.alleslocker.backend.domain.user.UserId
+import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.domain.vendor.ExternalApiIdentity
 import com.alleslocker.backend.domain.vendor.ExternalId
 import java.time.Instant
@@ -32,72 +33,78 @@ internal class SyncLocksUseCaseImpl(
         val fetchedLocks =
             try {
                 lockAdapter.fetchAllLocks().locks
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                logger.error("Failed to fetch locks from ISEO", e)
                 presenter.presentFailure(ErrorResponse.InternalServerError("Failed to fetch locks from ISEO"))
                 return
             }
 
         val fetchedSerialNumbers = fetchedLocks.map { it.serialNumber }.toSet()
 
-        var synced = 0
-        for (fetchedLock in fetchedLocks) {
+        val existingBySerial: Map<String, Lock> =
             try {
-                val existing = lockGateway.findBySerialNumber(LockSerialNumber(fetchedLock.serialNumber))
+                lockGateway.findBySerialNumbers(fetchedSerialNumbers.map { LockSerialNumber(it) }.toSet())
+                    .associateBy { it.serialNumber.value }
+            } catch (e: Exception) {
+                logger.error("Failed to load existing locks for upsert", e)
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load existing locks"))
+                return
+            }
+
+        val locksToUpsert =
+            fetchedLocks.map { fetchedLock ->
+                val existing = existingBySerial[fetchedLock.serialNumber]
                 val lockId = existing?.id ?: LockId.generate()
                 val metadata =
                     buildSet {
-                        fetchedLock.tagId?.let { add(MetadataEntry(key = "tagId", value = it.toString())) }
+                        existing?.metadata?.let { addAll(it) }
+                        fetchedLock.tagId?.let { tagId ->
+                            removeIf { it.key == "tagId" }
+                            add(MetadataEntry(key = "tagId", value = tagId.toString()))
+                        }
                     }
-                lockGateway.save(
-                    Lock(
-                        id = lockId,
-                        name = LockName(fetchedLock.name),
-                        serialNumber = LockSerialNumber(fetchedLock.serialNumber),
-                        metadata = metadata,
-                        apiIdentity = ExternalApiIdentity(fetchedLock.vendor, ExternalId(fetchedLock.externalId)),
-                    ),
+                Lock(
+                    id = lockId,
+                    name = LockName(fetchedLock.name),
+                    serialNumber = LockSerialNumber(fetchedLock.serialNumber),
+                    metadata = metadata,
+                    apiIdentity = ExternalApiIdentity(fetchedLock.vendor, ExternalId(fetchedLock.externalId)),
                 )
-                synced++
-            } catch (_: Exception) {
-                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to sync lock '${fetchedLock.serialNumber}'"))
-                return
             }
-        }
 
         val allLocalLocks =
             try {
                 lockGateway.findAll()
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                logger.error("Failed to load local locks for cleanup", e)
                 presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load local locks for cleanup"))
                 return
             }
 
-        var deleted = 0
-        for (localLock in allLocalLocks) {
-            if (localLock.serialNumber.value !in fetchedSerialNumbers) {
-                try {
-                    lockGateway.deleteById(localLock.id)
-                    deleted++
-                } catch (_: Exception) {
-                    presenter.presentFailure(
-                        ErrorResponse.InternalServerError("Failed to delete stale lock '${localLock.serialNumber.value}'"),
-                    )
-                    return
-                }
-            }
+        val idsToDelete =
+            allLocalLocks
+                .filter { it.apiIdentity?.api == AvailableVendors.ISEO && it.serialNumber.value !in fetchedSerialNumbers }
+                .map { it.id }
+
+        try {
+            lockGateway.syncLocks(locksToUpsert, idsToDelete)
+        } catch (e: Exception) {
+            logger.error("Failed to sync locks to database", e)
+            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to sync locks to database"))
+            return
         }
 
         runCatching {
             logger.audit(
                 AuditLog(
                     id = AuditLogId.generate(),
-                    message = AuditLogMessage("Synced locks from ISEO: $synced upserted, $deleted deleted"),
+                    message = AuditLogMessage("Synced locks from ISEO: ${locksToUpsert.size} upserted, ${idsToDelete.size} deleted"),
                     performedByUserId = UserId(request.requesterId),
                     createdAt = Instant.now(),
                 ),
             )
         }
 
-        presenter.present(SyncLocksResponseDto(synced = synced, deleted = deleted))
+        presenter.present(SyncLocksResponseDto(synced = locksToUpsert.size, deleted = idsToDelete.size))
     }
 }
