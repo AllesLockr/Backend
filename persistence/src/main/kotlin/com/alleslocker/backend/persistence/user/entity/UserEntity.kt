@@ -12,6 +12,15 @@ open class UserEntity {
     @Column(name = "id", nullable = false, unique = true)
     open lateinit var id: String
 
+    @Column(name = "firstname", nullable = false)
+    open lateinit var firstname: String
+
+    @Column(name = "lastname", nullable = false)
+    open lateinit var lastname: String
+
+    @Column(name = "email", nullable = false, unique = true)
+    open lateinit var email: String
+
     @Column(name = "username", nullable = false, unique = true)
     open lateinit var username: String
 
