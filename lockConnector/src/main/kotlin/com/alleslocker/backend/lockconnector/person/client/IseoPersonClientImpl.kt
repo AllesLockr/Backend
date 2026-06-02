@@ -53,6 +53,13 @@ class IseoPersonClientImpl(
                 headers = mapOf("Authorization" to "Bearer $token"),
             )
         } catch (e: Exception) {
+            runCatching {
+                restClient.delete(
+                    endpoint = "$baseUrl/api/v2/users/${response.id}",
+                    headers = mapOf("Authorization" to "Bearer $token"),
+                )
+            }.onFailure { e.addSuppressed(it) }
+
             throw e
         }
         return AddPersonAdapterResponse(externalIds = mapOf(AvailableApis.ISEO to response.id.toString()))
