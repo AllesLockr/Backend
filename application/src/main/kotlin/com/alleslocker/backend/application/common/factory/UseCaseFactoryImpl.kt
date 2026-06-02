@@ -1,14 +1,5 @@
 package com.alleslocker.backend.application.common.factory
 
-import com.alleslocker.backend.application.api.gateway.ApiDataGateway
-import com.alleslocker.backend.application.api.usecase.AddApiDataUseCase
-import com.alleslocker.backend.application.api.usecase.AddApiDataUseCaseImpl
-import com.alleslocker.backend.application.api.usecase.GetAllApiDataUseCase
-import com.alleslocker.backend.application.api.usecase.GetAllApiDataUseCaseImpl
-import com.alleslocker.backend.application.api.usecase.GetApiDataUseCase
-import com.alleslocker.backend.application.api.usecase.GetApiDataUseCaseImpl
-import com.alleslocker.backend.application.api.usecase.GetImplementedApisUseCase
-import com.alleslocker.backend.application.api.usecase.GetImplementedApisUseCaseImpl
 import com.alleslocker.backend.application.auditlog.gateway.AuditLogGateway
 import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPagedUseCase
 import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPagedUseCaseImpl
@@ -33,6 +24,16 @@ import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.RegisterUserUseCase
 import com.alleslocker.backend.application.user.usecase.RegisterUserUseCaseImpl
+import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
+import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
+import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCase
+import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCaseImpl
 import kotlin.reflect.KClass
 
 class UseCaseFactoryImpl(
@@ -77,14 +78,19 @@ class UseCaseFactoryImpl(
                     passwordHasher = passwordHasher,
                     userGateway = gatewayFactory[UserGateway::class],
                 ),
-            AddApiDataUseCase::class to
-                AddApiDataUseCaseImpl(
-                    apiDataGateway = gatewayFactory[ApiDataGateway::class],
+            AddVendorDataUseCase::class to
+                AddVendorDataUseCaseImpl(
+                    vendorDataGateway = gatewayFactory[VendorDataGateway::class],
                     logger = logger,
+                    vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
                 ),
-            GetImplementedApisUseCase::class to GetImplementedApisUseCaseImpl(),
-            GetApiDataUseCase::class to GetApiDataUseCaseImpl(gatewayFactory[ApiDataGateway::class]),
-            GetAllApiDataUseCase::class to GetAllApiDataUseCaseImpl(gatewayFactory[ApiDataGateway::class]),
+            GetImplementedVendorsUseCase::class to GetImplementedVendorsUseCaseImpl(),
+            GetVendorDataUseCase::class to GetVendorDataUseCaseImpl(gatewayFactory[VendorDataGateway::class]),
+            GetAllVendorDataUseCase::class to
+                GetAllVendorDataUseCaseImpl(
+                    gatewayFactory[VendorDataGateway::class],
+                    logger,
+                ),
             GetAllAuditLogsPagedUseCase::class to
                 GetAllAuditLogsPagedUseCaseImpl(
                     gatewayFactory[AuditLogGateway::class],
