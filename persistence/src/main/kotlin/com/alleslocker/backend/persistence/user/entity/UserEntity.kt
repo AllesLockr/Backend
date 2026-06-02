@@ -1,9 +1,13 @@
 package com.alleslocker.backend.persistence.user.entity
 
+import com.alleslocker.backend.domain.user.UserRole
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import kotlin.properties.Delegates
 
 @Entity
 @Table(name = "user")
@@ -12,9 +16,25 @@ open class UserEntity {
     @Column(name = "id", nullable = false, unique = true)
     open lateinit var id: String
 
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    open lateinit var role: UserRole
+
+    @Column(name = "firstname", nullable = false)
+    open lateinit var firstname: String
+
+    @Column(name = "lastname", nullable = false)
+    open lateinit var lastname: String
+
+    @Column(name = "email", nullable = false, unique = true)
+    open lateinit var email: String
+
     @Column(name = "username", nullable = false, unique = true)
     open lateinit var username: String
 
     @Column(name = "password_hash", nullable = false)
     open lateinit var passwordHash: String
+
+    @Column(name = "is_active", nullable = false)
+    open var isActive: Boolean = true
 }
