@@ -43,7 +43,8 @@ internal class SyncLocksUseCaseImpl(
 
         val existingBySerial: Map<String, Lock> =
             try {
-                lockGateway.findBySerialNumbers(fetchedSerialNumbers.map { LockSerialNumber(it) }.toSet())
+                lockGateway
+                    .findBySerialNumbers(fetchedSerialNumbers.map { LockSerialNumber(it) }.toSet())
                     .associateBy { it.serialNumber.value }
             } catch (e: Exception) {
                 logger.error("Failed to load existing locks for upsert", e)
