@@ -7,5 +7,5 @@ import jakarta.persistence.Embeddable
 class MetadataEntity(
     @Column(name = "meta_key")
     var key: String = "",
-    var value: String = ""
+    var value: String = "",
 )
