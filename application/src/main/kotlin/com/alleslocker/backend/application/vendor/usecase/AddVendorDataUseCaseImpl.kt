@@ -78,9 +78,8 @@ class AddVendorDataUseCaseImpl(
                 return presenter.presentFailure(ErrorResponse.InternalServerError("Could not save api to db: ${e.message}"))
             }
 
-        val vendorState = vendorConnectionAdapter.check(forApi, null)
-
         try {
+            val vendorState = vendorConnectionAdapter.check(forApi, null)
             vendorDataGateway.save(saved.copy(vendorState = vendorState))
         } catch (e: Exception) {
             return presenter.presentFailure(ErrorResponse.InternalServerError("Could not update connection state: ${e.message}"))
