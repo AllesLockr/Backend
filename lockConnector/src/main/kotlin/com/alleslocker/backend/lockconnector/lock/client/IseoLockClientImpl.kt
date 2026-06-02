@@ -12,7 +12,9 @@ class IseoLockClientImpl(
     private val tokenProvider: TokenProvider,
     private val configProvider: ConfigProvider,
 ) {
-    private data class IseoTag(val id: Long)
+    private data class IseoTag(
+        val id: Long,
+    )
 
     private data class IseoSmartLockItem(
         val name: String,

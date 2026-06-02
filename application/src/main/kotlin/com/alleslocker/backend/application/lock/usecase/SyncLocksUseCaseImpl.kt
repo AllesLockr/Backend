@@ -42,9 +42,10 @@ internal class SyncLocksUseCaseImpl(
             try {
                 val existing = lockGateway.findBySerialNumber(LockSerialNumber(fetchedLock.serialNumber))
                 val lockId = existing?.id ?: LockId.generate()
-                val metadata = buildSet {
-                    fetchedLock.tagId?.let { add(MetadataEntry(key = "tagId", value = it.toString())) }
-                }
+                val metadata =
+                    buildSet {
+                        fetchedLock.tagId?.let { add(MetadataEntry(key = "tagId", value = it.toString())) }
+                    }
                 lockGateway.save(
                     Lock(
                         id = lockId,
@@ -75,7 +76,9 @@ internal class SyncLocksUseCaseImpl(
                     lockGateway.deleteById(localLock.id)
                     deleted++
                 } catch (_: Exception) {
-                    presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete stale lock '${localLock.serialNumber.value}'"))
+                    presenter.presentFailure(
+                        ErrorResponse.InternalServerError("Failed to delete stale lock '${localLock.serialNumber.value}'"),
+                    )
                     return
                 }
             }

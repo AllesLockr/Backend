@@ -11,6 +11,8 @@ interface LockGateway : ReadWriteGateway<Lock, LockId> {
         page: Int = 0,
         size: Int = 10,
     ): Page<Lock>
+
     fun findBySerialNumber(serialNumber: LockSerialNumber): Lock?
+
     fun findAll(): List<Lock>
 }

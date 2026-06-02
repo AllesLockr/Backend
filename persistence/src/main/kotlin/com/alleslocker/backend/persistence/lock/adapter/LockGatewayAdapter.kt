@@ -45,8 +45,7 @@ class LockGatewayAdapter(
 
     override fun exists(id: LockId): Boolean = repository.existsById(id.value)
 
-    override fun findBySerialNumber(serialNumber: LockSerialNumber): Lock? =
-        repository.findBySerialNumber(serialNumber.value)?.toDomain()
+    override fun findBySerialNumber(serialNumber: LockSerialNumber): Lock? = repository.findBySerialNumber(serialNumber.value)?.toDomain()
 
     override fun findAll(): List<Lock> = repository.findAll().map { it.toDomain() }
 }
