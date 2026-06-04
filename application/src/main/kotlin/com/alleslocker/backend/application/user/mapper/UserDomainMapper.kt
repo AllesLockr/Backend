@@ -12,5 +12,6 @@ fun User.toDto() =
         lastname = lastname.value,
         username = username.value,
         email = email.value,
+        mustChangePassword = mustChangePassword,
         isActive = isActive,
     )

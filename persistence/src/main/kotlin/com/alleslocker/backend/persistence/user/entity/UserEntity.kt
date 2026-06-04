@@ -35,6 +35,9 @@ open class UserEntity {
     @Column(name = "password_hash", nullable = false)
     open lateinit var passwordHash: String
 
+    @Column(name = "must_change_password", nullable = false)
+    open var mustChangePassword: Boolean = false
+
     @Column(name = "is_active", nullable = false)
     open var isActive: Boolean = true
 }

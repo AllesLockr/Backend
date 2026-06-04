@@ -9,5 +9,6 @@ data class UserSchema(
     val lastname: String,
     val username: String,
     val email: String,
+    val mustChangePassword: Boolean,
     val isActive: Boolean,
 )

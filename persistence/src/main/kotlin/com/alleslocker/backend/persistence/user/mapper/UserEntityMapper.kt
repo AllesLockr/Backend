@@ -18,6 +18,7 @@ fun UserEntity.toDomain(): User =
         email = UserEmail(this.email),
         username = Username(this.username),
         passwordHash = PasswordHash(this.passwordHash),
+        mustChangePassword = mustChangePassword,
         isActive = this.isActive,
     )
 
@@ -31,6 +32,7 @@ fun User.toEntity(existing: UserEntity? = null): UserEntity {
     entity.email = this.email.value
     entity.username = this.username.value
     entity.passwordHash = this.passwordHash.value
+    entity.mustChangePassword = this.mustChangePassword
     entity.isActive = this.isActive
 
     return entity
