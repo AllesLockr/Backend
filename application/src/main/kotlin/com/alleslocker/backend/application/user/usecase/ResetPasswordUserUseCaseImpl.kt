@@ -56,7 +56,10 @@ class ResetPasswordUserUseCaseImpl(
 
         try {
             userGateway.save(
-                user.copy(passwordHash = newPasswordHash),
+                user.copy(
+                    passwordHash = newPasswordHash,
+                    mustChangePassword = false,
+                ),
             )
         } catch (e: Exception) {
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user"))
