@@ -188,10 +188,9 @@ class UserController(
         useCaseFactory.make(GetUserUseCase::class).execute(request.toDto(), presenter)
     }
 
-    @PostMapping("/{id}/reset-password")
+    @PostMapping("/reset-password")
     fun resetPassword(
         @AuthenticationPrincipal requestorId: String,
-        @PathVariable id: String,
         @RequestBody request: ResetPasswordUserRequestSchema,
     ) {
         val presenter = ResetPasswordUserPresenter(httpServletResponse, jacksonConverter, jwtService)
