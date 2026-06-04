@@ -17,22 +17,24 @@ class ResetPasswordUserUseCaseImpl(
 ) : ResetPasswordUserUseCase {
     override fun execute(
         request: ResetPasswordUserRequestDto,
-        presenter: OutputBoundary<ResetPasswordUserResponseDto>
+        presenter: OutputBoundary<ResetPasswordUserResponseDto>,
     ) {
-        val userId = try {
-            UserId(request.requestorId)
-        } catch (e: IllegalArgumentException) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Invalid user id: ${e.message}"))
-            return
-        }
+        val userId =
+            try {
+                UserId(request.requestorId)
+            } catch (e: IllegalArgumentException) {
+                presenter.presentFailure(ErrorResponse.BadRequest("Invalid user id: ${e.message}"))
+                return
+            }
 
-        val user = try {
-            userGateway.findById(userId)
-        } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load user"))
-            logger.error("Failed to load user with id ${request.requestorId}", e)
-            return
-        }
+        val user =
+            try {
+                userGateway.findById(userId)
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load user"))
+                logger.error("Failed to load user with id ${request.requestorId}", e)
+                return
+            }
         if (user == null) {
             presenter.presentFailure(ErrorResponse.NotFound("User doesn't exist"))
             return
@@ -44,16 +46,17 @@ class ResetPasswordUserUseCaseImpl(
         }
 
         val newPasswordHashString = passwordHasher.hash(request.newPassword)
-        val newPasswordHash = try {
-            PasswordHash(newPasswordHashString)
-        } catch (e: IllegalArgumentException) {
-            presenter.presentFailure(ErrorResponse.BadRequest("Invalid new password hash: ${e.message}"))
-            return
-        }
+        val newPasswordHash =
+            try {
+                PasswordHash(newPasswordHashString)
+            } catch (e: IllegalArgumentException) {
+                presenter.presentFailure(ErrorResponse.BadRequest("Invalid new password hash: ${e.message}"))
+                return
+            }
 
         try {
             userGateway.save(
-                user.copy(passwordHash = newPasswordHash)
+                user.copy(passwordHash = newPasswordHash),
             )
         } catch (e: Exception) {
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user"))
