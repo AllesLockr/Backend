@@ -2,17 +2,21 @@ package com.alleslocker.backend.web.user.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
+import com.alleslocker.backend.application.user.dto.request.ResetPasswordUserRequestDto
 import com.alleslocker.backend.application.user.usecase.GetUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
+import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
 import com.alleslocker.backend.web.common.security.JwtService
 import com.alleslocker.backend.web.user.mapper.toDto
 import com.alleslocker.backend.web.user.presenter.GetUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUsersPagedPresenter
 import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
+import com.alleslocker.backend.web.user.presenter.ResetPasswordUserPresenter
 import com.alleslocker.backend.web.user.schema.request.GetUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUsersPagedRequestSchema
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
+import com.alleslocker.backend.web.user.schema.request.ResetPasswordUserRequestSchema
 import com.alleslocker.backend.web.user.schema.response.GetUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.GetUsersPagedResponseSchema
 import com.alleslocker.backend.web.user.schema.response.LoginUserResponseSchema
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.security.Principal
 
 @Tag(name = "User")
 @RestController
@@ -181,5 +186,15 @@ class UserController(
         val request = GetUserRequestSchema(id)
         val presenter = GetUserPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetUserUseCase::class).execute(request.toDto(), presenter)
+    }
+
+    @PostMapping("/{id}/reset-password")
+    fun resetPassword(
+        @AuthenticationPrincipal requestorId: String,
+        @PathVariable id: String,
+        @RequestBody request: ResetPasswordUserRequestSchema,
+    ) {
+        val presenter = ResetPasswordUserPresenter(httpServletResponse, jacksonConverter, jwtService)
+        useCaseFactory.make(ResetPasswordUserUseCase::class).execute(request.toDto(requestorId), presenter)
     }
 }

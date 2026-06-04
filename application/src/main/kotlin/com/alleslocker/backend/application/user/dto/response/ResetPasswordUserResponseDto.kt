@@ -1,3 +1,5 @@
 package com.alleslocker.backend.application.user.dto.response
 
-class ResetPasswordUserResponseDto
+data class ResetPasswordUserResponseDto(
+    val userId: String,
+)

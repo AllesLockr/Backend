@@ -54,19 +54,20 @@ class ResetPasswordUserUseCaseImpl(
                 return
             }
 
-        try {
-            userGateway.save(
-                user.copy(
-                    passwordHash = newPasswordHash,
-                    mustChangePassword = false,
-                ),
-            )
-        } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user"))
-            logger.error("Failed to save user with id ${request.requestorId}", e)
-            return
-        }
+        val newUser =
+            try {
+                userGateway.save(
+                    user.copy(
+                        passwordHash = newPasswordHash,
+                        mustChangePassword = false,
+                    ),
+                )
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user"))
+                logger.error("Failed to save user with id ${request.requestorId}", e)
+                return
+            }
 
-        presenter.present(ResetPasswordUserResponseDto())
+        presenter.present(ResetPasswordUserResponseDto(newUser.id.value))
     }
 }
