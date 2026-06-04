@@ -190,7 +190,7 @@ class UserController(
     }
 
     @Operation(
-        summary = "Get a user by id.",
+        summary = "Reset the authenticated user's password.",
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -214,7 +214,7 @@ class UserController(
             ),
             ApiResponse(
                 responseCode = "400",
-                description = "Invalid id.",
+                description = "Invalid reset-password request.",
                 content = [
                     Content(
                         mediaType = "application/json",
