@@ -17,6 +17,6 @@ internal class CountPersonsPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
+        error.presentAsJson(HttpStatus.valueOf(error.status))
     }
 }

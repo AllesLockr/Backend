@@ -17,10 +17,6 @@ internal class GetUserPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        when (error) {
-            is ErrorResponse.BadRequest -> error.presentAsJson(HttpStatus.BAD_REQUEST)
-            is ErrorResponse.NotFound -> error.presentAsJson(HttpStatus.NOT_FOUND)
-            else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        error.presentAsJson(HttpStatus.valueOf(error.status))
     }
 }

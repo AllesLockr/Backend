@@ -18,10 +18,6 @@ internal class AddApiDataPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        when (error) {
-            is ErrorResponse.UnprocessableEntity -> error.presentAsJson(HttpStatus.UNPROCESSABLE_ENTITY)
-            is ErrorResponse.BadRequest -> error.presentAsJson(HttpStatus.BAD_REQUEST)
-            else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        error.presentAsJson(HttpStatus.valueOf(error.status))
     }
 }

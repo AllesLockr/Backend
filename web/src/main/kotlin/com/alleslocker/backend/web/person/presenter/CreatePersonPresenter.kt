@@ -19,10 +19,6 @@ internal class CreatePersonPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        when (error) {
-            is ErrorResponse.BadRequest -> error.presentAsJson(HttpStatus.BAD_REQUEST)
-            is ErrorResponse.AlreadyExists -> error.presentAsJson(HttpStatus.CONFLICT)
-            else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        error.presentAsJson(HttpStatus.valueOf(error.status))
     }
 }
