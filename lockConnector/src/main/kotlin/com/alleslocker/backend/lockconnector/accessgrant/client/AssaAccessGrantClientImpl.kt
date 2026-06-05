@@ -1,0 +1,15 @@
+package com.alleslocker.backend.lockconnector.accessgrant.client
+
+import com.alleslocker.backend.application.accessgrant.dto.request.adapter.GrantAccessAdapterRequest
+import com.alleslocker.backend.application.accessgrant.dto.request.adapter.RevokeAccessAdapterRequest
+import com.alleslocker.backend.application.accessgrant.dto.response.GrantAccessAdapterResponse
+import com.alleslocker.backend.lockconnector.accessgrant.adapter.AccessGrantClient
+import com.alleslocker.backend.lockconnector.rest.GenericRestClient
+
+internal class AssaAccessGrantClientImpl(
+    private val restClient: GenericRestClient,
+) : AccessGrantClient {
+    override fun grant(request: GrantAccessAdapterRequest): GrantAccessAdapterResponse = TODO("ASSA access grant not yet implemented")
+
+    override fun revoke(request: RevokeAccessAdapterRequest): Unit = TODO("ASSA access revoke not yet implemented")
+}
