@@ -18,6 +18,7 @@ internal class SyncLocksPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
+        val status = HttpStatus.resolve(error.status) ?: HttpStatus.INTERNAL_SERVER_ERROR
+        error.presentAsJson(status)
     }
 }

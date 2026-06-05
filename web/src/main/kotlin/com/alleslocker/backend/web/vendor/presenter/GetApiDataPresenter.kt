@@ -16,10 +16,7 @@ internal class GetApiDataPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        when (error) {
-            is ErrorResponse.NotFound -> error.presentAsJson(HttpStatus.NOT_FOUND)
-            is ErrorResponse.BadRequest -> error.presentAsJson(HttpStatus.BAD_REQUEST)
-            else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        val status = HttpStatus.resolve(error.status) ?: HttpStatus.INTERNAL_SERVER_ERROR
+        error.presentAsJson(status)
     }
 }
