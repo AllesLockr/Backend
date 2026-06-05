@@ -109,7 +109,9 @@ internal class GrantAccessUseCaseImpl(
                 )
             } catch (e: Exception) {
                 logger.error("Failed to push access grant to $vendor", e)
-                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to grant access on $vendor: ${e.message ?: "Unknown error"}"))
+                presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Failed to grant access on $vendor: ${e.message ?: "Unknown error"}"),
+                )
                 return
             }
 
@@ -136,7 +138,10 @@ internal class GrantAccessUseCaseImpl(
         logger.audit(
             AuditLog(
                 id = AuditLogId.generate(),
-                message = AuditLogMessage("Granted access: person ${personId.value} -> lock ${lockId.value} on $vendor (grant ${grantId.value})"),
+                message =
+                    AuditLogMessage(
+                        "Granted access: person ${personId.value} -> lock ${lockId.value} on $vendor (grant ${grantId.value})",
+                    ),
                 performedByUserId = UserId(request.requesterId),
                 createdAt = Instant.now(),
             ),

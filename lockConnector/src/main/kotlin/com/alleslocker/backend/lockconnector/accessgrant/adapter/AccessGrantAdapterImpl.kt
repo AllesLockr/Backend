@@ -22,7 +22,7 @@ internal class AccessGrantAdapterImpl(
     private val clients: Map<AvailableVendors, AccessGrantClient> =
         mapOf(
             AvailableVendors.ISEO to IseoAccessGrantClientImpl(restClient, iseoTokenProvider, configProvider),
-            //TODO: AvailableVendors.ASSA_AMOQ to AssaAccessGrantClientImpl(restClient),
+            // TODO: AvailableVendors.ASSA_AMOQ to AssaAccessGrantClientImpl(restClient),
         )
 
     private fun clientFor(vendor: AvailableVendors): AccessGrantClient =
