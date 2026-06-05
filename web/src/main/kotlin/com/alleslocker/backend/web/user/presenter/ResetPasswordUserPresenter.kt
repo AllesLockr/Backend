@@ -20,11 +20,6 @@ internal class ResetPasswordUserPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        when (error) {
-            is ErrorResponse.NotFound -> error.presentAsJson(HttpStatus.NOT_FOUND)
-            is ErrorResponse.BadRequest -> error.presentAsJson(HttpStatus.BAD_REQUEST)
-            is ErrorResponse.Unauthorized -> error.presentAsJson(HttpStatus.UNAUTHORIZED)
-            else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        error.presentAsJson(HttpStatus.valueOf(error.status))
     }
 }
