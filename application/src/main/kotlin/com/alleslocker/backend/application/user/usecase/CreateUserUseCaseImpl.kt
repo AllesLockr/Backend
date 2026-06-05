@@ -85,6 +85,34 @@ class CreateUserUseCaseImpl(
                 return
             }
 
+        val existingByUsername =
+            try {
+                userGateway.findByUsername(username.value)
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Error checking username"))
+                logger.error("Failed to check username uniqueness", e)
+                return
+            }
+
+        if (existingByUsername != null) {
+            presenter.presentFailure(ErrorResponse.AlreadyExists("username already exists"))
+            return
+        }
+
+        val existingByEmail =
+            try {
+                userGateway.findByEmail(email.value)
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Error checking email"))
+                logger.error("Failed to check email uniqueness", e)
+                return
+            }
+
+        if (existingByEmail != null) {
+            presenter.presentFailure(ErrorResponse.AlreadyExists("email already exists"))
+            return
+        }
+
         val password = passwordHasher.hash(passwordGeneratorService.generate())
         val passwordHash =
             try {

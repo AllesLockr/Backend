@@ -9,6 +9,8 @@ import com.alleslocker.backend.domain.user.UserId
 interface UserGateway : ReadWriteGateway<User, UserId> {
     fun findByUsername(username: String): User?
 
+    fun findByEmail(email: String): User?
+
     fun getAllUsersPaged(
         filter: UserFilterDto,
         page: Int = 0,
