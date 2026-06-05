@@ -20,6 +20,7 @@ internal class ResetPasswordUserPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        error.presentAsJson(HttpStatus.valueOf(error.status))
+        val status = HttpStatus.resolve(error.status) ?: HttpStatus.INTERNAL_SERVER_ERROR
+        error.presentAsJson(status)
     }
 }
