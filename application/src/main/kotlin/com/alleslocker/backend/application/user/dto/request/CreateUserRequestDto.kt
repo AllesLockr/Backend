@@ -1,4 +1,9 @@
 package com.alleslocker.backend.application.user.dto.request
 
-class CreateUserRequestDto {
-}
+data class CreateUserRequestDto(
+    val requestorId: String,
+    val firstname: String,
+    val lastname: String,
+    val username: String,
+    val email: String,
+)
