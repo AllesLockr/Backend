@@ -5,7 +5,6 @@ import com.alleslocker.backend.application.user.dto.response.ResetPasswordUserRe
 import com.alleslocker.backend.web.common.presenter.JsonRestPresenter
 import com.alleslocker.backend.web.common.security.JwtService
 import com.alleslocker.backend.web.user.mapper.toSchema
-import com.alleslocker.backend.web.user.schema.response.LoginUserResponseSchema
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
