@@ -3,14 +3,10 @@ package com.alleslocker.backend.application.user.usecase
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
-import com.alleslocker.backend.application.person.dto.response.GetPersonsPagedResponseDto
-import com.alleslocker.backend.application.person.mapper.toDto
 import com.alleslocker.backend.application.user.dto.request.GetUsersPagedRequestDto
 import com.alleslocker.backend.application.user.dto.response.GetUsersPagedResponseDto
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.mapper.toDto
-import com.alleslocker.backend.domain.user.UserId
-import com.alleslocker.backend.domain.user.UserRole
 
 class GetUsersPagedUseCaseImpl(
     private val userGateway: UserGateway,

@@ -4,5 +4,5 @@ import com.alleslocker.backend.application.common.InputBoundary
 import kotlin.reflect.KClass
 
 interface UseCaseFactory {
-    fun <RQ, RS, I : com.alleslocker.backend.application.common.InputBoundary<RQ, RS>> make(inputBoundary: KClass<out I>): I
+    fun <RQ, RS, I : InputBoundary<RQ, RS>> make(inputBoundary: KClass<out I>): I
 }

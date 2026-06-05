@@ -2,7 +2,6 @@ package com.alleslocker.backend.web.user.presenter
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.user.dto.response.GetUserResponseDto
-import com.alleslocker.backend.application.user.dto.response.GetUsersPagedResponseDto
 import com.alleslocker.backend.web.common.presenter.JsonRestPresenter
 import com.alleslocker.backend.web.user.mapper.toSchema
 import jakarta.servlet.http.HttpServletResponse

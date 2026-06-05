@@ -10,4 +10,5 @@ data class UserDto(
     val username: String,
     val email: String,
     val isActive: Boolean,
+    val mustChangePassword: Boolean,
 )

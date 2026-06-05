@@ -29,6 +29,8 @@ import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
+import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCaseImpl
 import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
@@ -92,6 +94,12 @@ class UseCaseFactoryImpl(
             GetUserUseCase::class to
                 GetUserUseCaseImpl(
                     userGateway = gatewayFactory[UserGateway::class],
+                    logger = logger,
+                ),
+            ResetPasswordUserUseCase::class to
+                ResetPasswordUserUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    passwordHasher = passwordHasher,
                     logger = logger,
                 ),
             AddVendorDataUseCase::class to

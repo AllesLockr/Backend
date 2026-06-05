@@ -9,4 +9,5 @@ data class User(
     val email: UserEmail,
     val passwordHash: PasswordHash,
     val isActive: Boolean,
+    val mustChangePassword: Boolean,
 )

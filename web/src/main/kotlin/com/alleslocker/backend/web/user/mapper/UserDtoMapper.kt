@@ -11,5 +11,6 @@ fun UserDto.toSchema() =
         lastname = lastname,
         username = username,
         email = email,
+        mustChangePassword = mustChangePassword,
         isActive = isActive,
     )

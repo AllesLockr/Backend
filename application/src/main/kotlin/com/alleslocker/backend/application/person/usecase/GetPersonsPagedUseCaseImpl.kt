@@ -6,7 +6,6 @@ import com.alleslocker.backend.application.person.dto.request.GetPersonsPagedReq
 import com.alleslocker.backend.application.person.dto.response.GetPersonsPagedResponseDto
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.application.person.mapper.toDto
-import com.alleslocker.backend.domain.person.Person
 
 internal class GetPersonsPagedUseCaseImpl(
     private val personGateway: PersonGateway,
