@@ -18,7 +18,7 @@ internal class CreateUserPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        val status = HttpStatus.valueOf(error.status) ?: HttpStatus.INTERNAL_SERVER_ERROR
+        val status = HttpStatus.resolve(error.status) ?: HttpStatus.INTERNAL_SERVER_ERROR
         error.presentAsJson(status)
     }
 }
