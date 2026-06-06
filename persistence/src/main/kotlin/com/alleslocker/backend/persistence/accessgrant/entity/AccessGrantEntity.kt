@@ -1,6 +1,5 @@
 package com.alleslocker.backend.persistence.accessgrant.entity
 
-import com.alleslocker.backend.domain.accessgrant.AccessOperation
 import com.alleslocker.backend.domain.vendor.AvailableVendors
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -28,10 +27,6 @@ open class AccessGrantEntity {
 
     @Column(name = "end_at", nullable = false)
     open lateinit var endAt: Instant
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "operation", nullable = false)
-    open lateinit var operation: AccessOperation
 
     @Enumerated(EnumType.STRING)
     @Column(name = "external_api", nullable = true)

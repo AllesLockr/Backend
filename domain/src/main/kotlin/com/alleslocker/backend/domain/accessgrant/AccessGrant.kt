@@ -9,6 +9,5 @@ data class AccessGrant(
     val personId: PersonId,
     val lockId: LockId,
     val schedule: AccessSchedule,
-    val operation: AccessOperation = AccessOperation.OPEN,
     val apiIdentity: ExternalApiIdentity? = null,
 )

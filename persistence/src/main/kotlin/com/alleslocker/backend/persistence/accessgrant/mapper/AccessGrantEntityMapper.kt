@@ -17,7 +17,6 @@ fun AccessGrantEntity.toDomain(): AccessGrant {
         personId = PersonId(this.personId),
         lockId = LockId(this.lockId),
         schedule = AccessSchedule(start = this.startAt, end = this.endAt),
-        operation = this.operation,
         apiIdentity = if (api != null && extId != null) ExternalApiIdentity(api, ExternalId(extId)) else null,
     )
 }
@@ -30,7 +29,6 @@ fun AccessGrant.toEntity(existing: AccessGrantEntity? = null): AccessGrantEntity
     entity.lockId = this.lockId.value
     entity.startAt = this.schedule.start
     entity.endAt = this.schedule.end
-    entity.operation = this.operation
     entity.externalApi = this.apiIdentity?.api
     entity.externalId = this.apiIdentity?.externalId?.value
 

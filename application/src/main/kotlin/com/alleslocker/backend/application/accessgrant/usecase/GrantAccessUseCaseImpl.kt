@@ -13,7 +13,6 @@ import com.alleslocker.backend.application.lock.gateway.LockGateway
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.domain.accessgrant.AccessGrant
 import com.alleslocker.backend.domain.accessgrant.AccessGrantId
-import com.alleslocker.backend.domain.accessgrant.AccessOperation
 import com.alleslocker.backend.domain.accessgrant.AccessSchedule
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
@@ -102,7 +101,6 @@ internal class GrantAccessUseCaseImpl(
                         personExternalId = personIdentity.externalId.value,
                         lockExternalId = lockIdentity.externalId.value,
                         lockTagId = lockTagId,
-                        operation = AccessOperation.OPEN,
                         start = schedule.start,
                         end = schedule.end,
                     ),
@@ -121,7 +119,6 @@ internal class GrantAccessUseCaseImpl(
                 personId = personId,
                 lockId = lockId,
                 schedule = schedule,
-                operation = AccessOperation.OPEN,
                 apiIdentity = ExternalApiIdentity(vendor, ExternalId(adapterResponse.externalId)),
             )
 
