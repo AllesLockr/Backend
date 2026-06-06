@@ -21,11 +21,7 @@ internal class GrantAccessPresenter(
     }
 
     override fun presentFailure(error: ErrorResponse) {
-        when (error) {
-            is ErrorResponse.BadRequest -> error.presentAsJson(HttpStatus.BAD_REQUEST)
-            is ErrorResponse.NotFound -> error.presentAsJson(HttpStatus.NOT_FOUND)
-            is ErrorResponse.UnprocessableEntity -> error.presentAsJson(HttpStatus.UNPROCESSABLE_ENTITY)
-            else -> error.presentAsJson(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        val status = HttpStatus.resolve(error.status) ?: HttpStatus.INTERNAL_SERVER_ERROR
+        error.presentAsJson(status)
     }
 }
