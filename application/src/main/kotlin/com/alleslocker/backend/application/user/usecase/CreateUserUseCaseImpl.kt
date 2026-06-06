@@ -113,10 +113,10 @@ class CreateUserUseCaseImpl(
             return
         }
 
-        val password = passwordHasher.hash(passwordGeneratorService.generate())
+        val clearPassword = passwordGeneratorService.generate()
         val passwordHash =
             try {
-                PasswordHash(password)
+                PasswordHash(passwordHasher.hash(clearPassword))
             } catch (e: IllegalArgumentException) {
                 presenter.presentFailure(ErrorResponse.BadRequest("Invalid password hash: ${e.message}"))
                 return
@@ -146,6 +146,7 @@ class CreateUserUseCaseImpl(
         presenter.present(
             CreateUserResponseDto(
                 id = saved.id.value,
+                password = clearPassword,
             ),
         )
     }
