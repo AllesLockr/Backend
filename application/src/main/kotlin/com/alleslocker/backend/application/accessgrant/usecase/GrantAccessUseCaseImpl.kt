@@ -110,7 +110,7 @@ internal class GrantAccessUseCaseImpl(
             } catch (e: Exception) {
                 logger.error("Failed to push access grant to $vendor", e)
                 presenter.presentFailure(
-                    ErrorResponse.InternalServerError("Failed to grant access on $vendor: ${e.message ?: "Unknown error"}"),
+                    ErrorResponse.InternalServerError("Failed to grant access on $vendor"),
                 )
                 return
             }
@@ -131,7 +131,7 @@ internal class GrantAccessUseCaseImpl(
             runCatching {
                 accessGrantAdapter.revoke(RevokeAccessAdapterRequest(vendor, adapterResponse.externalId))
             }.onFailure { logger.error("Failed to revoke grant ${grantId.value} on $vendor", it) }
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save access grant: ${e.message ?: "Unknown error"}"))
+            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save access grant"))
             return
         }
 
