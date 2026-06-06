@@ -8,4 +8,6 @@ interface UserRepository :
     JpaRepository<UserEntity, String>,
     JpaSpecificationExecutor<UserEntity> {
     fun findByUsername(username: String): UserEntity?
+
+    fun findByEmail(email: String): UserEntity?
 }

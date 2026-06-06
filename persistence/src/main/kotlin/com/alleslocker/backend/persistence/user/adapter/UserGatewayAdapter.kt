@@ -36,6 +36,8 @@ class UserGatewayAdapter(
 
     override fun findByUsername(username: String): User? = repository.findByUsername(username)?.toDomain()
 
+    override fun findByEmail(email: String): User? = repository.findByEmail(email)?.toDomain()
+
     override fun getAllUsersPaged(
         filter: UserFilterDto,
         page: Int,

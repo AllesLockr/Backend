@@ -6,6 +6,7 @@ import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPaged
 import com.alleslocker.backend.application.common.InputBoundary
 import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.security.PasswordHasher
+import com.alleslocker.backend.application.common.service.PasswordGeneratorService
 import com.alleslocker.backend.application.lock.adapter.LockAdapter
 import com.alleslocker.backend.application.lock.gateway.LockGateway
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
@@ -23,6 +24,8 @@ import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImp
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCaseImpl
 import com.alleslocker.backend.application.user.gateway.UserGateway
+import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
+import com.alleslocker.backend.application.user.usecase.CreateUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.GetUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
@@ -49,6 +52,8 @@ class UseCaseFactoryImpl(
     private val passwordHasher: PasswordHasher,
     private val logger: Logger,
 ) : UseCaseFactory {
+    private val passwordGeneratorService = PasswordGeneratorService()
+
     private val useCases: Map<KClass<out InputBoundary<*, *>>, InputBoundary<*, *>> =
         mapOf(
             CreatePersonUseCase::class to
@@ -101,6 +106,13 @@ class UseCaseFactoryImpl(
                     userGateway = gatewayFactory[UserGateway::class],
                     passwordHasher = passwordHasher,
                     logger = logger,
+                ),
+            CreateUserUseCase::class to
+                CreateUserUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    passwordHasher = passwordHasher,
+                    logger = logger,
+                    passwordGeneratorService = passwordGeneratorService,
                 ),
             AddVendorDataUseCase::class to
                 AddVendorDataUseCaseImpl(

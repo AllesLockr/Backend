@@ -2,20 +2,24 @@ package com.alleslocker.backend.web.user.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
+import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
 import com.alleslocker.backend.web.common.security.JwtService
 import com.alleslocker.backend.web.user.mapper.toDto
+import com.alleslocker.backend.web.user.presenter.CreateUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUsersPagedPresenter
 import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
 import com.alleslocker.backend.web.user.presenter.ResetPasswordUserPresenter
+import com.alleslocker.backend.web.user.schema.request.CreateUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUsersPagedRequestSchema
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.ResetPasswordUserRequestSchema
+import com.alleslocker.backend.web.user.schema.response.CreateUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.GetUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.GetUsersPagedResponseSchema
 import com.alleslocker.backend.web.user.schema.response.LoginUserResponseSchema
@@ -250,5 +254,79 @@ class UserController(
     ) {
         val presenter = ResetPasswordUserPresenter(httpServletResponse, jacksonConverter, jwtService)
         useCaseFactory.make(ResetPasswordUserUseCase::class).execute(request.toDto(requestorId), presenter)
+    }
+
+    @Operation(
+        summary = "Create a new user (admin only).",
+        responses = [
+            ApiResponse(
+                responseCode = "201",
+                description = "User successfully created.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = CreateUserResponseSchema::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid request (e.g. invalid requestor ID, lastname, firstname, email or username).",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Requestor is not an admin.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Requestor not found.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "409",
+                description = "Username or email already exists.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Something went wrong...rip",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @PostMapping("/create")
+    fun createUser(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: CreateUserRequestSchema,
+    ) {
+        val presenter = CreateUserPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(CreateUserUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 }
