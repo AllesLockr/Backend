@@ -1,6 +1,6 @@
 package com.alleslocker.backend.web.vendor.schema
 
-data class AddApiDataRequestSchema(
+data class AddVendorDataRequestSchema(
     val forApi: String,
     val baseUrl: String,
     val apiKey: String?,

@@ -44,6 +44,8 @@ import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsU
 import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCaseImpl
 import kotlin.reflect.KClass
 
 class UseCaseFactoryImpl(
@@ -57,81 +59,87 @@ class UseCaseFactoryImpl(
     private val useCases: Map<KClass<out InputBoundary<*, *>>, InputBoundary<*, *>> =
         mapOf(
             CreatePersonUseCase::class to
-                CreatePersonUseCaseImpl(
-                    personGateway = gatewayFactory[PersonGateway::class],
-                    personAdapter = adapterFactory[PersonAdapter::class],
-                    logger = logger,
-                ),
+                    CreatePersonUseCaseImpl(
+                        personGateway = gatewayFactory[PersonGateway::class],
+                        personAdapter = adapterFactory[PersonAdapter::class],
+                        logger = logger,
+                    ),
             DeletePersonUseCase::class to
-                DeletePersonUseCaseImpl(
-                    personGateway = gatewayFactory[PersonGateway::class],
-                    personAdapter = adapterFactory[PersonAdapter::class],
-                    logger = logger,
-                ),
+                    DeletePersonUseCaseImpl(
+                        personGateway = gatewayFactory[PersonGateway::class],
+                        personAdapter = adapterFactory[PersonAdapter::class],
+                        logger = logger,
+                    ),
             GetPersonsPagedUseCase::class to
-                GetPersonsPagedUseCaseImpl(
-                    personGateway = gatewayFactory[PersonGateway::class],
-                ),
+                    GetPersonsPagedUseCaseImpl(
+                        personGateway = gatewayFactory[PersonGateway::class],
+                    ),
             CountPersonsUseCase::class to
-                CountPersonsUseCaseImpl(
-                    personGateway = gatewayFactory[PersonGateway::class],
-                ),
+                    CountPersonsUseCaseImpl(
+                        personGateway = gatewayFactory[PersonGateway::class],
+                    ),
             GetLocksPagedUseCase::class to
-                GetLocksPagedUseCaseImpl(
-                    lockGateway = gatewayFactory[LockGateway::class],
-                ),
+                    GetLocksPagedUseCaseImpl(
+                        lockGateway = gatewayFactory[LockGateway::class],
+                    ),
             SyncLocksUseCase::class to
-                SyncLocksUseCaseImpl(
-                    lockGateway = gatewayFactory[LockGateway::class],
-                    lockAdapter = adapterFactory[LockAdapter::class],
-                    logger = logger,
-                ),
+                    SyncLocksUseCaseImpl(
+                        lockGateway = gatewayFactory[LockGateway::class],
+                        lockAdapter = adapterFactory[LockAdapter::class],
+                        logger = logger,
+                    ),
             LoginUserUseCase::class to
-                LoginUserUseCaseImpl(
-                    passwordHasher = passwordHasher,
-                    userGateway = gatewayFactory[UserGateway::class],
-                ),
+                    LoginUserUseCaseImpl(
+                        passwordHasher = passwordHasher,
+                        userGateway = gatewayFactory[UserGateway::class],
+                    ),
             GetUsersPagedUseCase::class to
-                GetUsersPagedUseCaseImpl(
-                    userGateway = gatewayFactory[UserGateway::class],
-                    logger = logger,
-                ),
+                    GetUsersPagedUseCaseImpl(
+                        userGateway = gatewayFactory[UserGateway::class],
+                        logger = logger,
+                    ),
             GetUserUseCase::class to
-                GetUserUseCaseImpl(
-                    userGateway = gatewayFactory[UserGateway::class],
-                    logger = logger,
-                ),
+                    GetUserUseCaseImpl(
+                        userGateway = gatewayFactory[UserGateway::class],
+                        logger = logger,
+                    ),
             ResetPasswordUserUseCase::class to
-                ResetPasswordUserUseCaseImpl(
-                    userGateway = gatewayFactory[UserGateway::class],
-                    passwordHasher = passwordHasher,
-                    logger = logger,
-                ),
+                    ResetPasswordUserUseCaseImpl(
+                        userGateway = gatewayFactory[UserGateway::class],
+                        passwordHasher = passwordHasher,
+                        logger = logger,
+                    ),
             CreateUserUseCase::class to
-                CreateUserUseCaseImpl(
-                    userGateway = gatewayFactory[UserGateway::class],
-                    passwordHasher = passwordHasher,
-                    logger = logger,
-                    passwordGeneratorService = passwordGeneratorService,
-                ),
+                    CreateUserUseCaseImpl(
+                        userGateway = gatewayFactory[UserGateway::class],
+                        passwordHasher = passwordHasher,
+                        logger = logger,
+                        passwordGeneratorService = passwordGeneratorService,
+                    ),
             AddVendorDataUseCase::class to
-                AddVendorDataUseCaseImpl(
-                    vendorDataGateway = gatewayFactory[VendorDataGateway::class],
-                    logger = logger,
-                    vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
-                ),
+                    AddVendorDataUseCaseImpl(
+                        vendorDataGateway = gatewayFactory[VendorDataGateway::class],
+                        logger = logger,
+                        vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
+                    ),
+            UpdateVendorDataUseCase::class to
+                    UpdateVendorDataUseCaseImpl(
+                        vendorDataGateway = gatewayFactory[VendorDataGateway::class],
+                        logger = logger,
+                        vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
+                    ),
             GetImplementedVendorsUseCase::class to GetImplementedVendorsUseCaseImpl(),
             GetVendorDataUseCase::class to GetVendorDataUseCaseImpl(gatewayFactory[VendorDataGateway::class]),
             GetAllVendorDataUseCase::class to
-                GetAllVendorDataUseCaseImpl(
-                    gatewayFactory[VendorDataGateway::class],
-                    logger,
-                ),
+                    GetAllVendorDataUseCaseImpl(
+                        gatewayFactory[VendorDataGateway::class],
+                        logger,
+                    ),
             GetAllAuditLogsPagedUseCase::class to
-                GetAllAuditLogsPagedUseCaseImpl(
-                    gatewayFactory[AuditLogGateway::class],
-                    logger,
-                ),
+                    GetAllAuditLogsPagedUseCaseImpl(
+                        gatewayFactory[AuditLogGateway::class],
+                        logger,
+                    ),
         )
 
     override fun <RQ, RS, I : InputBoundary<RQ, RS>> make(inputBoundary: KClass<out I>): I {
