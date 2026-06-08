@@ -25,20 +25,20 @@ import java.time.Instant
 class UpdateVendorDataUseCaseImpl(
     private val vendorDataGateway: VendorDataGateway,
     private val logger: Logger,
-    private val vendorConnectionAdapter: VendorConnectionAdapter
-) :
-    UpdateVendorDataUseCase {
+    private val vendorConnectionAdapter: VendorConnectionAdapter,
+) : UpdateVendorDataUseCase {
     override fun execute(
         request: UpdateVendorDataRequestDto,
-        presenter: OutputBoundary<SuccessResponse>
+        presenter: OutputBoundary<SuccessResponse>,
     ) {
-        val forApi = try {
-            AvailableVendors.valueOf(request.forApi)
-        } catch (e: IllegalArgumentException) {
-            presenter.presentFailure(ErrorResponse.BadRequest("forApi value invalid"))
-            logger.error("No vendor found for ${request.forApi}", e)
-            return
-        }
+        val forApi =
+            try {
+                AvailableVendors.valueOf(request.forApi)
+            } catch (e: IllegalArgumentException) {
+                presenter.presentFailure(ErrorResponse.BadRequest("forApi value invalid"))
+                logger.error("No vendor found for ${request.forApi}", e)
+                return
+            }
 
         val existing = vendorDataGateway.findByForApi(forApi)
         if (existing == null) {
@@ -46,23 +46,26 @@ class UpdateVendorDataUseCaseImpl(
             return
         }
 
-        val baseUrl = let {
-            if (request.baseUrl == null) {
-                existing.baseUrl
-            } else {
-                try {
-                    URI(request.baseUrl)
-                } catch (_: URISyntaxException) {
-                    presenter.presentFailure(ErrorResponse.BadRequest("baseUrl is not a valid URI"))
-                    return
+        val baseUrl =
+            let {
+                if (request.baseUrl == null) {
+                    existing.baseUrl
+                } else {
+                    try {
+                        URI(request.baseUrl)
+                    } catch (_: URISyntaxException) {
+                        presenter.presentFailure(ErrorResponse.BadRequest("baseUrl is not a valid URI"))
+                        return
+                    }
                 }
             }
-        }
 
         val vendorAuthentication =
             let {
                 if (!request.apiKey.isNullOrBlank() && !request.apiUsername.isNullOrBlank() && !request.apiPassword.isNullOrBlank()) {
-                    return presenter.presentFailure(ErrorResponse.UnprocessableEntity("you can only update apiKey OR username and password, not both!"))
+                    return presenter.presentFailure(
+                        ErrorResponse.UnprocessableEntity("you can only update apiKey OR username and password, not both!"),
+                    )
                 }
                 if (!request.apiKey.isNullOrBlank() && request.apiUsername.isNullOrBlank() && request.apiPassword.isNullOrBlank()) {
                     VendorAuthentication.ApiKey(request.apiKey)
@@ -108,12 +111,11 @@ class UpdateVendorDataUseCaseImpl(
         presenter.present(SuccessResponse.Created("Successfully updated ${saved.forVendor}"))
     }
 
-    private fun updatedFields(request: UpdateVendorDataRequestDto): String {
-        return buildList {
+    private fun updatedFields(request: UpdateVendorDataRequestDto): String =
+        buildList {
             if (!request.apiKey.isNullOrBlank()) add("ApiKey")
             if (!request.apiUsername.isNullOrBlank()) add("ApiUsername")
             if (!request.apiPassword.isNullOrBlank()) add("ApiPassword")
             if (!request.baseUrl.isNullOrBlank()) add("BaseUrl")
         }.joinToString(", ")
-    }
 }

@@ -14,7 +14,6 @@ internal class UpdateVendorDataPresenter(
     override fun present(response: SuccessResponse) {
         when (response) {
             is SuccessResponse.Created -> response.presentAsJson(HttpStatus.CREATED)
-
         }
     }
 
