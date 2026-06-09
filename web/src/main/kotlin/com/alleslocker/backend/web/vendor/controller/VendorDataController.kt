@@ -29,9 +29,9 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -248,11 +248,12 @@ class VendorDataController(
             ),
         ],
     )
-    @PatchMapping()
+    @PutMapping()
     fun updateVendorData(
         @AuthenticationPrincipal requesterId: String,
         @RequestBody request: UpdateVendorDataRequestSchema,
     ) {
+        println(request.toString())
         val presenter = UpdateVendorDataPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(UpdateVendorDataUseCase::class).execute(request.toDto(requesterId), presenter)
     }

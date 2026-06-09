@@ -103,7 +103,15 @@ class UpdateVendorDataUseCaseImpl(
         logger.audit(
             AuditLog(
                 id = AuditLogId.generate(),
-                message = AuditLogMessage("Updated Vendor-Data for ${saved.forVendor}: ${updatedFields(request)}"),
+                message =
+                    AuditLogMessage(
+                        "Updated Vendor-Data for ${saved.forVendor}: ${
+                            updatedFields(
+                                existing,
+                                updated,
+                            )
+                        }",
+                    ),
                 performedByUserId = UserId(request.requesterId),
                 createdAt = Instant.now(),
             ),
@@ -111,11 +119,26 @@ class UpdateVendorDataUseCaseImpl(
         presenter.present(SuccessResponse.Created("Successfully updated ${saved.forVendor}"))
     }
 
-    private fun updatedFields(request: UpdateVendorDataRequestDto): String =
+    private fun updatedFields(
+        existing: VendorData,
+        updated: VendorData,
+    ): String =
         buildList {
-            if (!request.apiKey.isNullOrBlank()) add("ApiKey")
-            if (!request.apiUsername.isNullOrBlank()) add("ApiUsername")
-            if (!request.apiPassword.isNullOrBlank()) add("ApiPassword")
-            if (!request.baseUrl.isNullOrBlank()) add("BaseUrl")
+            if (existing.baseUrl != updated.baseUrl) add("BaseUrl")
+
+            val before = existing.vendorAuthentication
+            val after = updated.vendorAuthentication
+
+            val beforeKey = (before as? VendorAuthentication.ApiKey)?.value
+            val afterKey = (after as? VendorAuthentication.ApiKey)?.value
+            if (beforeKey != afterKey) add("ApiKey")
+
+            val beforeUser = (before as? VendorAuthentication.BaseAuth)?.username
+            val afterUser = (after as? VendorAuthentication.BaseAuth)?.username
+            if (beforeUser != afterUser) add("ApiUsername")
+
+            val beforePass = (before as? VendorAuthentication.BaseAuth)?.password
+            val afterPass = (after as? VendorAuthentication.BaseAuth)?.password
+            if (beforePass != afterPass) add("ApiPassword")
         }.joinToString(", ")
 }
