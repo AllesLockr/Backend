@@ -2,6 +2,8 @@ package com.alleslocker.backend.application.common.factory
 
 import com.alleslocker.backend.application.accessgrant.adapter.AccessGrantAdapter
 import com.alleslocker.backend.application.accessgrant.gateway.AccessGrantGateway
+import com.alleslocker.backend.application.accessgrant.usecase.GetAccessGrantsPagedUseCase
+import com.alleslocker.backend.application.accessgrant.usecase.GetAccessGrantsPagedUseCaseImpl
 import com.alleslocker.backend.application.accessgrant.usecase.GrantAccessUseCase
 import com.alleslocker.backend.application.accessgrant.usecase.GrantAccessUseCaseImpl
 import com.alleslocker.backend.application.accessgrant.usecase.RevokeAccessUseCase
@@ -105,6 +107,10 @@ class UseCaseFactoryImpl(
                     accessGrantGateway = gatewayFactory[AccessGrantGateway::class],
                     accessGrantAdapter = adapterFactory[AccessGrantAdapter::class],
                     logger = logger,
+                ),
+            GetAccessGrantsPagedUseCase::class to
+                GetAccessGrantsPagedUseCaseImpl(
+                    accessGrantGateway = gatewayFactory[AccessGrantGateway::class],
                 ),
             LoginUserUseCase::class to
                 LoginUserUseCaseImpl(

@@ -1,14 +1,18 @@
 package com.alleslocker.backend.web.accessgrant.controller
 
+import com.alleslocker.backend.application.accessgrant.usecase.GetAccessGrantsPagedUseCase
 import com.alleslocker.backend.application.accessgrant.usecase.GrantAccessUseCase
 import com.alleslocker.backend.application.accessgrant.usecase.RevokeAccessUseCase
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.web.accessgrant.mapper.toDto
+import com.alleslocker.backend.web.accessgrant.presenter.GetAccessGrantsPagedPresenter
 import com.alleslocker.backend.web.accessgrant.presenter.GrantAccessPresenter
 import com.alleslocker.backend.web.accessgrant.presenter.RevokeAccessPresenter
+import com.alleslocker.backend.web.accessgrant.schema.request.GetAccessGrantsPagedRequestSchema
 import com.alleslocker.backend.web.accessgrant.schema.request.GrantAccessRequestSchema
 import com.alleslocker.backend.web.accessgrant.schema.request.RevokeAccessRequestSchema
+import com.alleslocker.backend.web.accessgrant.schema.response.GetAccessGrantsPagedResponseSchema
 import com.alleslocker.backend.web.accessgrant.schema.response.GrantAccessResponseSchema
 import com.alleslocker.backend.web.accessgrant.schema.response.RevokeAccessResponseSchema
 import io.swagger.v3.oas.annotations.Operation
@@ -118,5 +122,38 @@ class AccessGrantController(
     ) {
         val presenter = RevokeAccessPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(RevokeAccessUseCase::class).execute(request.toDto(requesterId), presenter)
+    }
+
+    @Operation(
+        summary = "Get access grants paginated, optionally filtered by person or lock.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetAccessGrantsPagedResponseSchema::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid page, size, personId or lockId.",
+                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Something went wrong.",
+                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+            ),
+        ],
+    )
+    @PostMapping("/all")
+    fun getAccessGrantsPaged(
+        @RequestBody request: GetAccessGrantsPagedRequestSchema,
+    ) {
+        val presenter = GetAccessGrantsPagedPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(GetAccessGrantsPagedUseCase::class).execute(request.toDto(), presenter)
     }
 }
