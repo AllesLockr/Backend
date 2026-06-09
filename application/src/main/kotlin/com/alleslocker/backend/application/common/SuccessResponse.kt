@@ -2,7 +2,7 @@ package com.alleslocker.backend.application.common
 
 sealed class SuccessResponse(
     val message: String,
-    val status: Int
+    val status: Int,
 ) {
     class Created(
         message: String,

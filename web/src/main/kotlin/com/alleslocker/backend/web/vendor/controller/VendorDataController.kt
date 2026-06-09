@@ -300,7 +300,8 @@ class VendorDataController(
         @PathVariable id: String,
     ) {
         val presenter = DeleteVendorDataPresenter(httpServletResponse, jacksonConverter)
-        useCaseFactory.make(DeleteVendorDataUseCase::class)
+        useCaseFactory
+            .make(DeleteVendorDataUseCase::class)
             .execute(DeleteVendorDataRequestDto(id, requesterId), presenter)
     }
 }

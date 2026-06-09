@@ -15,16 +15,17 @@ import java.time.Instant
 
 class DeleteVendorDataUseCaseImpl(
     private val vendorDataGateway: VendorDataGateway,
-    private val logger: Logger
+    private val logger: Logger,
 ) : DeleteVendorDataUseCase {
     override fun execute(
         request: DeleteVendorDataRequestDto,
-        presenter: OutputBoundary<SuccessResponse>
+        presenter: OutputBoundary<SuccessResponse>,
     ) {
         val id = VendorId(request.id)
 
-        val existing = vendorDataGateway.findById(id)
-            ?: return presenter.presentFailure(ErrorResponse.NotFound("Vendor with id ${request.id} not found"))
+        val existing =
+            vendorDataGateway.findById(id)
+                ?: return presenter.presentFailure(ErrorResponse.NotFound("Vendor with id ${request.id} not found"))
 
         try {
             vendorDataGateway.deleteById(id)
