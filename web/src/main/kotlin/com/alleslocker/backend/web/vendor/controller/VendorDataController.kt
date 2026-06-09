@@ -10,12 +10,15 @@ import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
 import com.alleslocker.backend.web.vendor.mapper.toDto
-import com.alleslocker.backend.web.vendor.presenter.AddApiDataPresenter
-import com.alleslocker.backend.web.vendor.presenter.GetAllApiDataPresenter
-import com.alleslocker.backend.web.vendor.presenter.GetApiDataPresenter
-import com.alleslocker.backend.web.vendor.presenter.GetImplementedApisPresenter
-import com.alleslocker.backend.web.vendor.schema.AddApiDataRequestSchema
+import com.alleslocker.backend.web.vendor.presenter.AddVendorDataPresenter
+import com.alleslocker.backend.web.vendor.presenter.GetAllVendorDataPresenter
+import com.alleslocker.backend.web.vendor.presenter.GetImplementedVendorsPresenter
+import com.alleslocker.backend.web.vendor.presenter.GetVendorDataPresenter
+import com.alleslocker.backend.web.vendor.presenter.UpdateVendorDataPresenter
+import com.alleslocker.backend.web.vendor.schema.AddVendorDataRequestSchema
+import com.alleslocker.backend.web.vendor.schema.UpdateVendorDataRequestSchema
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
@@ -28,6 +31,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -86,9 +90,9 @@ class VendorDataController(
     @PostMapping()
     fun addVendorData(
         @AuthenticationPrincipal requesterId: String,
-        @RequestBody request: AddApiDataRequestSchema,
+        @RequestBody request: AddVendorDataRequestSchema,
     ) {
-        val presenter = AddApiDataPresenter(httpServletResponse, jacksonConverter)
+        val presenter = AddVendorDataPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(AddVendorDataUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 
@@ -109,7 +113,7 @@ class VendorDataController(
     )
     @GetMapping("/implemented")
     fun implementedVendors() {
-        val presenter = GetImplementedApisPresenter(httpServletResponse, jacksonConverter)
+        val presenter = GetImplementedVendorsPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetImplementedVendorsUseCase::class).execute(Unit, presenter)
     }
 
@@ -159,7 +163,7 @@ class VendorDataController(
     fun getVendorData(
         @PathVariable id: String,
     ) {
-        val presenter = GetApiDataPresenter(httpServletResponse, jacksonConverter)
+        val presenter = GetVendorDataPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetVendorDataUseCase::class).execute(IdRequest(id), presenter)
     }
 
@@ -189,7 +193,68 @@ class VendorDataController(
     )
     @GetMapping("/all")
     fun getAllVendorData() {
-        val presenter = GetAllApiDataPresenter(httpServletResponse, jacksonConverter)
+        val presenter = GetAllVendorDataPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetAllVendorDataUseCase::class).execute(Unit, presenter)
+    }
+
+    @Operation(
+        summary = "Update one vendor-data.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = SuccessResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "404",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "400",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "422",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @PutMapping()
+    fun updateVendorData(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: UpdateVendorDataRequestSchema,
+    ) {
+        println(request.toString())
+        val presenter = UpdateVendorDataPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(UpdateVendorDataUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 }

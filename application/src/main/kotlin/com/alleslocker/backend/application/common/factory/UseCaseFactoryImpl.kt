@@ -44,6 +44,8 @@ import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsU
 import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCaseImpl
 import kotlin.reflect.KClass
 
 class UseCaseFactoryImpl(
@@ -116,6 +118,12 @@ class UseCaseFactoryImpl(
                 ),
             AddVendorDataUseCase::class to
                 AddVendorDataUseCaseImpl(
+                    vendorDataGateway = gatewayFactory[VendorDataGateway::class],
+                    logger = logger,
+                    vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
+                ),
+            UpdateVendorDataUseCase::class to
+                UpdateVendorDataUseCaseImpl(
                     vendorDataGateway = gatewayFactory[VendorDataGateway::class],
                     logger = logger,
                     vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],

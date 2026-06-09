@@ -1,9 +1,9 @@
 package com.alleslocker.backend.web.vendor.mapper
 
 import com.alleslocker.backend.application.vendor.dto.request.AddVendorDataRequestDto
-import com.alleslocker.backend.web.vendor.schema.AddApiDataRequestSchema
+import com.alleslocker.backend.web.vendor.schema.AddVendorDataRequestSchema
 
-fun AddApiDataRequestSchema.toDto(requesterId: String) =
+fun AddVendorDataRequestSchema.toDto(requesterId: String) =
     AddVendorDataRequestDto(
         forApi = forApi,
         baseUrl = baseUrl,
