@@ -1,7 +1,6 @@
 package com.alleslocker.backend.web.accessgrant.schema.response
 
-data class GrantAccessResponseSchema(
+data class RevokeAccessResponseSchema(
     val grantId: String,
     val vendor: VendorSchema,
-    val externalId: String,
 )

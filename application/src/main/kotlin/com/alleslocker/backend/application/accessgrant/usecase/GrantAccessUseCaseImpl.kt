@@ -105,6 +105,11 @@ internal class GrantAccessUseCaseImpl(
                         end = schedule.end,
                     ),
                 )
+            } catch (e: IllegalArgumentException) {
+                presenter.presentFailure(
+                    ErrorResponse.UnprocessableEntity(e.message ?: "Access grant not supported on $vendor"),
+                )
+                return
             } catch (e: Exception) {
                 logger.error("Failed to push access grant to $vendor", e)
                 presenter.presentFailure(
