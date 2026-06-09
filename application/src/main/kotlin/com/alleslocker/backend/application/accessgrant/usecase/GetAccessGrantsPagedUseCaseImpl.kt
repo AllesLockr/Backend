@@ -5,12 +5,14 @@ import com.alleslocker.backend.application.accessgrant.dto.response.GetAccessGra
 import com.alleslocker.backend.application.accessgrant.gateway.AccessGrantGateway
 import com.alleslocker.backend.application.accessgrant.mapper.toDto
 import com.alleslocker.backend.application.common.ErrorResponse
+import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.domain.lock.LockId
 import com.alleslocker.backend.domain.person.PersonId
 
 internal class GetAccessGrantsPagedUseCaseImpl(
     private val accessGrantGateway: AccessGrantGateway,
+    private val logger: Logger,
 ) : GetAccessGrantsPagedUseCase {
     override fun execute(
         request: GetAccessGrantsPagedRequestDto,
@@ -55,6 +57,7 @@ internal class GetAccessGrantsPagedUseCaseImpl(
                     size = request.size,
                 )
             } catch (e: Exception) {
+                logger.error("Failed to load access grants page", e)
                 presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load access grants"))
                 return
             }

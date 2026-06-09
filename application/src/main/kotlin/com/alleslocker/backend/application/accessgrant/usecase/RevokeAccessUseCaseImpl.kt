@@ -64,7 +64,12 @@ internal class RevokeAccessUseCaseImpl(
 
         try {
             accessGrantGateway.deleteById(grantId)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            logger.error(
+                "Vendor revoke for grant ${grantId.value} on $vendor succeeded but DB deletion failed; " +
+                    "grant is stale and safe to retry",
+                e,
+            )
             presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete access grant"))
             return
         }

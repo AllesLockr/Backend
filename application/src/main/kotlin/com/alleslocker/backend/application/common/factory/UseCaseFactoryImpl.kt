@@ -111,6 +111,7 @@ class UseCaseFactoryImpl(
             GetAccessGrantsPagedUseCase::class to
                 GetAccessGrantsPagedUseCaseImpl(
                     accessGrantGateway = gatewayFactory[AccessGrantGateway::class],
+                    logger = logger,
                 ),
             LoginUserUseCase::class to
                 LoginUserUseCaseImpl(
