@@ -38,6 +38,8 @@ import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapte
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCase
@@ -127,6 +129,11 @@ class UseCaseFactoryImpl(
                     vendorDataGateway = gatewayFactory[VendorDataGateway::class],
                     logger = logger,
                     vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
+                ),
+            DeleteVendorDataUseCase::class to
+                DeleteVendorDataUseCaseImpl(
+                    vendorDataGateway = gatewayFactory[VendorDataGateway::class],
+                    logger = logger,
                 ),
             GetImplementedVendorsUseCase::class to GetImplementedVendorsUseCaseImpl(),
             GetVendorDataUseCase::class to GetVendorDataUseCaseImpl(gatewayFactory[VendorDataGateway::class]),
