@@ -9,45 +9,19 @@ import com.alleslocker.backend.application.common.security.PasswordHasher
 import com.alleslocker.backend.application.common.service.PasswordGeneratorService
 import com.alleslocker.backend.application.lock.adapter.LockAdapter
 import com.alleslocker.backend.application.lock.gateway.LockGateway
-import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
-import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCaseImpl
-import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCase
-import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCaseImpl
+import com.alleslocker.backend.application.lock.usecase.*
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
 import com.alleslocker.backend.application.person.gateway.PersonGateway
-import com.alleslocker.backend.application.person.usecase.CountPersonsUseCase
-import com.alleslocker.backend.application.person.usecase.CountPersonsUseCaseImpl
-import com.alleslocker.backend.application.person.usecase.CreatePersonUseCase
-import com.alleslocker.backend.application.person.usecase.CreatePersonUseCaseImpl
-import com.alleslocker.backend.application.person.usecase.DeletePersonUseCase
-import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImpl
-import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
-import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCaseImpl
+import com.alleslocker.backend.application.person.usecase.*
 import com.alleslocker.backend.application.user.gateway.UserGateway
-import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
-import com.alleslocker.backend.application.user.usecase.CreateUserUseCaseImpl
-import com.alleslocker.backend.application.user.usecase.GetUserUseCase
-import com.alleslocker.backend.application.user.usecase.GetUserUseCaseImpl
-import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
-import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCaseImpl
-import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
-import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
-import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
-import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.*
 import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
-import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCaseImpl
-import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCaseImpl
-import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCaseImpl
-import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCase
-import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCaseImpl
-import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCaseImpl
-import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.*
+import com.alleslocker.backend.application.vendorSpecificField.schema.lock.LockVendorSpecificFieldSchemaRegistry
+import com.alleslocker.backend.application.vendorSpecificField.schema.lock.provider.IseoLockSchemaProvider
+import com.alleslocker.backend.application.vendorSpecificField.schema.vendor.VendorDataVendorSpecificFieldSchemaRegistry
+import com.alleslocker.backend.application.vendorSpecificField.schema.vendor.provider.IseoVendorDataSchemaProvider
 import kotlin.reflect.KClass
 
 class UseCaseFactoryImpl(
@@ -57,6 +31,22 @@ class UseCaseFactoryImpl(
     private val logger: Logger,
 ) : UseCaseFactory {
     private val passwordGeneratorService = PasswordGeneratorService()
+
+    private val vendorDataVendorSpecificFieldSchemaRegistry =
+        VendorDataVendorSpecificFieldSchemaRegistry(
+            providers =
+                listOf(
+                    IseoVendorDataSchemaProvider(),
+                ),
+        )
+
+    private val lockVendorSpecificFieldSchemaRegistry =
+        LockVendorSpecificFieldSchemaRegistry(
+            providers =
+                listOf(
+                    IseoLockSchemaProvider(),
+                ),
+        )
 
     private val useCases: Map<KClass<out InputBoundary<*, *>>, InputBoundary<*, *>> =
         mapOf(
@@ -136,6 +126,10 @@ class UseCaseFactoryImpl(
                     logger = logger,
                 ),
             GetImplementedVendorsUseCase::class to GetImplementedVendorsUseCaseImpl(),
+            GetVendorDataVendorSpecificFieldsSchemaUseCase::class to
+                GetVendorDataVendorSpecificFieldsSchemaUseCaseImpl(vendorDataVendorSpecificFieldSchemaRegistry),
+            GetLockVendorSpecificFieldsSchemaUseCase::class to
+                GetLockVendorSpecificFieldsSchemaUseCaseImpl(lockVendorSpecificFieldSchemaRegistry),
             GetVendorDataUseCase::class to GetVendorDataUseCaseImpl(gatewayFactory[VendorDataGateway::class]),
             GetAllVendorDataUseCase::class to
                 GetAllVendorDataUseCaseImpl(

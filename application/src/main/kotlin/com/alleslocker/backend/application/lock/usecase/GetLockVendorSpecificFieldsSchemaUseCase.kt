@@ -1,0 +1,8 @@
+package com.alleslocker.backend.application.lock.usecase
+
+import com.alleslocker.backend.application.common.InputBoundary
+import com.alleslocker.backend.application.vendorSpecificField.schema.dto.request.GetVendorSpecificFieldsSchemaRequestDto
+import com.alleslocker.backend.application.vendorSpecificField.schema.dto.response.GetVendorSpecificFieldsSchemaResponseDto
+
+interface GetLockVendorSpecificFieldsSchemaUseCase :
+    InputBoundary<GetVendorSpecificFieldsSchemaRequestDto, GetVendorSpecificFieldsSchemaResponseDto>

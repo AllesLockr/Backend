@@ -7,19 +7,11 @@ import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.application.vendor.dto.request.DeleteVendorDataRequestDto
 import com.alleslocker.backend.application.vendor.dto.response.GetImplementedVendorsResponseDto
 import com.alleslocker.backend.application.vendor.dto.response.GetVendorDataResponseDto
-import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCase
-import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
-import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.*
+import com.alleslocker.backend.application.vendorSpecificField.schema.dto.request.GetVendorSpecificFieldsSchemaRequestDto
+import com.alleslocker.backend.application.vendorSpecificField.schema.dto.response.GetVendorSpecificFieldsSchemaResponseDto
 import com.alleslocker.backend.web.vendor.mapper.toDto
-import com.alleslocker.backend.web.vendor.presenter.AddVendorDataPresenter
-import com.alleslocker.backend.web.vendor.presenter.DeleteVendorDataPresenter
-import com.alleslocker.backend.web.vendor.presenter.GetAllVendorDataPresenter
-import com.alleslocker.backend.web.vendor.presenter.GetImplementedVendorsPresenter
-import com.alleslocker.backend.web.vendor.presenter.GetVendorDataPresenter
-import com.alleslocker.backend.web.vendor.presenter.UpdateVendorDataPresenter
+import com.alleslocker.backend.web.vendor.presenter.*
 import com.alleslocker.backend.web.vendor.schema.AddVendorDataRequestSchema
 import com.alleslocker.backend.web.vendor.schema.UpdateVendorDataRequestSchema
 import io.swagger.v3.oas.annotations.Operation
@@ -31,14 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @Tag(name = "Vendor-Data", description = "Configure 3rd party lock provider APIs.")
 @RestController
@@ -119,6 +104,41 @@ class VendorDataController(
     fun implementedVendors() {
         val presenter = GetImplementedVendorsPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(GetImplementedVendorsUseCase::class).execute(Unit, presenter)
+    }
+
+    @Operation(
+        summary = "Get the vendor-specific custom fields a consumer must additionally send for a vendor.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetVendorSpecificFieldsSchemaResponseDto::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "422",
+                description = "The 'forVendor' value was not valid.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @GetMapping("/vendor-specific-fields/{forVendor}")
+    fun customFields(
+        @PathVariable forVendor: String,
+    ) {
+        val presenter = GetVendorDataVendorSpecificFieldsSchemaPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory
+            .make(GetVendorDataVendorSpecificFieldsSchemaUseCase::class)
+            .execute(GetVendorSpecificFieldsSchemaRequestDto(forVendor), presenter)
     }
 
     @Operation(

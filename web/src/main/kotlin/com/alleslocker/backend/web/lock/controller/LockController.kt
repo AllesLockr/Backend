@@ -3,9 +3,13 @@ package com.alleslocker.backend.web.lock.controller
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.application.lock.dto.request.SyncLocksRequestDto
+import com.alleslocker.backend.application.lock.usecase.GetLockVendorSpecificFieldsSchemaUseCase
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
 import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCase
+import com.alleslocker.backend.application.vendorSpecificField.schema.dto.request.GetVendorSpecificFieldsSchemaRequestDto
+import com.alleslocker.backend.application.vendorSpecificField.schema.dto.response.GetVendorSpecificFieldsSchemaResponseDto
 import com.alleslocker.backend.web.lock.mapper.toDto
+import com.alleslocker.backend.web.lock.presenter.GetLockVendorSpecificFieldsSchemaPresenter
 import com.alleslocker.backend.web.lock.presenter.GetLocksPagedPresenter
 import com.alleslocker.backend.web.lock.presenter.SyncLocksPresenter
 import com.alleslocker.backend.web.lock.schema.request.GetLocksPagedRequestSchema
@@ -19,10 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @Tag(name = "Lock")
 @RestController
@@ -106,5 +107,40 @@ class LockController(
     ) {
         val presenter = SyncLocksPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(SyncLocksUseCase::class).execute(SyncLocksRequestDto(requesterId), presenter)
+    }
+
+    @Operation(
+        summary = "Get the vendor-specific custom fields a consumer must additionally send for a vendor.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetVendorSpecificFieldsSchemaResponseDto::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "422",
+                description = "The 'forVendor' value was not valid.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @GetMapping("/vendor-specific-fields/{forVendor}")
+    fun customFields(
+        @PathVariable forVendor: String,
+    ) {
+        val presenter = GetLockVendorSpecificFieldsSchemaPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory
+            .make(GetLockVendorSpecificFieldsSchemaUseCase::class)
+            .execute(GetVendorSpecificFieldsSchemaRequestDto(forVendor), presenter)
     }
 }

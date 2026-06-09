@@ -6,12 +6,12 @@ import com.alleslocker.backend.domain.vendor.VendorData
 import com.alleslocker.backend.domain.vendor.VendorId
 import com.alleslocker.backend.persistence.vendor.mapper.toDomain
 import com.alleslocker.backend.persistence.vendor.mapper.toEntity
-import com.alleslocker.backend.persistence.vendor.repository.ApiDataRepository
+import com.alleslocker.backend.persistence.vendor.repository.VendorDataRepository
 import org.springframework.stereotype.Component
 
 @Component
 class VendorDataGatewayAdapter(
-    private val repository: ApiDataRepository,
+    private val repository: VendorDataRepository,
 ) : VendorDataGateway {
     override fun save(entity: VendorData): VendorData {
         val existing = repository.findById(entity.id.value).orElse(null)
