@@ -87,7 +87,7 @@ class AddVendorDataUseCaseImpl(
         logger.audit(
             AuditLog(
                 id = AuditLogId.generate(),
-                message = AuditLogMessage("Added new API-Data for ${saved.forVendor} with url ${saved.baseUrl}"),
+                message = AuditLogMessage("Added new Vendor-Data for ${saved.forVendor} with url ${saved.baseUrl}"),
                 performedByUserId = UserId(request.requesterId),
                 createdAt = Instant.now(),
             ),

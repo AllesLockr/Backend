@@ -4,15 +4,18 @@ import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.IdRequest
 import com.alleslocker.backend.application.common.SuccessResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
+import com.alleslocker.backend.application.vendor.dto.request.DeleteVendorDataRequestDto
 import com.alleslocker.backend.application.vendor.dto.response.GetImplementedVendorsResponseDto
 import com.alleslocker.backend.application.vendor.dto.response.GetVendorDataResponseDto
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
 import com.alleslocker.backend.web.vendor.mapper.toDto
 import com.alleslocker.backend.web.vendor.presenter.AddVendorDataPresenter
+import com.alleslocker.backend.web.vendor.presenter.DeleteVendorDataPresenter
 import com.alleslocker.backend.web.vendor.presenter.GetAllVendorDataPresenter
 import com.alleslocker.backend.web.vendor.presenter.GetImplementedVendorsPresenter
 import com.alleslocker.backend.web.vendor.presenter.GetVendorDataPresenter
@@ -28,6 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -253,8 +257,50 @@ class VendorDataController(
         @AuthenticationPrincipal requesterId: String,
         @RequestBody request: UpdateVendorDataRequestSchema,
     ) {
-        println(request.toString())
         val presenter = UpdateVendorDataPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(UpdateVendorDataUseCase::class).execute(request.toDto(requesterId), presenter)
+    }
+
+    @Operation(
+        summary = "Delete one vendor-data by id.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = SuccessResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "404",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @DeleteMapping("/{id}")
+    fun deleteVendorData(
+        @AuthenticationPrincipal requesterId: String,
+        @PathVariable id: String,
+    ) {
+        val presenter = DeleteVendorDataPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(DeleteVendorDataUseCase::class)
+            .execute(DeleteVendorDataRequestDto(id, requesterId), presenter)
     }
 }

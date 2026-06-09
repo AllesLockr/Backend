@@ -12,9 +12,8 @@ internal class UpdateVendorDataPresenter(
     jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : JsonRestPresenter<SuccessResponse>(httpServletResponse, jacksonConverter) {
     override fun present(response: SuccessResponse) {
-        when (response) {
-            is SuccessResponse.Created -> response.presentAsJson(HttpStatus.CREATED)
-        }
+        val status = HttpStatus.resolve(response.status) ?: HttpStatus.OK
+        response.presentAsJson(status)
     }
 
     override fun presentFailure(error: ErrorResponse) {

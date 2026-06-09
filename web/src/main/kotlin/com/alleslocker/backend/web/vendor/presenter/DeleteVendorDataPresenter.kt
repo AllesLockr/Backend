@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 
-internal class AddVendorDataPresenter(
+internal class DeleteVendorDataPresenter(
     httpServletResponse: HttpServletResponse,
     jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : JsonRestPresenter<SuccessResponse>(httpServletResponse, jacksonConverter) {
