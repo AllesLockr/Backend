@@ -50,7 +50,7 @@ internal class IseoAccessGrantClientImpl(
                 ?: throw IllegalStateException("ISEO user ${request.personExternalId} has no user-type tag")
 
         val lockTagId =
-            request.metadata["tagId"]
+            request.metadata.firstOrNull { it.key == "tagId" }?.value
                 ?: throw IllegalStateException("Lock ${request.lockExternalId} has no ISEO lock tag")
 
         val response =

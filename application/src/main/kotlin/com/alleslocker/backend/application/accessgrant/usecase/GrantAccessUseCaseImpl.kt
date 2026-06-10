@@ -88,8 +88,6 @@ internal class GrantAccessUseCaseImpl(
                     return
                 }
 
-        val lockMetadata = lock.metadata.associate { it.key to it.value }
-
         val grantId = AccessGrantId.generate()
 
         val adapterResponse =
@@ -100,7 +98,7 @@ internal class GrantAccessUseCaseImpl(
                         grantId = grantId.value,
                         personExternalId = personIdentity.externalId.value,
                         lockExternalId = lockIdentity.externalId.value,
-                        metadata = lockMetadata,
+                        metadata = lock.metadata,
                         start = schedule.start,
                         end = schedule.end,
                     ),
