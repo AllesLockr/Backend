@@ -8,6 +8,6 @@ data class AccessGrantSchema(
     val lockId: String,
     val start: Instant,
     val end: Instant,
-    val vendor: VendorSchema?,
-    val externalId: String?,
+    val vendor: String?,
+    val vendorExternalId: String?,
 )

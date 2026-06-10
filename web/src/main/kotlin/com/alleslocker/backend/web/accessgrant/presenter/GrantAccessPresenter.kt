@@ -3,7 +3,6 @@ package com.alleslocker.backend.web.accessgrant.presenter
 import com.alleslocker.backend.application.accessgrant.dto.response.GrantAccessResponseDto
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.web.accessgrant.schema.response.GrantAccessResponseSchema
-import com.alleslocker.backend.web.accessgrant.schema.response.VendorSchema
 import com.alleslocker.backend.web.common.presenter.JsonRestPresenter
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -16,8 +15,8 @@ internal class GrantAccessPresenter(
     override fun present(response: GrantAccessResponseDto) {
         GrantAccessResponseSchema(
             grantId = response.grantId,
-            vendor = VendorSchema.valueOf(response.vendor),
-            externalId = response.externalId,
+            vendor = response.vendor,
+            vendorExternalId = response.vendorExternalId,
         ).presentAsJson(HttpStatus.CREATED)
     }
 

@@ -9,5 +9,5 @@ data class AccessGrantDto(
     val start: Instant,
     val end: Instant,
     val vendor: String?,
-    val externalId: String?,
+    val vendorExternalId: String?,
 )

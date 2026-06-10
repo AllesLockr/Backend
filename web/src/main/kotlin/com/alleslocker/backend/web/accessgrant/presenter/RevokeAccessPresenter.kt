@@ -3,7 +3,6 @@ package com.alleslocker.backend.web.accessgrant.presenter
 import com.alleslocker.backend.application.accessgrant.dto.response.RevokeAccessResponseDto
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.web.accessgrant.schema.response.RevokeAccessResponseSchema
-import com.alleslocker.backend.web.accessgrant.schema.response.VendorSchema
 import com.alleslocker.backend.web.common.presenter.JsonRestPresenter
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -16,7 +15,7 @@ internal class RevokeAccessPresenter(
     override fun present(response: RevokeAccessResponseDto) {
         RevokeAccessResponseSchema(
             grantId = response.grantId,
-            vendor = VendorSchema.valueOf(response.vendor),
+            vendor = response.vendor,
         ).presentAsJson(HttpStatus.OK)
     }
 

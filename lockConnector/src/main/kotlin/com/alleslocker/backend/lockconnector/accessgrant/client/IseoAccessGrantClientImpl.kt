@@ -8,13 +8,19 @@ import com.alleslocker.backend.lockconnector.accessgrant.adapter.AccessGrantClie
 import com.alleslocker.backend.lockconnector.client.TokenProvider
 import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.rest.GenericRestClient
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
+import org.springframework.stereotype.Component
 
+@Component
 internal class IseoAccessGrantClientImpl(
     private val restClient: GenericRestClient,
+    @Qualifier("iseoAdminTokenProvider")
     private val tokenProvider: TokenProvider,
     private val configProvider: ConfigProvider,
 ) : AccessGrantClient {
+    override val vendor = AvailableVendors.ISEO
+
     private data class IseoUserTag(
         val id: Int? = null,
         val type: String? = null,
@@ -44,7 +50,7 @@ internal class IseoAccessGrantClientImpl(
                 ?: throw IllegalStateException("ISEO user ${request.personExternalId} has no user-type tag")
 
         val lockTagId =
-            request.lockTagId
+            request.metadata["tagId"]
                 ?: throw IllegalStateException("Lock ${request.lockExternalId} has no ISEO lock tag")
 
         val response =

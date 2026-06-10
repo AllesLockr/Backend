@@ -8,7 +8,7 @@ data class GrantAccessAdapterRequest(
     val grantId: String,
     val personExternalId: String,
     val lockExternalId: String,
-    val lockTagId: String?,
+    val metadata: Map<String, String> = emptyMap(),
     val start: Instant,
     val end: Instant,
 )

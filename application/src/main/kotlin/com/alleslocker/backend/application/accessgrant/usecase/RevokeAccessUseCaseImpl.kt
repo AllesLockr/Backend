@@ -79,7 +79,7 @@ internal class RevokeAccessUseCaseImpl(
                 id = AuditLogId.generate(),
                 message =
                     AuditLogMessage(
-                        "Revoked access: person ${grant.personId.value} -> lock ${grant.lockId.value} on $vendor (grant ${grantId.value})",
+                        "Revoked person ${grant.personId.value}'s access to lock ${grant.lockId.value} on $vendor (grant ${grantId.value})",
                     ),
                 performedByUserId = UserId(request.requesterId),
                 createdAt = Instant.now(),

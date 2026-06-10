@@ -10,7 +10,6 @@ import com.alleslocker.backend.web.accessgrant.schema.request.GrantAccessRequest
 import com.alleslocker.backend.web.accessgrant.schema.request.RevokeAccessRequestSchema
 import com.alleslocker.backend.web.accessgrant.schema.response.AccessGrantSchema
 import com.alleslocker.backend.web.accessgrant.schema.response.GetAccessGrantsPagedResponseSchema
-import com.alleslocker.backend.web.accessgrant.schema.response.VendorSchema
 import com.alleslocker.backend.web.common.mapper.toSchema
 
 fun GrantAccessRequestSchema.toDto(requesterId: String) =
@@ -43,8 +42,8 @@ fun AccessGrantDto.toSchema() =
         lockId = this.lockId,
         start = this.start,
         end = this.end,
-        vendor = this.vendor?.let { VendorSchema.valueOf(it) },
-        externalId = this.externalId,
+        vendor = this.vendor,
+        vendorExternalId = this.vendorExternalId,
     )
 
 fun GetAccessGrantsPagedResponseDto.toSchema() =

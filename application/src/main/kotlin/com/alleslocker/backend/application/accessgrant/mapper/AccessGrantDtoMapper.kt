@@ -11,5 +11,5 @@ fun AccessGrant.toDto() =
         start = this.schedule.start,
         end = this.schedule.end,
         vendor = this.apiIdentity?.api?.name,
-        externalId = this.apiIdentity?.externalId?.value,
+        vendorExternalId = this.apiIdentity?.externalId?.value,
     )

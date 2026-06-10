@@ -88,7 +88,7 @@ internal class GrantAccessUseCaseImpl(
                     return
                 }
 
-        val lockTagId = lock.metadata.firstOrNull { it.key == "tagId" }?.value
+        val lockMetadata = lock.metadata.associate { it.key to it.value }
 
         val grantId = AccessGrantId.generate()
 
@@ -100,7 +100,7 @@ internal class GrantAccessUseCaseImpl(
                         grantId = grantId.value,
                         personExternalId = personIdentity.externalId.value,
                         lockExternalId = lockIdentity.externalId.value,
-                        lockTagId = lockTagId,
+                        metadata = lockMetadata,
                         start = schedule.start,
                         end = schedule.end,
                     ),
@@ -143,7 +143,7 @@ internal class GrantAccessUseCaseImpl(
                 id = AuditLogId.generate(),
                 message =
                     AuditLogMessage(
-                        "Granted access: person ${personId.value} -> lock ${lockId.value} on $vendor (grant ${grantId.value})",
+                        "Granted person ${personId.value} access to lock ${lockId.value} on $vendor (grant ${grantId.value})",
                     ),
                 performedByUserId = UserId(request.requesterId),
                 createdAt = Instant.now(),
@@ -154,7 +154,7 @@ internal class GrantAccessUseCaseImpl(
             GrantAccessResponseDto(
                 grantId = grantId.value,
                 vendor = vendor.name,
-                externalId = adapterResponse.externalId,
+                vendorExternalId = adapterResponse.externalId,
             ),
         )
     }
