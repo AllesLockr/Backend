@@ -7,6 +7,7 @@ import com.alleslocker.backend.domain.vendor.AvailableVendors
 
 internal interface AccessGrantClient {
     val vendor: AvailableVendors
+
     fun grant(request: GrantAccessAdapterRequest): GrantAccessAdapterResponse
 
     fun revoke(request: RevokeAccessAdapterRequest)
