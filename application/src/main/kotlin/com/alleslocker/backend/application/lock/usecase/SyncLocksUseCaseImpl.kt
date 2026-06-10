@@ -34,8 +34,8 @@ internal class SyncLocksUseCaseImpl(
             try {
                 lockAdapter.fetchAllLocks().locks
             } catch (e: Exception) {
-                logger.error("Failed to fetch locks from ISEO", e)
-                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to fetch locks from ISEO"))
+                logger.error("Failed to fetch locks", e)
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to fetch locks"))
                 return
             }
 
@@ -99,7 +99,7 @@ internal class SyncLocksUseCaseImpl(
             logger.audit(
                 AuditLog(
                     id = AuditLogId.generate(),
-                    message = AuditLogMessage("Synced locks from ISEO: ${locksToUpsert.size} upserted, ${idsToDelete.size} deleted"),
+                    message = AuditLogMessage("Synced locks: ${locksToUpsert.size} upserted, ${idsToDelete.size} deleted"),
                     performedByUserId = UserId(request.requesterId),
                     createdAt = Instant.now(),
                 ),

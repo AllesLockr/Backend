@@ -1,5 +1,13 @@
 package com.alleslocker.backend.application.common.factory
 
+import com.alleslocker.backend.application.accessgrant.adapter.AccessGrantAdapter
+import com.alleslocker.backend.application.accessgrant.gateway.AccessGrantGateway
+import com.alleslocker.backend.application.accessgrant.usecase.GetAccessGrantsPagedUseCase
+import com.alleslocker.backend.application.accessgrant.usecase.GetAccessGrantsPagedUseCaseImpl
+import com.alleslocker.backend.application.accessgrant.usecase.GrantAccessUseCase
+import com.alleslocker.backend.application.accessgrant.usecase.GrantAccessUseCaseImpl
+import com.alleslocker.backend.application.accessgrant.usecase.RevokeAccessUseCase
+import com.alleslocker.backend.application.accessgrant.usecase.RevokeAccessUseCaseImpl
 import com.alleslocker.backend.application.auditlog.gateway.AuditLogGateway
 import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPagedUseCase
 import com.alleslocker.backend.application.auditlog.usecase.GetAllAuditLogsPagedUseCaseImpl
@@ -88,6 +96,25 @@ class UseCaseFactoryImpl(
                 SyncLocksUseCaseImpl(
                     lockGateway = gatewayFactory[LockGateway::class],
                     lockAdapter = adapterFactory[LockAdapter::class],
+                    logger = logger,
+                ),
+            GrantAccessUseCase::class to
+                GrantAccessUseCaseImpl(
+                    accessGrantGateway = gatewayFactory[AccessGrantGateway::class],
+                    personGateway = gatewayFactory[PersonGateway::class],
+                    lockGateway = gatewayFactory[LockGateway::class],
+                    accessGrantAdapter = adapterFactory[AccessGrantAdapter::class],
+                    logger = logger,
+                ),
+            RevokeAccessUseCase::class to
+                RevokeAccessUseCaseImpl(
+                    accessGrantGateway = gatewayFactory[AccessGrantGateway::class],
+                    accessGrantAdapter = adapterFactory[AccessGrantAdapter::class],
+                    logger = logger,
+                ),
+            GetAccessGrantsPagedUseCase::class to
+                GetAccessGrantsPagedUseCaseImpl(
+                    accessGrantGateway = gatewayFactory[AccessGrantGateway::class],
                     logger = logger,
                 ),
             LoginUserUseCase::class to

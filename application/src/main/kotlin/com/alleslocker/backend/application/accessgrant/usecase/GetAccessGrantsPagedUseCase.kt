@@ -1,0 +1,7 @@
+package com.alleslocker.backend.application.accessgrant.usecase
+
+import com.alleslocker.backend.application.accessgrant.dto.request.GetAccessGrantsPagedRequestDto
+import com.alleslocker.backend.application.accessgrant.dto.response.GetAccessGrantsPagedResponseDto
+import com.alleslocker.backend.application.common.InputBoundary
+
+interface GetAccessGrantsPagedUseCase : InputBoundary<GetAccessGrantsPagedRequestDto, GetAccessGrantsPagedResponseDto>
