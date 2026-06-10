@@ -11,7 +11,19 @@ import org.springframework.stereotype.Component
 internal class AccessGrantAdapterImpl(
     clients: List<AccessGrantClient>,
 ) : AccessGrantAdapter {
-    private val clients: Map<AvailableVendors, AccessGrantClient> = clients.associateBy { it.vendor }
+    private val clients: Map<AvailableVendors, AccessGrantClient> =
+        clients
+            .also { list ->
+                val duplicates =
+                    list
+                        .groupingBy { it.vendor }
+                        .eachCount()
+                        .filterValues { it > 1 }
+                        .keys
+                require(duplicates.isEmpty()) {
+                    "Duplicate access-grant clients configured for vendors: $duplicates"
+                }
+            }.associateBy { it.vendor }
 
     private fun clientFor(vendor: AvailableVendors): AccessGrantClient =
         clients[vendor] ?: throw IllegalArgumentException("No access-grant client for $vendor")
