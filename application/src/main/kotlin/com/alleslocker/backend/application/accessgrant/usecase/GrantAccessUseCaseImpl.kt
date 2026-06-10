@@ -129,7 +129,8 @@ internal class GrantAccessUseCaseImpl(
 
         try {
             accessGrantGateway.save(grant)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            logger.error("Failed to save access grant ${grantId.value}", e)
             runCatching {
                 accessGrantAdapter.revoke(RevokeAccessAdapterRequest(vendor, adapterResponse.externalId))
             }.onFailure { logger.error("Failed to revoke grant ${grantId.value} on $vendor", it) }
