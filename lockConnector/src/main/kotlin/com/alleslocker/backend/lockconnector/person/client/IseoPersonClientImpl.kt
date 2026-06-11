@@ -4,10 +4,10 @@ import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonA
 import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
 import com.alleslocker.backend.domain.vendor.AvailableVendors
-import com.alleslocker.backend.lockconnector.client.TokenProvider
-import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
+import com.alleslocker.backend.lockconnector.auth.common.TokenProvider
+import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
+import com.alleslocker.backend.lockconnector.common.GenericRestClient
 import com.alleslocker.backend.lockconnector.person.adapter.PersonClient
-import com.alleslocker.backend.lockconnector.rest.GenericRestClient
 import org.springframework.http.MediaType
 
 class IseoPersonClientImpl(

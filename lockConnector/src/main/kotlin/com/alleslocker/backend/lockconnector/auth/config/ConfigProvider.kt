@@ -1,4 +1,4 @@
-package com.alleslocker.backend.lockconnector.iseo.config
+package com.alleslocker.backend.lockconnector.auth.config
 
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.domain.vendor.AvailableVendors

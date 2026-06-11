@@ -1,4 +1,4 @@
-package com.alleslocker.backend.lockconnector.connection.adapter
+package com.alleslocker.backend.lockconnector.connectioncheck.adapter
 
 import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
 

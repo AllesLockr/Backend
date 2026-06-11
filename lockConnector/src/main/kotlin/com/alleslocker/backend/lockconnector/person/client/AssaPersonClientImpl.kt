@@ -3,8 +3,8 @@ package com.alleslocker.backend.lockconnector.person.client
 import com.alleslocker.backend.application.person.dto.request.adapter.AddPersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.request.adapter.DeletePersonAdapterRequest
 import com.alleslocker.backend.application.person.dto.response.AddPersonAdapterResponse
+import com.alleslocker.backend.lockconnector.common.GenericRestClient
 import com.alleslocker.backend.lockconnector.person.adapter.PersonClient
-import com.alleslocker.backend.lockconnector.rest.GenericRestClient
 
 class AssaPersonClientImpl(
     private val restClient: GenericRestClient,

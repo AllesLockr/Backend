@@ -1,4 +1,4 @@
-package com.alleslocker.backend.lockconnector.factory
+package com.alleslocker.backend.lockconnector.common
 
 import com.alleslocker.backend.application.common.adapter.Adapter
 import com.alleslocker.backend.application.common.factory.AdapterFactory
