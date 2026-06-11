@@ -12,8 +12,7 @@ internal class AssaAccessGrantClientImpl(
 ) : AccessGrantClient {
     override val vendor = AvailableVendors.ASSA_AMOQ
 
-    override fun grant(request: GrantAccessAdapterRequest): GrantAccessAdapterResponse =
-        TODO("ASSA access grant not yet implemented")
+    override fun grant(request: GrantAccessAdapterRequest): GrantAccessAdapterResponse = TODO("ASSA access grant not yet implemented")
 
     override fun revoke(request: RevokeAccessAdapterRequest): Unit = TODO("ASSA access revoke not yet implemented")
 }

@@ -7,15 +7,15 @@ import com.alleslocker.backend.domain.vendor.definition.VendorSpecificField
 import com.alleslocker.backend.domain.vendor.definition.VendorSpecificFieldType
 
 class VendorSpecificDefinitionsImpl : VendorSpecificDefinitions {
-    private val definitions = listOf(
-        VendorSpecificDefinition(
-            AvailableVendors.ISEO,
-            listOf(
-                VendorSpecificField(name = "installer-email", type = VendorSpecificFieldType.EMAIL)
-            )
+    private val definitions =
+        listOf(
+            VendorSpecificDefinition(
+                AvailableVendors.ISEO,
+                listOf(
+                    VendorSpecificField(name = "installer-email", type = VendorSpecificFieldType.EMAIL),
+                ),
+            ),
         )
-    )
 
-    override fun get(availableVendors: AvailableVendors): VendorSpecificDefinition? =
-        definitions.find { it.vendorName == availableVendors }
+    override fun get(availableVendors: AvailableVendors): VendorSpecificDefinition? = definitions.find { it.vendorName == availableVendors }
 }

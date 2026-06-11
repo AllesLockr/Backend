@@ -4,5 +4,5 @@ import com.alleslocker.backend.domain.vendor.AvailableVendors
 
 data class VendorSpecificDefinition(
     val vendorName: AvailableVendors,
-    val vendorSpecificFields: List<VendorSpecificField>
+    val vendorSpecificFields: List<VendorSpecificField>,
 )

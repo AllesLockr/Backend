@@ -6,10 +6,12 @@ import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
 import org.springframework.stereotype.Component
 
 @Component
-class TokenProviderFactory(private val configProvider: ConfigProvider) {
+class TokenProviderFactory(
+    private val configProvider: ConfigProvider,
+) {
     private val tokenProviders: Map<AvailableVendors, TokenProvider> =
         mapOf(
-            AvailableVendors.ISEO to TokenProvider(IseoOAuthTokenClient(configProvider, AvailableVendors.ISEO))
+            AvailableVendors.ISEO to TokenProvider(IseoOAuthTokenClient(configProvider, AvailableVendors.ISEO)),
         )
 
     fun make(availableVendor: AvailableVendors): TokenProvider {

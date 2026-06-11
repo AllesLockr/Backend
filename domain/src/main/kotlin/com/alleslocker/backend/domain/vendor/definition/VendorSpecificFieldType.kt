@@ -4,5 +4,5 @@ enum class VendorSpecificFieldType {
     EMAIL,
     ENCRYPTED,
     TEXT,
-    NUMBER
+    NUMBER,
 }

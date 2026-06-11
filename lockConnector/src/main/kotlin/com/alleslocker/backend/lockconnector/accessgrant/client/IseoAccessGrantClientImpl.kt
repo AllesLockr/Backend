@@ -92,15 +92,15 @@ internal class IseoAccessGrantClientImpl(
             "lockTagMatchingMode" to "AT_LEAST_ONE_TAG",
             "daysOfTheWeek" to listOf(1, 2, 3, 4, 5, 6, 7),
             "dateInterval" to
-                    mapOf(
-                        "from" to request.start.toEpochMilli(),
-                        "to" to request.end.toEpochMilli(),
-                    ),
+                mapOf(
+                    "from" to request.start.toEpochMilli(),
+                    "to" to request.end.toEpochMilli(),
+                ),
             "timeInterval" to
-                    mapOf(
-                        "from" to 0,
-                        "to" to 86340,
-                    ),
+                mapOf(
+                    "from" to 0,
+                    "to" to 86340,
+                ),
             "type" to "SMART",
         )
     }
