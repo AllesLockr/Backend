@@ -52,22 +52,42 @@ class AccessGrantController(
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid request.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "Person or lock not found.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "422",
                 description = "Person not provisioned on the lock's vendor.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
         ],
     )
@@ -96,22 +116,42 @@ class AccessGrantController(
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid request.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "Access grant not found.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "422",
                 description = "Access grant is not present on any vendor.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
         ],
     )
@@ -140,12 +180,22 @@ class AccessGrantController(
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid page, size, personId or lockId.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Something went wrong.",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponse::class))],
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
             ),
         ],
     )

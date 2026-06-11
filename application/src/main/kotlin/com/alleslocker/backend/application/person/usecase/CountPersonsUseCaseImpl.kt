@@ -17,7 +17,9 @@ internal class CountPersonsUseCaseImpl(
             try {
                 personGateway.count()
             } catch (e: Exception) {
-                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to count persons: ${e.message ?: "Unknown error"}"))
+                presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Failed to count persons: ${e.message ?: "Unknown error"}"),
+                )
                 return
             }
 

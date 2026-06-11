@@ -10,5 +10,12 @@ fun PersonDto.toSchema() =
         firstname = this.firstname,
         lastname = this.lastname,
         email = this.email,
-        apiIdentities = this.apiIdentities.map { ExternalApiIdentitySchema(api = it.api, externalId = it.externalId) }.toSet(),
+        apiIdentities =
+            this.apiIdentities
+                .map {
+                    ExternalApiIdentitySchema(
+                        api = it.api,
+                        externalId = it.externalId,
+                    )
+                }.toSet(),
     )

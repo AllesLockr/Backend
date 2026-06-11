@@ -18,7 +18,7 @@ internal class IseoAccessGrantClientImpl(
     private val configProvider: ConfigProvider,
 ) : AccessGrantClient {
     override val vendor = AvailableVendors.ISEO
-    val tokenProvider = tokenProviderFactory.make(vendor)
+    private val tokenProvider = tokenProviderFactory.make(vendor)
 
     private data class IseoUserTag(
         val id: Int? = null,

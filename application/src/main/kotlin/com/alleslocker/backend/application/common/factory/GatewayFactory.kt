@@ -8,5 +8,6 @@ interface GatewayFactory {
 
     fun migrate()
 
-    operator fun <T : com.alleslocker.backend.application.common.gateway.Gateway> get(gateway: KClass<out T>) = make(gateway)
+    operator fun <T : com.alleslocker.backend.application.common.gateway.Gateway> get(gateway: KClass<out T>) =
+        make(gateway)
 }

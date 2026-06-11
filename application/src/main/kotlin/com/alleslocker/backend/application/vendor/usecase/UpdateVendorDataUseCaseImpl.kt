@@ -62,14 +62,22 @@ class UpdateVendorDataUseCaseImpl(
 
         val vendorAuthentication =
             let {
-                if (!request.apiKey.isNullOrBlank() && !request.apiUsername.isNullOrBlank() && !request.apiPassword.isNullOrBlank()) {
+                if (!request.apiKey.isNullOrBlank() && !request.apiUsername.isNullOrBlank() &&
+                    !request.apiPassword.isNullOrBlank()
+                ) {
                     return presenter.presentFailure(
-                        ErrorResponse.UnprocessableEntity("you can only update apiKey OR username and password, not both!"),
+                        ErrorResponse.UnprocessableEntity(
+                            "you can only update apiKey OR username and password, not both!",
+                        ),
                     )
                 }
-                if (!request.apiKey.isNullOrBlank() && request.apiUsername.isNullOrBlank() && request.apiPassword.isNullOrBlank()) {
+                if (!request.apiKey.isNullOrBlank() && request.apiUsername.isNullOrBlank() &&
+                    request.apiPassword.isNullOrBlank()
+                ) {
                     VendorAuthentication.ApiKey(request.apiKey)
-                } else if (request.apiKey.isNullOrBlank() && !request.apiUsername.isNullOrBlank() && !request.apiPassword.isNullOrBlank()) {
+                } else if (request.apiKey.isNullOrBlank() && !request.apiUsername.isNullOrBlank() &&
+                    !request.apiPassword.isNullOrBlank()
+                ) {
                     VendorAuthentication.BaseAuth(ApiUsername(request.apiUsername), ApiPassword(request.apiPassword))
                 } else {
                     existing.vendorAuthentication

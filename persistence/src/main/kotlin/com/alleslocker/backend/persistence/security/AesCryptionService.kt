@@ -67,7 +67,11 @@ class AesCryptionService(
     }
 
     override fun decrypt(cipherTextWithIvBase64: String?): String {
-        if (cipherTextWithIvBase64.isNullOrBlank()) throw IllegalArgumentException("cipherTextWithIvBase64 can not be null or blank!")
+        if (cipherTextWithIvBase64.isNullOrBlank()) {
+            throw IllegalArgumentException(
+                "cipherTextWithIvBase64 can not be null or blank!",
+            )
+        }
 
         return try {
             val cipherTextWithIv = Base64.getDecoder().decode(cipherTextWithIvBase64)
