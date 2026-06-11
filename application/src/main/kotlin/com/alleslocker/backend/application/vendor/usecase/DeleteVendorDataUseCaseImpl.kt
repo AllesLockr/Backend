@@ -31,7 +31,9 @@ class DeleteVendorDataUseCaseImpl(
             vendorDataGateway.deleteById(id)
         } catch (e: Exception) {
             logger.error("Error deleting vendor data", e)
-            return presenter.presentFailure(ErrorResponse.InternalServerError("Error while deleting requested Vendor-Data"))
+            return presenter.presentFailure(
+                ErrorResponse.InternalServerError("Error while deleting requested Vendor-Data"),
+            )
         }
 
         logger.audit(

@@ -28,7 +28,8 @@ internal class AccessGrantAdapterImpl(
     private fun clientFor(vendor: AvailableVendors): AccessGrantClient =
         clients[vendor] ?: throw IllegalArgumentException("No access-grant client for $vendor")
 
-    override fun grant(request: GrantAccessAdapterRequest): GrantAccessAdapterResponse = clientFor(request.vendor).grant(request)
+    override fun grant(request: GrantAccessAdapterRequest): GrantAccessAdapterResponse =
+        clientFor(request.vendor).grant(request)
 
     override fun revoke(request: RevokeAccessAdapterRequest) = clientFor(request.vendor).revoke(request)
 }

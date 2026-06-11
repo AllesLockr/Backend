@@ -44,7 +44,9 @@ internal class DeletePersonUseCaseImpl(
                 personAdapter.deletePerson(DeletePersonAdapterRequest(externalIds = externalIds))
             } catch (e: Exception) {
                 presenter.presentFailure(
-                    ErrorResponse.InternalServerError("Failed to delete person on external API: ${e.message ?: "Unknown error"}"),
+                    ErrorResponse.InternalServerError(
+                        "Failed to delete person on external API: ${e.message ?: "Unknown error"}",
+                    ),
                 )
                 return
             }
@@ -53,7 +55,9 @@ internal class DeletePersonUseCaseImpl(
         try {
             personGateway.deleteById(id)
         } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to delete person: ${e.message ?: "Unknown error"}"))
+            presenter.presentFailure(
+                ErrorResponse.InternalServerError("Failed to delete person: ${e.message ?: "Unknown error"}"),
+            )
             return
         }
         logger.audit(

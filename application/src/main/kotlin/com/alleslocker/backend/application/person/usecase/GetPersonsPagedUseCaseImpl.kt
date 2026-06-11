@@ -32,7 +32,9 @@ internal class GetPersonsPagedUseCaseImpl(
                     size = request.size,
                 )
             } catch (e: Exception) {
-                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load persons: ${e.message ?: "Unknown error"}"))
+                presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Failed to load persons: ${e.message ?: "Unknown error"}"),
+                )
                 return
             }
 

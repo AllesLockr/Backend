@@ -1,9 +1,9 @@
-package com.alleslocker.backend.lockconnector.iseo.client
+package com.alleslocker.backend.lockconnector.auth.client
 
 import com.alleslocker.backend.domain.vendor.AvailableVendors
-import com.alleslocker.backend.lockconnector.client.TokenClient
-import com.alleslocker.backend.lockconnector.client.TokenResponse
-import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
+import com.alleslocker.backend.lockconnector.auth.common.TokenClient
+import com.alleslocker.backend.lockconnector.auth.common.TokenResponse
+import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.http.MediaType
 import org.springframework.http.client.SimpleClientHttpRequestFactory

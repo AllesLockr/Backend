@@ -30,7 +30,10 @@ open class AccessGrantGatewayAdapter(
 
     override fun exists(id: AccessGrantId): Boolean = repository.existsById(id.value)
 
-    override fun findByPersonId(personId: PersonId): List<AccessGrant> = repository.findByPersonId(personId.value).map { it.toDomain() }
+    override fun findByPersonId(personId: PersonId): List<AccessGrant> =
+        repository.findByPersonId(personId.value).map {
+            it.toDomain()
+        }
 
     override fun getAllGrantsPaged(
         personId: PersonId?,

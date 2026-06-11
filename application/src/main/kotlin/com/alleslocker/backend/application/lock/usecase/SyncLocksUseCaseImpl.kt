@@ -84,8 +84,9 @@ internal class SyncLocksUseCaseImpl(
 
         val idsToDelete =
             allLocalLocks
-                .filter { it.apiIdentity?.api == AvailableVendors.ISEO && it.serialNumber.value !in fetchedSerialNumbers }
-                .map { it.id }
+                .filter {
+                    it.apiIdentity?.api == AvailableVendors.ISEO && it.serialNumber.value !in fetchedSerialNumbers
+                }.map { it.id }
 
         try {
             lockGateway.syncLocks(locksToUpsert, idsToDelete)
@@ -99,7 +100,10 @@ internal class SyncLocksUseCaseImpl(
             logger.audit(
                 AuditLog(
                     id = AuditLogId.generate(),
-                    message = AuditLogMessage("Synced locks: ${locksToUpsert.size} upserted, ${idsToDelete.size} deleted"),
+                    message =
+                        AuditLogMessage(
+                            "Synced locks: ${locksToUpsert.size} upserted, ${idsToDelete.size} deleted",
+                        ),
                     performedByUserId = UserId(request.requesterId),
                     createdAt = Instant.now(),
                 ),

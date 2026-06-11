@@ -36,7 +36,9 @@ class AddVendorDataUseCaseImpl(
             try {
                 AvailableVendors.valueOf(request.forApi)
             } catch (_: IllegalArgumentException) {
-                presenter.presentFailure(ErrorResponse.UnprocessableEntity("${request.forApi} is not implemented (yet)!"))
+                presenter.presentFailure(
+                    ErrorResponse.UnprocessableEntity("${request.forApi} is not implemented (yet)!"),
+                )
                 return
             }
 
@@ -53,12 +55,18 @@ class AddVendorDataUseCaseImpl(
 
         val vendorAuthentication =
             let {
-                if (!request.apiKey.isNullOrBlank() && request.apiUsername.isNullOrBlank() && request.apiPassword.isNullOrBlank()) {
+                if (!request.apiKey.isNullOrBlank() && request.apiUsername.isNullOrBlank() &&
+                    request.apiPassword.isNullOrBlank()
+                ) {
                     VendorAuthentication.ApiKey(request.apiKey)
-                } else if (request.apiKey.isNullOrBlank() && !request.apiUsername.isNullOrBlank() && !request.apiPassword.isNullOrBlank()) {
+                } else if (request.apiKey.isNullOrBlank() && !request.apiUsername.isNullOrBlank() &&
+                    !request.apiPassword.isNullOrBlank()
+                ) {
                     VendorAuthentication.BaseAuth(ApiUsername(request.apiUsername), ApiPassword(request.apiPassword))
                 } else {
-                    return presenter.presentFailure(ErrorResponse.BadRequest("either apiKey or apiUsername and apiPassword must be set!"))
+                    return presenter.presentFailure(
+                        ErrorResponse.BadRequest("either apiKey or apiUsername and apiPassword must be set!"),
+                    )
                 }
             }
 
@@ -75,14 +83,18 @@ class AddVendorDataUseCaseImpl(
             try {
                 vendorDataGateway.save(vendorData)
             } catch (e: Exception) {
-                return presenter.presentFailure(ErrorResponse.InternalServerError("Could not save api to db: ${e.message}"))
+                return presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Could not save api to db: ${e.message}"),
+                )
             }
 
         try {
             val vendorState = vendorConnectionAdapter.check(forApi)
             vendorDataGateway.save(saved.copy(vendorState = vendorState))
         } catch (e: Exception) {
-            return presenter.presentFailure(ErrorResponse.InternalServerError("Could not update connection state: ${e.message}"))
+            return presenter.presentFailure(
+                ErrorResponse.InternalServerError("Could not update connection state: ${e.message}"),
+            )
         }
         logger.audit(
             AuditLog(

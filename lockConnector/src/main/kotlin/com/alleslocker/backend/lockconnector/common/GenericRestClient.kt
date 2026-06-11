@@ -1,4 +1,4 @@
-package com.alleslocker.backend.lockconnector.rest
+package com.alleslocker.backend.lockconnector.common
 
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.MediaType

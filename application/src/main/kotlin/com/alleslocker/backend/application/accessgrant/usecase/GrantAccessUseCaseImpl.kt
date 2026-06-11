@@ -76,7 +76,9 @@ internal class GrantAccessUseCaseImpl(
         val lockIdentity =
             lock.apiIdentity
                 ?: run {
-                    presenter.presentFailure(ErrorResponse.BadRequest("Lock ${lockId.value} is not present on any vendor"))
+                    presenter.presentFailure(
+                        ErrorResponse.BadRequest("Lock ${lockId.value} is not present on any vendor"),
+                    )
                     return
                 }
         val vendor = lockIdentity.api
@@ -84,7 +86,9 @@ internal class GrantAccessUseCaseImpl(
         val personIdentity =
             person.apiIdentities.firstOrNull { it.api == vendor }
                 ?: run {
-                    presenter.presentFailure(ErrorResponse.UnprocessableEntity("Person ${personId.value} not present on $vendor"))
+                    presenter.presentFailure(
+                        ErrorResponse.UnprocessableEntity("Person ${personId.value} not present on $vendor"),
+                    )
                     return
                 }
 

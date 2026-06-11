@@ -5,21 +5,20 @@ import com.alleslocker.backend.application.accessgrant.dto.request.adapter.Revok
 import com.alleslocker.backend.application.accessgrant.dto.response.GrantAccessAdapterResponse
 import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.lockconnector.accessgrant.adapter.AccessGrantClient
-import com.alleslocker.backend.lockconnector.client.TokenProvider
-import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
-import com.alleslocker.backend.lockconnector.rest.GenericRestClient
-import org.springframework.beans.factory.annotation.Qualifier
+import com.alleslocker.backend.lockconnector.auth.common.TokenProviderFactory
+import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
+import com.alleslocker.backend.lockconnector.common.GenericRestClient
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 
 @Component
 internal class IseoAccessGrantClientImpl(
     private val restClient: GenericRestClient,
-    @Qualifier("iseoAdminTokenProvider")
-    private val tokenProvider: TokenProvider,
+    private val tokenProviderFactory: TokenProviderFactory,
     private val configProvider: ConfigProvider,
 ) : AccessGrantClient {
     override val vendor = AvailableVendors.ISEO
+    private val tokenProvider = tokenProviderFactory.make(vendor)
 
     private data class IseoUserTag(
         val id: Int? = null,

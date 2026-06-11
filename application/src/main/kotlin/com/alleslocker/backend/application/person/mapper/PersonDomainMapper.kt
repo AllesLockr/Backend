@@ -10,5 +10,9 @@ fun Person.toDto() =
         firstname = this.firstname.value,
         lastname = this.lastname.value,
         email = this.email.value,
-        apiIdentities = this.apiIdentities.map { ExternalApiIdentityDto(api = it.api.name, externalId = it.externalId.value) }.toSet(),
+        apiIdentities =
+            this.apiIdentities
+                .map {
+                    ExternalApiIdentityDto(api = it.api.name, externalId = it.externalId.value)
+                }.toSet(),
     )

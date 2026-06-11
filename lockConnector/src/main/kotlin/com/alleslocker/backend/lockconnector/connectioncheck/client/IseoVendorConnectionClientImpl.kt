@@ -1,12 +1,12 @@
-package com.alleslocker.backend.lockconnector.connection.client
+package com.alleslocker.backend.lockconnector.connectioncheck.client
 
 import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.domain.vendor.VendorConnectionState
 import com.alleslocker.backend.domain.vendor.VendorState
-import com.alleslocker.backend.lockconnector.client.TokenProvider
-import com.alleslocker.backend.lockconnector.connection.adapter.VendorConnectionClient
-import com.alleslocker.backend.lockconnector.iseo.config.ConfigProvider
-import com.alleslocker.backend.lockconnector.rest.GenericRestClient
+import com.alleslocker.backend.lockconnector.auth.common.TokenProvider
+import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
+import com.alleslocker.backend.lockconnector.common.GenericRestClient
+import com.alleslocker.backend.lockconnector.connectioncheck.adapter.VendorConnectionClient
 import org.springframework.http.HttpStatus
 import java.time.Instant
 

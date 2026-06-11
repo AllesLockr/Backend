@@ -1,4 +1,4 @@
-﻿package com.alleslocker.backend.lockconnector.client
+﻿package com.alleslocker.backend.lockconnector.auth.common
 
 data class TokenResponse(
     val accessToken: String,
