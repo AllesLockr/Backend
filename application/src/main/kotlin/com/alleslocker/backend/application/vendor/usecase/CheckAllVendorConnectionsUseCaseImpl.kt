@@ -13,7 +13,8 @@ class CheckAllVendorConnectionsUseCaseImpl(
     private val vendorDataGateway: VendorDataGateway,
     private val vendorConnectionAdapter: VendorConnectionAdapter,
     private val logger: Logger,
-) : CheckAllVendorConnectionsUseCase, InputBoundary<Unit, Unit> {
+) : CheckAllVendorConnectionsUseCase,
+    InputBoundary<Unit, Unit> {
     override fun execute(
         request: Unit,
         presenter: OutputBoundary<Unit>,
