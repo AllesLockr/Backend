@@ -3,7 +3,7 @@ package com.alleslocker.backend.application.user.usecase
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
-import com.alleslocker.backend.application.user.dto.request.RequestUserPasswordChangeRequestDto
+import com.alleslocker.backend.application.user.dto.request.DeactivateUserRequestDto
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
@@ -11,13 +11,14 @@ import com.alleslocker.backend.domain.auditlog.AuditLogMessage
 import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.user.UserRole
 import java.time.Instant
+import kotlin.math.log
 
-class RequestUserPasswordChangeUseCaseImpl(
-    private val userGateway: UserGateway,
-    private val logger: Logger,
-) : RequestUserPasswordChangeUseCase {
+class DeactivateUserUseCaseImpl(
+    val userGateway: UserGateway,
+    val logger: Logger,
+) : DeactivateUserUseCase {
     override fun execute(
-        request: RequestUserPasswordChangeRequestDto,
+        request: DeactivateUserRequestDto,
         presenter: OutputBoundary<Unit>,
     ) {
         val requestorId =
@@ -69,16 +70,16 @@ class RequestUserPasswordChangeUseCaseImpl(
             return
         }
 
-        if (user.mustChangePassword) {
-            presenter.presentFailure(ErrorResponse.BadRequest("User $userId were already requested to change"))
+        if (!user.isActive) {
+            presenter.presentFailure(ErrorResponse.BadRequest("User $userId is already deactivated"))
             return
         }
 
-        val newUser =
+        val saved =
             try {
-                userGateway.save(user.copy(mustChangePassword = true))
+                userGateway.save(user.copy(isActive = false))
             } catch (e: Exception) {
-                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user"))
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user ${e.message}"))
                 logger.error("Failed to save user", e)
                 return
             }
@@ -88,7 +89,7 @@ class RequestUserPasswordChangeUseCaseImpl(
                 id = AuditLogId.generate(),
                 message =
                     AuditLogMessage(
-                        "Requested to change password of ${newUser.username.value} with id ${newUser.id.value}",
+                        "Deactivated user ${saved.username.value} with id ${saved.id.value}",
                     ),
                 performedByUserId = requestorId,
                 createdAt = Instant.now(),

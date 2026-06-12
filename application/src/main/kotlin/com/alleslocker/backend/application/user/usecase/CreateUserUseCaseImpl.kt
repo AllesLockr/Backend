@@ -8,6 +8,9 @@ import com.alleslocker.backend.application.common.service.PasswordGeneratorServi
 import com.alleslocker.backend.application.user.dto.request.CreateUserRequestDto
 import com.alleslocker.backend.application.user.dto.response.CreateUserResponseDto
 import com.alleslocker.backend.application.user.gateway.UserGateway
+import com.alleslocker.backend.domain.auditlog.AuditLog
+import com.alleslocker.backend.domain.auditlog.AuditLogId
+import com.alleslocker.backend.domain.auditlog.AuditLogMessage
 import com.alleslocker.backend.domain.user.PasswordHash
 import com.alleslocker.backend.domain.user.User
 import com.alleslocker.backend.domain.user.UserEmail
@@ -16,6 +19,7 @@ import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.user.UserLastname
 import com.alleslocker.backend.domain.user.UserRole
 import com.alleslocker.backend.domain.user.Username
+import java.time.Instant
 
 class CreateUserUseCaseImpl(
     private val userGateway: UserGateway,
@@ -142,6 +146,18 @@ class CreateUserUseCaseImpl(
                 logger.error("Failed to save user", e)
                 return
             }
+
+        logger.audit(
+            AuditLog(
+                id = AuditLogId.generate(),
+                message =
+                    AuditLogMessage(
+                        "Created user ${saved.username.value} with id ${saved.id.value}",
+                    ),
+                performedByUserId = requestorId,
+                createdAt = Instant.now(),
+            ),
+        )
 
         presenter.present(
             CreateUserResponseDto(

@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 
-internal class RequestUserPasswordChangePresenter(
+internal class ActivateUserPresenter(
     httpServletResponse: HttpServletResponse,
     jacksonConverter: MappingJackson2HttpMessageConverter,
 ) : JsonRestPresenter<Unit>(httpServletResponse, jacksonConverter) {

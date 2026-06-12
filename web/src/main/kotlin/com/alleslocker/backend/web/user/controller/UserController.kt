@@ -2,7 +2,9 @@ package com.alleslocker.backend.web.user.controller
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
+import com.alleslocker.backend.application.user.usecase.ActivateUserUseCase
 import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
+import com.alleslocker.backend.application.user.usecase.DeactivateUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
@@ -10,13 +12,16 @@ import com.alleslocker.backend.application.user.usecase.RequestUserPasswordChang
 import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
 import com.alleslocker.backend.web.common.security.JwtService
 import com.alleslocker.backend.web.user.mapper.toDto
+import com.alleslocker.backend.web.user.presenter.ActivateUserPresenter
 import com.alleslocker.backend.web.user.presenter.CreateUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUsersPagedPresenter
 import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
 import com.alleslocker.backend.web.user.presenter.RequestUserPasswordChangePresenter
 import com.alleslocker.backend.web.user.presenter.ResetPasswordUserPresenter
+import com.alleslocker.backend.web.user.schema.request.ActivateUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.CreateUserRequestSchema
+import com.alleslocker.backend.web.user.schema.request.DeactivateUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUsersPagedRequestSchema
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
@@ -340,5 +345,23 @@ class UserController(
     ) {
         val presenter = RequestUserPasswordChangePresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(RequestUserPasswordChangeUseCase::class).execute(request.toDto(requesterId), presenter)
+    }
+
+    @PostMapping("/activate-user")
+    fun activateUser(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: ActivateUserRequestSchema,
+    ) {
+        val presenter = ActivateUserPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(ActivateUserUseCase::class).execute(request.toDto(requesterId), presenter)
+    }
+
+    @PostMapping("/deactivate-user")
+    fun deactivateUser(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: DeactivateUserRequestSchema,
+    ) {
+        val presenter = ActivateUserPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(DeactivateUserUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 }
