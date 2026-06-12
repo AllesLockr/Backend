@@ -20,5 +20,9 @@ security:
     expiration: 86400000
 
 
+app:
+  scheduling:
+    vendor-connection-check: 300000
+
 server:
   port: 8080

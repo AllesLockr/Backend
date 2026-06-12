@@ -46,6 +46,8 @@ import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapte
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.CheckAllVendorConnectionsUseCase
+import com.alleslocker.backend.application.vendor.usecase.CheckAllVendorConnectionsUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
@@ -168,6 +170,12 @@ class UseCaseFactoryImpl(
                 GetAllVendorDataUseCaseImpl(
                     gatewayFactory[VendorDataGateway::class],
                     logger,
+                ),
+            CheckAllVendorConnectionsUseCase::class to
+                CheckAllVendorConnectionsUseCaseImpl(
+                    vendorDataGateway = gatewayFactory[VendorDataGateway::class],
+                    vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
+                    logger = logger,
                 ),
             GetAllAuditLogsPagedUseCase::class to
                 GetAllAuditLogsPagedUseCaseImpl(
