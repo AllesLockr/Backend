@@ -10,4 +10,8 @@ interface UserRepository :
     fun findByUsername(username: String): UserEntity?
 
     fun findByEmail(email: String): UserEntity?
+
+    fun existsByEmail(email: String): Boolean
+
+    fun existsByUsername(username: String): Boolean
 }
