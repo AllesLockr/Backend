@@ -32,14 +32,24 @@ import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImp
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCaseImpl
 import com.alleslocker.backend.application.user.gateway.UserGateway
+import com.alleslocker.backend.application.user.usecase.ActivateUserUseCase
+import com.alleslocker.backend.application.user.usecase.ActivateUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCase
+import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
 import com.alleslocker.backend.application.user.usecase.CreateUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.DeactivateUserUseCase
+import com.alleslocker.backend.application.user.usecase.DeactivateUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.EditUserUseCase
+import com.alleslocker.backend.application.user.usecase.EditUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.GetUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.RequestUserPasswordChangeUseCase
+import com.alleslocker.backend.application.user.usecase.RequestUserPasswordChangeUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
 import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCaseImpl
 import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
@@ -146,6 +156,31 @@ class UseCaseFactoryImpl(
                     passwordHasher = passwordHasher,
                     logger = logger,
                     passwordGeneratorService = passwordGeneratorService,
+                ),
+            RequestUserPasswordChangeUseCase::class to
+                RequestUserPasswordChangeUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    logger = logger,
+                ),
+            ActivateUserUseCase::class to
+                ActivateUserUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    logger = logger,
+                ),
+            DeactivateUserUseCase::class to
+                DeactivateUserUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    logger = logger,
+                ),
+            EditUserUseCase::class to
+                EditUserUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    logger = logger,
+                ),
+            ChangeUserRoleUseCase::class to
+                ChangeUserRoleUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    logger = logger,
                 ),
             AddVendorDataUseCase::class to
                 AddVendorDataUseCaseImpl(

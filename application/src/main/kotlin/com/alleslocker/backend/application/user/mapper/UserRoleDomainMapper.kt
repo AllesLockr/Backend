@@ -9,3 +9,9 @@ fun UserRole.toDto() =
         UserRole.ADMIN -> UserRoleDto.ADMIN
         UserRole.USER -> UserRoleDto.USER
     }
+
+fun UserRoleDto.toDomain() =
+    when (this) {
+        UserRoleDto.USER -> UserRole.USER
+        UserRoleDto.ADMIN -> UserRole.ADMIN
+    }
