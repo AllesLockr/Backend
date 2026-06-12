@@ -1,5 +1,5 @@
 package com.alleslocker.backend.web.user.schema.request
 
-class ActivateUserRequestSchema(
+data class ActivateUserRequestSchema(
     val userId: String,
 )

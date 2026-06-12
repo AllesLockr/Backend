@@ -1,5 +1,5 @@
 package com.alleslocker.backend.web.user.schema.request
 
-class DeactivateUserRequestSchema(
+data class DeactivateUserRequestSchema(
     val userId: String,
 )

@@ -18,6 +18,7 @@ import com.alleslocker.backend.web.user.mapper.toDto
 import com.alleslocker.backend.web.user.presenter.ActivateUserPresenter
 import com.alleslocker.backend.web.user.presenter.ChangeUserRolePresenter
 import com.alleslocker.backend.web.user.presenter.CreateUserPresenter
+import com.alleslocker.backend.web.user.presenter.DeactivateUserPresenter
 import com.alleslocker.backend.web.user.presenter.EditUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUsersPagedPresenter
@@ -506,7 +507,7 @@ class UserController(
         @AuthenticationPrincipal requesterId: String,
         @RequestBody request: DeactivateUserRequestSchema,
     ) {
-        val presenter = ActivateUserPresenter(httpServletResponse, jacksonConverter)
+        val presenter = DeactivateUserPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(DeactivateUserUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 

@@ -94,7 +94,7 @@ class ChangeUserRoleUseCaseImpl(
                 id = AuditLogId.generate(),
                 message =
                     AuditLogMessage(
-                        "Changed role of user ${saved.username.value} with id ${saved.id.value} to ${user.role}",
+                        "Changed role of user ${saved.username.value} with id ${saved.id.value} to ${request.role.toDomain()}",
                     ),
                 performedByUserId = requestorId,
                 createdAt = Instant.now(),

@@ -24,7 +24,7 @@ class ActivateUserUseCaseImpl(
     ) {
         val requestorId =
             try {
-                UserId(request.userId)
+                UserId(request.requestorId)
             } catch (e: IllegalArgumentException) {
                 presenter.presentFailure(ErrorResponse.BadRequest("Invalid id: ${e.message}"))
                 return

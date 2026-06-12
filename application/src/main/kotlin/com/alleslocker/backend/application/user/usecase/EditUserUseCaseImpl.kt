@@ -85,7 +85,7 @@ internal class EditUserUseCaseImpl(
                 }
 
             if (exists) {
-                presenter.presentFailure(ErrorResponse.NotFound("User with email ${request.email} already exists"))
+                presenter.presentFailure(ErrorResponse.AlreadyExists("User with email ${request.email} already exists"))
                 return
             }
         }
@@ -102,7 +102,7 @@ internal class EditUserUseCaseImpl(
 
             if (exists) {
                 presenter.presentFailure(
-                    ErrorResponse.NotFound("User with username ${request.username} already exists"),
+                    ErrorResponse.AlreadyExists("User with username ${request.username} already exists"),
                 )
                 return
             }
