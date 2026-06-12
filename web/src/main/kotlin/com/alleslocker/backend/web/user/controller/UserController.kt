@@ -6,6 +6,7 @@ import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUserUseCase
 import com.alleslocker.backend.application.user.usecase.GetUsersPagedUseCase
 import com.alleslocker.backend.application.user.usecase.LoginUserUseCase
+import com.alleslocker.backend.application.user.usecase.RequestUserPasswordChangeUseCase
 import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
 import com.alleslocker.backend.web.common.security.JwtService
 import com.alleslocker.backend.web.user.mapper.toDto
@@ -13,11 +14,13 @@ import com.alleslocker.backend.web.user.presenter.CreateUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUserPresenter
 import com.alleslocker.backend.web.user.presenter.GetUsersPagedPresenter
 import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
+import com.alleslocker.backend.web.user.presenter.RequestUserPasswordChangePresenter
 import com.alleslocker.backend.web.user.presenter.ResetPasswordUserPresenter
 import com.alleslocker.backend.web.user.schema.request.CreateUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.GetUsersPagedRequestSchema
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
+import com.alleslocker.backend.web.user.schema.request.RequestUserPasswordChangeRequestSchema
 import com.alleslocker.backend.web.user.schema.request.ResetPasswordUserRequestSchema
 import com.alleslocker.backend.web.user.schema.response.CreateUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.GetUserResponseSchema
@@ -328,5 +331,14 @@ class UserController(
     ) {
         val presenter = CreateUserPresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(CreateUserUseCase::class).execute(request.toDto(requesterId), presenter)
+    }
+
+    @PostMapping("/request-password-change")
+    fun requestPasswordChange(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: RequestUserPasswordChangeRequestSchema,
+    ) {
+        val presenter = RequestUserPasswordChangePresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(RequestUserPasswordChangeUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 }
