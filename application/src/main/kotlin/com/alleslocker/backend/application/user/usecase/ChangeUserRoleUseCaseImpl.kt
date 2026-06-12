@@ -6,7 +6,6 @@ import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.user.dto.request.ChangeUserRoleRequestDto
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.mapper.toDomain
-import com.alleslocker.backend.application.user.mapper.toDto
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
 import com.alleslocker.backend.domain.auditlog.AuditLogMessage
@@ -20,7 +19,7 @@ class ChangeUserRoleUseCaseImpl(
 ) : ChangeUserRoleUseCase {
     override fun execute(
         request: ChangeUserRoleRequestDto,
-        presenter: OutputBoundary<Unit>
+        presenter: OutputBoundary<Unit>,
     ) {
         val requestorId =
             try {
@@ -76,17 +75,19 @@ class ChangeUserRoleUseCaseImpl(
             return
         }
 
-        val userCopy = user.copy(
-            role = request.role.toDomain(),
-        )
+        val userCopy =
+            user.copy(
+                role = request.role.toDomain(),
+            )
 
-        val saved = try {
-            userGateway.save(userCopy)
-        } catch (e: Exception) {
-            presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user: ${e.message}"))
-            logger.error("Failed to save user", e)
-            return
-        }
+        val saved =
+            try {
+                userGateway.save(userCopy)
+            } catch (e: Exception) {
+                presenter.presentFailure(ErrorResponse.InternalServerError("Failed to save user: ${e.message}"))
+                logger.error("Failed to save user", e)
+                return
+            }
 
         logger.audit(
             AuditLog(
