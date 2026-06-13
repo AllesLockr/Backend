@@ -22,7 +22,6 @@ class DataSeeder(
     private val passwordHasher: PasswordHasher,
     private val logger: Logger,
 ) : CommandLineRunner {
-
     override fun run(vararg args: String?) {
         val existingUsers = userGateway.getAllUsersPaged(UserFilterDto(), 0, 1)
 
@@ -36,17 +35,18 @@ class DataSeeder(
         val rawPassword = passwordGenerator.generate()
         logger.info("Creating initial admin user '$username' with password: $rawPassword")
 
-        val user = User(
-            id = UserId.generate(),
-            role = UserRole.ADMIN,
-            firstname = UserFirstname("Admin"),
-            lastname = UserLastname("Admin"),
-            username = Username(username),
-            email = UserEmail("admin@admin.com"),
-            passwordHash = PasswordHash(passwordHasher.hash(rawPassword)),
-            isActive = true,
-            mustChangePassword = true,
-        )
+        val user =
+            User(
+                id = UserId.generate(),
+                role = UserRole.ADMIN,
+                firstname = UserFirstname("Admin"),
+                lastname = UserLastname("Admin"),
+                username = Username(username),
+                email = UserEmail("admin@admin.com"),
+                passwordHash = PasswordHash(passwordHasher.hash(rawPassword)),
+                isActive = true,
+                mustChangePassword = true,
+            )
 
         userGateway.save(user)
         logger.info("Initial admin user '$username' created. Change this password on first login.")
