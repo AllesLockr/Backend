@@ -24,17 +24,15 @@ class DataSeeder(
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         val existingUsers = userGateway.getAllUsersPaged(UserFilterDto(), 0, 1)
-
         if (existingUsers.totalElements > 0) {
             logger.info("Users already exist in the database, skipping seeding")
             return
         }
-
         val username = "Admin"
         val passwordGenerator = PasswordGeneratorService()
-        val rawPassword = passwordGenerator.generate()
-        logger.info("Creating initial admin user '$username' with password: $rawPassword")
-
+        val rawPassword = passwordGenerator.generate(length = 16)
+        println("*** INITIAL ADMIN PASSWORD: $rawPassword — save this now, it will not be shown again ***")
+        logger.info("Creating initial admin user '$username'; password generated and stored securely")
         val user =
             User(
                 id = UserId.generate(),
@@ -47,7 +45,6 @@ class DataSeeder(
                 isActive = true,
                 mustChangePassword = true,
             )
-
         userGateway.save(user)
         logger.info("Initial admin user '$username' created. Change this password on first login.")
     }
