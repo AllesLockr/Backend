@@ -7,6 +7,8 @@ import com.alleslocker.backend.domain.lock.LockId
 import com.alleslocker.backend.domain.lock.LockSerialNumber
 
 interface LockGateway : ReadWriteGateway<Lock, LockId> {
+    fun count(): Long
+
     fun getAllLocksPaged(
         page: Int = 0,
         size: Int = 10,

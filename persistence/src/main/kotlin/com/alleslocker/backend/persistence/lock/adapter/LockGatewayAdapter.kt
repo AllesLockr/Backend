@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 open class LockGatewayAdapter(
     private val repository: LockRepository,
 ) : LockGateway {
+    override fun count() = repository.count()
+
     override fun getAllLocksPaged(
         page: Int,
         size: Int,
