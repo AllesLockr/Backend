@@ -12,5 +12,5 @@ fun UpdateVendorDataRequestSchema.toDto(requesterId: String) =
         apiKey = apiKey,
         apiUsername = apiUsername,
         apiPassword = apiPassword,
-        metadata = metadata?.map { MetadataEntryDto(it.key, it.value) }?.toSet()
+        metadata = metadata?.map { MetadataEntryDto(it.key, it.value) }?.toSet(),
     )

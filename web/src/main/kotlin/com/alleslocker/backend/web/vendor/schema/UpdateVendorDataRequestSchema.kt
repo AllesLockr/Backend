@@ -8,5 +8,5 @@ data class UpdateVendorDataRequestSchema(
     val apiKey: String?,
     val apiUsername: String?,
     val apiPassword: String?,
-    val metadata: Set<MetadataEntrySchema>?
+    val metadata: Set<MetadataEntrySchema>?,
 )

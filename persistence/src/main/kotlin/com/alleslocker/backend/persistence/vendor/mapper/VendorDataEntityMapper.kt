@@ -33,7 +33,7 @@ fun VendorDataEntity.toDomain(): VendorData {
         baseUrl = URI(this.baseUrl),
         vendorAuthentication = auth,
         vendorState = VendorState(VendorConnectionState.valueOf(vendorConnectionState), lastChecked),
-        metadata = metadata.map { it.toDomain() }.toSet()
+        metadata = metadata.map { it.toDomain() }.toSet(),
     )
 }
 
