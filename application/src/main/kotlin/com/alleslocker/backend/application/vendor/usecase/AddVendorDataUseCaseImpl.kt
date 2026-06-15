@@ -5,11 +5,14 @@ import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.common.SuccessResponse
 import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
+import com.alleslocker.backend.application.vendor.adapter.VendorSpecificDefinitionsAdapter
 import com.alleslocker.backend.application.vendor.dto.request.AddVendorDataRequestDto
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
 import com.alleslocker.backend.domain.auditlog.AuditLogMessage
+import com.alleslocker.backend.domain.shared.MetadataEntry
+import com.alleslocker.backend.domain.shared.MetadataValidationResult
 import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.vendor.ApiPassword
 import com.alleslocker.backend.domain.vendor.ApiUsername
@@ -27,6 +30,7 @@ class AddVendorDataUseCaseImpl(
     private val vendorDataGateway: VendorDataGateway,
     private val vendorConnectionAdapter: VendorConnectionAdapter,
     private val logger: Logger,
+    private val vendorSpecificDefinitionsAdapter: VendorSpecificDefinitionsAdapter,
 ) : AddVendorDataUseCase {
     override fun execute(
         request: AddVendorDataRequestDto,
@@ -70,6 +74,29 @@ class AddVendorDataUseCaseImpl(
                 }
             }
 
+        val metadata =
+            let {
+                val validationResult =
+                    vendorSpecificDefinitionsAdapter.validateMetadataRequest(forApi, request.metadata)
+
+                when (validationResult) {
+                    is MetadataValidationResult.Error -> {
+                        return presenter.presentFailure(
+                            ErrorResponse.BadRequest(
+                                validationResult.message,
+                            ),
+                        )
+                    }
+
+                    is MetadataValidationResult.Success -> {
+                        request.metadata
+                            ?.map { MetadataEntry(it.key, it.value) }
+                            ?.toSet()
+                            ?: emptySet()
+                    }
+                }
+            }
+
         val vendorData =
             VendorData(
                 id = VendorId.generate(),
@@ -77,25 +104,29 @@ class AddVendorDataUseCaseImpl(
                 baseUrl = baseUrl,
                 vendorAuthentication = vendorAuthentication,
                 vendorState = VendorState(VendorConnectionState.DISCONNECTED, Instant.now()),
+                metadata = metadata,
             )
 
         val saved =
             try {
                 vendorDataGateway.save(vendorData)
             } catch (e: Exception) {
+                logger.error("Could not save vendor data to db: ${e.message}", e)
                 return presenter.presentFailure(
-                    ErrorResponse.InternalServerError("Could not save api to db: ${e.message}"),
+                    ErrorResponse.InternalServerError("Could not save vendor data."),
                 )
             }
 
-        try {
-            val vendorState = vendorConnectionAdapter.check(forApi)
-            vendorDataGateway.save(saved.copy(vendorState = vendorState))
-        } catch (e: Exception) {
-            return presenter.presentFailure(
-                ErrorResponse.InternalServerError("Could not update connection state: ${e.message}"),
-            )
-        }
+        val checked =
+            try {
+                val vendorState = vendorConnectionAdapter.check(forApi)
+                vendorDataGateway.save(vendorData.copy(vendorState = vendorState))
+            } catch (e: Exception) {
+                logger.error("Could not update connection state: ${e.message}", e)
+                return presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Could not update connection state."),
+                )
+            }
         logger.audit(
             AuditLog(
                 id = AuditLogId.generate(),
@@ -104,6 +135,26 @@ class AddVendorDataUseCaseImpl(
                 createdAt = Instant.now(),
             ),
         )
+
+        val updatedMetadata =
+            try {
+                vendorConnectionAdapter.handleMetadata(saved.forVendor, saved.metadata)
+            } catch (e: Exception) {
+                logger.error("Could not handle metadata: ${e.message}", e)
+                return presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Vendor data saved but metadata handling failed."),
+                )
+            }
+
+        try {
+            vendorDataGateway.save(checked.copy(metadata = updatedMetadata))
+        } catch (e: Exception) {
+            logger.error("Could not update metadata: ${e.message}", e)
+            return presenter.presentFailure(
+                ErrorResponse.InternalServerError("Could not update metadata."),
+            )
+        }
+
         presenter.present(SuccessResponse.Created("Successfully added ${saved.baseUrl}"))
     }
 }

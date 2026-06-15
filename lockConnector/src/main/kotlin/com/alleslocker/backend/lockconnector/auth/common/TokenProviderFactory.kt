@@ -1,6 +1,7 @@
 package com.alleslocker.backend.lockconnector.auth.common
 
 import com.alleslocker.backend.domain.vendor.AvailableVendors
+import com.alleslocker.backend.lockconnector.auth.client.AssaAmoqTokenClient
 import com.alleslocker.backend.lockconnector.auth.client.IseoOAuthTokenClient
 import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
 import org.springframework.stereotype.Component
@@ -12,6 +13,7 @@ class TokenProviderFactory(
     private val tokenProviders: Map<AvailableVendors, TokenProvider> =
         mapOf(
             AvailableVendors.ISEO to TokenProvider(IseoOAuthTokenClient(configProvider, AvailableVendors.ISEO)),
+            AvailableVendors.ASSA_AMOQ to TokenProvider(AssaAmoqTokenClient()),
         )
 
     fun make(availableVendor: AvailableVendors): TokenProvider {

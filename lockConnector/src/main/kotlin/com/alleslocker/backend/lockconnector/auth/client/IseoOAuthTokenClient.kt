@@ -1,6 +1,7 @@
 package com.alleslocker.backend.lockconnector.auth.client
 
 import com.alleslocker.backend.domain.vendor.AvailableVendors
+import com.alleslocker.backend.domain.vendor.VendorAuthentication
 import com.alleslocker.backend.lockconnector.auth.common.TokenClient
 import com.alleslocker.backend.lockconnector.auth.common.TokenResponse
 import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
@@ -38,11 +39,14 @@ class IseoOAuthTokenClient(
 
     override fun getToken(): TokenResponse {
         val credentials = configProvider.load(api)
+        require(credentials.authentication is VendorAuthentication.BaseAuth) {
+            "This shouldn't happen: VendorAuthentication for ISEO should be BaseAuth!"
+        }
         val formData =
             LinkedMultiValueMap<String, String>().apply {
                 add("grant_type", "password")
-                add("username", credentials.username)
-                add("password", credentials.password)
+                add("username", credentials.authentication.username.value)
+                add("password", credentials.authentication.password.value)
             }
         val response =
             client
