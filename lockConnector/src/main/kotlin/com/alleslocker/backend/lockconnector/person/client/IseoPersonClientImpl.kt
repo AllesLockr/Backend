@@ -9,6 +9,7 @@ import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.common.GenericRestClient
 import com.alleslocker.backend.lockconnector.person.adapter.PersonClient
 import org.springframework.http.MediaType
+import org.springframework.web.client.body
 
 class IseoPersonClientImpl(
     private val restClient: GenericRestClient,
@@ -43,7 +44,7 @@ class IseoPersonClientImpl(
                             ("Authorization" to "Bearer $token"),
                         ),
                     contentType = MediaType.APPLICATION_JSON,
-                ).body(IseoCreateUserResponse::class.java)
+                ).body<IseoCreateUserResponse>()
                 ?: throw IllegalStateException("ISEO returned empty response body")
 
         try {

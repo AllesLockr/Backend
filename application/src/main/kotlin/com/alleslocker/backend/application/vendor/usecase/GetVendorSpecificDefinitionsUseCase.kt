@@ -1,0 +1,8 @@
+package com.alleslocker.backend.application.vendor.usecase
+
+import com.alleslocker.backend.application.common.InputBoundary
+import com.alleslocker.backend.application.vendor.dto.request.GetVendorSpecificDefinitionsRequestDto
+import com.alleslocker.backend.application.vendor.dto.response.GetVendorSpecificDefinitionsResponseDto
+
+interface GetVendorSpecificDefinitionsUseCase :
+    InputBoundary<GetVendorSpecificDefinitionsRequestDto, GetVendorSpecificDefinitionsResponseDto>

@@ -5,13 +5,16 @@ import com.alleslocker.backend.application.common.IdRequest
 import com.alleslocker.backend.application.common.SuccessResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.application.vendor.dto.request.DeleteVendorDataRequestDto
+import com.alleslocker.backend.application.vendor.dto.request.GetVendorSpecificDefinitionsRequestDto
 import com.alleslocker.backend.application.vendor.dto.response.GetImplementedVendorsResponseDto
 import com.alleslocker.backend.application.vendor.dto.response.GetVendorDataResponseDto
+import com.alleslocker.backend.application.vendor.dto.response.GetVendorSpecificDefinitionsResponseDto
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.DeleteVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetAllVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
+import com.alleslocker.backend.application.vendor.usecase.GetVendorSpecificDefinitionsUseCase
 import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
 import com.alleslocker.backend.web.vendor.mapper.toDto
 import com.alleslocker.backend.web.vendor.presenter.AddVendorDataPresenter
@@ -19,6 +22,7 @@ import com.alleslocker.backend.web.vendor.presenter.DeleteVendorDataPresenter
 import com.alleslocker.backend.web.vendor.presenter.GetAllVendorDataPresenter
 import com.alleslocker.backend.web.vendor.presenter.GetImplementedVendorsPresenter
 import com.alleslocker.backend.web.vendor.presenter.GetVendorDataPresenter
+import com.alleslocker.backend.web.vendor.presenter.GetVendorSpecificDefinitionsPresenter
 import com.alleslocker.backend.web.vendor.presenter.UpdateVendorDataPresenter
 import com.alleslocker.backend.web.vendor.schema.AddVendorDataRequestSchema
 import com.alleslocker.backend.web.vendor.schema.UpdateVendorDataRequestSchema
@@ -49,7 +53,9 @@ class VendorDataController(
     private val jacksonConverter: MappingJackson2HttpMessageConverter,
 ) {
     @Operation(
-        summary = "Add new credentials for an implemented vendor.",
+        summary =
+            "Add new credentials for an implemented vendor. Check /definitions/{forVendor}" +
+                " for required metadata fields.",
         responses = [
             ApiResponse(
                 responseCode = "200",
@@ -303,5 +309,48 @@ class VendorDataController(
         useCaseFactory
             .make(DeleteVendorDataUseCase::class)
             .execute(DeleteVendorDataRequestDto(id, requesterId), presenter)
+    }
+
+    @Operation(
+        summary = "Get vendor specific fields that should be sent when creating a new vendor-data.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = GetVendorSpecificDefinitionsResponseDto::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "422",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @GetMapping("/definitions/{forVendor}")
+    fun getVendorSpecificDefinitions(
+        @PathVariable forVendor: String,
+    ) {
+        val presenter = GetVendorSpecificDefinitionsPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory
+            .make(GetVendorSpecificDefinitionsUseCase::class)
+            .execute(GetVendorSpecificDefinitionsRequestDto(forVendor), presenter)
     }
 }

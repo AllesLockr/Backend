@@ -11,18 +11,15 @@ class ConfigProvider(
 ) {
     data class ApiCredentials(
         val baseUrl: String,
-        val username: String,
-        val password: String,
+        val authentication: VendorAuthentication,
     )
 
     fun load(api: AvailableVendors): ApiCredentials {
-        val apiData = vendorGateway.findByForApi(api) ?: throw IllegalStateException("$api API data not found")
-        val auth = apiData.vendorAuthentication
-        require(auth is VendorAuthentication.BaseAuth) { "$api API data must use base auth" }
+        val apiData = vendorGateway.findByForApi(api) ?: throw IllegalStateException("$api Vendor data not found")
+
         return ApiCredentials(
             baseUrl = apiData.baseUrl.toString(),
-            username = auth.username.value,
-            password = auth.password.value,
+            authentication = apiData.vendorAuthentication,
         )
     }
 }

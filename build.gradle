@@ -48,6 +48,7 @@ tasks.register("ktlintCheck", JavaExec) {
     description = "Check Kotlin code style."
     classpath = configurations.ktlint
     mainClass = "com.pinterest.ktlint.Main"
+    jvmArgs("--sun-misc-unsafe-memory-access=allow") // Java 24+
     args "**/src/**/*.kt", "**.kts", "!**/build/**"
 }
 
@@ -56,6 +57,7 @@ tasks.register("ktlintFormat", JavaExec) {
     description = "Fix Kotlin code style deviations."
     classpath = configurations.ktlint
     mainClass = "com.pinterest.ktlint.Main"
+    jvmArgs("--sun-misc-unsafe-memory-access=allow") // Java 24+
     args "-F", "**/src/**/*.kt", "**.kts", "!**/build/**"
 }
 
