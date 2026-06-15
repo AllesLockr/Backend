@@ -53,7 +53,9 @@ class VendorDataController(
     private val jacksonConverter: MappingJackson2HttpMessageConverter,
 ) {
     @Operation(
-        summary = "Add new credentials for an implemented vendor. Check /definitions/{forVendor} for required metadata fields.",
+        summary =
+            "Add new credentials for an implemented vendor. Check /definitions/{forVendor}" +
+                " for required metadata fields.",
         responses = [
             ApiResponse(
                 responseCode = "200",
