@@ -334,6 +334,15 @@ class VendorDataController(
                 ],
             ),
             ApiResponse(
+                responseCode = "400",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
                 responseCode = "422",
                 content = [
                     Content(

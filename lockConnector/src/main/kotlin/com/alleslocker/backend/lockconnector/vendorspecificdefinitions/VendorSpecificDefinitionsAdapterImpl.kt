@@ -16,8 +16,17 @@ class VendorSpecificDefinitionsAdapterImpl : VendorSpecificDefinitionsAdapter {
             VendorSpecificDefinition(
                 AvailableVendors.ISEO,
                 listOf(
-                    VendorSpecificField(name = "installer-email", type = VendorSpecificFieldType.EMAIL),
-                    VendorSpecificField(name = "installer-password", type = VendorSpecificFieldType.PASSWORD),
+                    VendorSpecificField(
+                        name = "installer-email",
+                        type = VendorSpecificFieldType.EMAIL,
+                        internal = false,
+                    ),
+                    VendorSpecificField(
+                        name = "installer-password",
+                        type = VendorSpecificFieldType.PASSWORD,
+                        internal = false,
+                    ),
+                    VendorSpecificField(name = "installer-id", type = VendorSpecificFieldType.NUMBER, internal = true),
                 ),
             ),
         )
@@ -32,22 +41,21 @@ class VendorSpecificDefinitionsAdapterImpl : VendorSpecificDefinitionsAdapter {
         val allowedFieldNames =
             get(forVendor)
                 ?.vendorSpecificFields
+                ?.filter { it.internal == false }
                 ?.map { it.name }
                 ?.toSet()
                 ?: emptySet()
 
-        if (allowedFieldNames.isNotEmpty() && metadata == null) {
+        if (allowedFieldNames.isEmpty()) {
+            return if (metadata == null) {
+                MetadataValidationResult.Success()
+            } else {
+                MetadataValidationResult.Error.NoMetadataRequired(forVendor.name)
+            }
+        }
+
+        if (metadata == null) {
             return MetadataValidationResult.Error.MissingRequiredMetadata(allowedFieldNames.toString(), forVendor.name)
-        }
-
-        if (allowedFieldNames.isEmpty() && metadata != null) {
-            return MetadataValidationResult.Error.NoMetadataRequired(forVendor.name)
-        }
-
-        val hasInvalidKeys = metadata!!.any { it.key !in allowedFieldNames }
-
-        if (hasInvalidKeys) {
-            return MetadataValidationResult.Error.InvalidMetadata(forVendor.name)
         }
 
         val providedKeys = metadata.map { it.key }.toSet()

@@ -89,9 +89,10 @@ class AddVendorDataUseCaseImpl(
                     }
 
                     is MetadataValidationResult.Success -> {
-                        request.metadata!!
-                            .map { MetadataEntry(it.key, it.value) }
-                            .toSet()
+                        request.metadata
+                            ?.map { MetadataEntry(it.key, it.value) }
+                            ?.toSet()
+                            ?: emptySet()
                     }
                 }
             }
@@ -116,15 +117,16 @@ class AddVendorDataUseCaseImpl(
                 )
             }
 
-        try {
-            val vendorState = vendorConnectionAdapter.check(forApi)
-            vendorDataGateway.save(saved.copy(vendorState = vendorState))
-        } catch (e: Exception) {
-            logger.error("Could not update connection state: ${e.message}", e)
-            return presenter.presentFailure(
-                ErrorResponse.InternalServerError("Could not update connection state."),
-            )
-        }
+        val checked =
+            try {
+                val vendorState = vendorConnectionAdapter.check(forApi)
+                vendorDataGateway.save(vendorData.copy(vendorState = vendorState))
+            } catch (e: Exception) {
+                logger.error("Could not update connection state: ${e.message}", e)
+                return presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Could not update connection state."),
+                )
+            }
         logger.audit(
             AuditLog(
                 id = AuditLogId.generate(),
@@ -134,7 +136,24 @@ class AddVendorDataUseCaseImpl(
             ),
         )
 
-        vendorConnectionAdapter.handleMetadata(saved.forVendor, saved.metadata)
+        val updatedMetadata =
+            try {
+                vendorConnectionAdapter.handleMetadata(saved.forVendor, saved.metadata)
+            } catch (e: Exception) {
+                logger.error("Could not handle metadata: ${e.message}", e)
+                return presenter.presentFailure(
+                    ErrorResponse.InternalServerError("Vendor data saved but metadata handling failed."),
+                )
+            }
+
+        try {
+            vendorDataGateway.save(checked.copy(metadata = updatedMetadata))
+        } catch (e: Exception) {
+            logger.error("Could not update metadata: ${e.message}", e)
+            return presenter.presentFailure(
+                ErrorResponse.InternalServerError("Could not update metadata."),
+            )
+        }
 
         presenter.present(SuccessResponse.Created("Successfully added ${saved.baseUrl}"))
     }

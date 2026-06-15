@@ -11,5 +11,5 @@ interface VendorConnectionAdapter : Adapter {
     fun handleMetadata(
         vendor: AvailableVendors,
         metadata: Set<MetadataEntry>,
-    )
+    ): Set<MetadataEntry>
 }

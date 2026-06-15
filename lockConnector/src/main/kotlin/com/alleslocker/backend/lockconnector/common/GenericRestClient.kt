@@ -49,6 +49,23 @@ class GenericRestClient {
             }.body(body)
             .retrieve()
 
+    fun putForResponse(
+        endpoint: String,
+        body: Any,
+        headers: Map<String, String> = emptyMap(),
+        contentType: MediaType,
+    ): RestClient.ResponseSpec =
+        client
+            .put()
+            .uri(endpoint)
+            .contentType(contentType)
+            .headers { header ->
+                headers.forEach { (k, v) ->
+                    header.set(k, v)
+                }
+            }.body(body)
+            .retrieve()
+
     fun delete(
         endpoint: String,
         headers: Map<String, String> = emptyMap(),

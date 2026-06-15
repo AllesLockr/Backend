@@ -89,31 +89,28 @@ class UpdateVendorDataUseCaseImpl(
                 }
             }
 
-        val metadata =
-            let {
-                if (request.metadata != null) {
-                    val validationResult =
-                        vendorSpecificDefinitionsAdapter.validateMetadataRequest(forApi, request.metadata)
+        val metadata = existing.metadata.toMutableSet()
 
-                    when (validationResult) {
-                        is MetadataValidationResult.Error -> {
-                            return presenter.presentFailure(
-                                ErrorResponse.BadRequest(
-                                    validationResult.message,
-                                ),
-                            )
-                        }
+        if (request.metadata != null) {
+            val validationResult =
+                vendorSpecificDefinitionsAdapter.validateMetadataRequest(forApi, request.metadata)
 
-                        is MetadataValidationResult.Success -> {
-                            request.metadata
-                                .map { MetadataEntry(it.key, it.value) }
-                                .toSet()
-                        }
-                    }
-                } else {
-                    existing.metadata
+            when (validationResult) {
+                is MetadataValidationResult.Error -> {
+                    return presenter.presentFailure(
+                        ErrorResponse.BadRequest(
+                            validationResult.message,
+                        ),
+                    )
+                }
+
+                is MetadataValidationResult.Success -> {
+                    val newEntries = request.metadata.map { MetadataEntry(it.key, it.value) }
+                    metadata.removeAll { e -> newEntries.any { it.key == e.key } }
+                    metadata.addAll(newEntries)
                 }
             }
+        }
 
         val updated =
             VendorData(
@@ -156,6 +153,16 @@ class UpdateVendorDataUseCaseImpl(
                 createdAt = Instant.now(),
             ),
         )
+
+        try {
+            vendorConnectionAdapter.handleMetadata(forApi, saved.metadata)
+        } catch (e: Exception) {
+            logger.error("Could not handle metadata: ${e.message}", e)
+            return presenter.presentFailure(
+                ErrorResponse.InternalServerError("Vendor data saved but metadata handling failed."),
+            )
+        }
+
         presenter.present(SuccessResponse.Created("Successfully updated ${saved.forVendor}"))
     }
 

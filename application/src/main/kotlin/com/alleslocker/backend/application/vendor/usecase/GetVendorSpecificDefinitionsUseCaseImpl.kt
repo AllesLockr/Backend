@@ -33,7 +33,7 @@ class GetVendorSpecificDefinitionsUseCaseImpl(
             GetVendorSpecificDefinitionsResponseDto(
                 vendorName = definition.vendorName.name,
                 vendorSpecificFields =
-                    definition.vendorSpecificFields.map {
+                    definition.vendorSpecificFields.filter { !it.internal }.map {
                         VendorSpecificFieldDto(
                             it.name,
                             it.type.name,

@@ -36,10 +36,10 @@ class VendorConnectionAdapterImpl(
     override fun handleMetadata(
         vendor: AvailableVendors,
         metadata: Set<MetadataEntry>,
-    ) {
+    ): Set<MetadataEntry> {
         when (vendor) {
-            AvailableVendors.ISEO -> iseoVendorConnectionClient.handleMetadata(vendor, metadata)
-            AvailableVendors.ASSA_AMOQ -> assaAmoqVendorConnectionClient.handleMetadata(vendor, metadata)
+            AvailableVendors.ISEO -> return iseoVendorConnectionClient.handleMetadata(vendor, metadata)
+            AvailableVendors.ASSA_AMOQ -> return assaAmoqVendorConnectionClient.handleMetadata(vendor, metadata)
         }
     }
 }

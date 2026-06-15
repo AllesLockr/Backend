@@ -37,7 +37,8 @@ class AssaAmoqVendorConnectionClientImpl(
     override fun handleMetadata(
         vendor: AvailableVendors,
         metadata: Set<MetadataEntry>,
-    ) {
+    ): Set<MetadataEntry> {
         // No metadata needed for AssaAmock
+        return metadata
     }
 }
