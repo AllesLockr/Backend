@@ -5,11 +5,14 @@ import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.common.SuccessResponse
 import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
+import com.alleslocker.backend.application.vendor.adapter.VendorSpecificDefinitionsAdapter
 import com.alleslocker.backend.application.vendor.dto.request.UpdateVendorDataRequestDto
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.domain.auditlog.AuditLog
 import com.alleslocker.backend.domain.auditlog.AuditLogId
 import com.alleslocker.backend.domain.auditlog.AuditLogMessage
+import com.alleslocker.backend.domain.shared.MetadataEntry
+import com.alleslocker.backend.domain.shared.MetadataValidationResult
 import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.vendor.ApiPassword
 import com.alleslocker.backend.domain.vendor.ApiUsername
@@ -26,6 +29,7 @@ class UpdateVendorDataUseCaseImpl(
     private val vendorDataGateway: VendorDataGateway,
     private val logger: Logger,
     private val vendorConnectionAdapter: VendorConnectionAdapter,
+    private val vendorSpecificDefinitionsAdapter: VendorSpecificDefinitionsAdapter,
 ) : UpdateVendorDataUseCase {
     override fun execute(
         request: UpdateVendorDataRequestDto,
@@ -40,11 +44,12 @@ class UpdateVendorDataUseCaseImpl(
                 return
             }
 
-        val existing = vendorDataGateway.findByForApi(forApi)
-        if (existing == null) {
-            presenter.presentFailure(ErrorResponse.NotFound("No configured vendor-data found for ${request.forApi}"))
-            return
-        }
+        val existing =
+            vendorDataGateway.findByForApi(forApi) ?: return presenter.presentFailure(
+                ErrorResponse.NotFound(
+                    "No configured vendor-data found for ${request.forApi}",
+                ),
+            )
 
         val baseUrl =
             let {
@@ -84,6 +89,32 @@ class UpdateVendorDataUseCaseImpl(
                 }
             }
 
+        val metadata =
+            let {
+                if (request.metadata != null) {
+                    val validationResult =
+                        vendorSpecificDefinitionsAdapter.validateMetadataRequest(forApi, request.metadata)
+
+                    when (validationResult) {
+                        is MetadataValidationResult.Error -> {
+                            return presenter.presentFailure(
+                                ErrorResponse.BadRequest(
+                                    validationResult.message,
+                                ),
+                            )
+                        }
+
+                        is MetadataValidationResult.Success -> {
+                            request.metadata
+                                .map { MetadataEntry(it.key, it.value) }
+                                .toSet()
+                        }
+                    }
+                } else {
+                    existing.metadata
+                }
+            }
+
         val updated =
             VendorData(
                 id = existing.id,
@@ -91,6 +122,7 @@ class UpdateVendorDataUseCaseImpl(
                 baseUrl = baseUrl,
                 vendorAuthentication = vendorAuthentication,
                 vendorState = VendorState(VendorConnectionState.DISCONNECTED, Instant.now()),
+                metadata = metadata,
             )
 
         val saved =
@@ -133,6 +165,8 @@ class UpdateVendorDataUseCaseImpl(
     ): String =
         buildList {
             if (existing.baseUrl != updated.baseUrl) add("BaseUrl")
+
+            if (existing.metadata != updated.metadata) add("Metadata")
 
             val before = existing.vendorAuthentication
             val after = updated.vendorAuthentication

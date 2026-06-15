@@ -55,6 +55,7 @@ import com.alleslocker.backend.application.user.usecase.RequestUserPasswordChang
 import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
 import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCaseImpl
 import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
+import com.alleslocker.backend.application.vendor.adapter.VendorSpecificDefinitionsAdapter
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.AddVendorDataUseCaseImpl
@@ -68,6 +69,8 @@ import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsU
 import com.alleslocker.backend.application.vendor.usecase.GetImplementedVendorsUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.GetVendorDataUseCaseImpl
+import com.alleslocker.backend.application.vendor.usecase.GetVendorSpecificDefinitionsUseCase
+import com.alleslocker.backend.application.vendor.usecase.GetVendorSpecificDefinitionsUseCaseImpl
 import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCase
 import com.alleslocker.backend.application.vendor.usecase.UpdateVendorDataUseCaseImpl
 import kotlin.reflect.KClass
@@ -194,12 +197,14 @@ class UseCaseFactoryImpl(
                     vendorDataGateway = gatewayFactory[VendorDataGateway::class],
                     logger = logger,
                     vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
+                    vendorSpecificDefinitionsAdapter = adapterFactory[VendorSpecificDefinitionsAdapter::class],
                 ),
             UpdateVendorDataUseCase::class to
                 UpdateVendorDataUseCaseImpl(
                     vendorDataGateway = gatewayFactory[VendorDataGateway::class],
                     logger = logger,
                     vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
+                    vendorSpecificDefinitionsAdapter = adapterFactory[VendorSpecificDefinitionsAdapter::class],
                 ),
             DeleteVendorDataUseCase::class to
                 DeleteVendorDataUseCaseImpl(
@@ -207,6 +212,10 @@ class UseCaseFactoryImpl(
                     logger = logger,
                 ),
             GetImplementedVendorsUseCase::class to GetImplementedVendorsUseCaseImpl(),
+            GetVendorSpecificDefinitionsUseCase::class to
+                GetVendorSpecificDefinitionsUseCaseImpl(
+                    adapterFactory[VendorSpecificDefinitionsAdapter::class],
+                ),
             GetVendorDataUseCase::class to GetVendorDataUseCaseImpl(gatewayFactory[VendorDataGateway::class]),
             GetAllVendorDataUseCase::class to
                 GetAllVendorDataUseCaseImpl(

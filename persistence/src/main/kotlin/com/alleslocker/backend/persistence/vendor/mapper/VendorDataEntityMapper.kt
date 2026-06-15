@@ -9,6 +9,8 @@ import com.alleslocker.backend.domain.vendor.VendorConnectionState
 import com.alleslocker.backend.domain.vendor.VendorData
 import com.alleslocker.backend.domain.vendor.VendorId
 import com.alleslocker.backend.domain.vendor.VendorState
+import com.alleslocker.backend.persistence.shared.mapper.toDomain
+import com.alleslocker.backend.persistence.shared.mapper.toEntity
 import com.alleslocker.backend.persistence.vendor.entity.VendorDataEntity
 import java.net.URI
 
@@ -31,6 +33,7 @@ fun VendorDataEntity.toDomain(): VendorData {
         baseUrl = URI(this.baseUrl),
         vendorAuthentication = auth,
         vendorState = VendorState(VendorConnectionState.valueOf(vendorConnectionState), lastChecked),
+        metadata = metadata.map { it.toDomain() }.toSet()
     )
 }
 
@@ -42,6 +45,7 @@ fun VendorData.toEntity(existing: VendorDataEntity? = null): VendorDataEntity {
     entity.baseUrl = baseUrl.toString()
     entity.lastChecked = vendorState.lastChecked
     entity.vendorConnectionState = vendorState.connectionState.toString()
+    entity.metadata = metadata.map { it.toEntity() }.toMutableSet()
 
     when (val auth = vendorAuthentication) {
         is VendorAuthentication.ApiKey -> {
