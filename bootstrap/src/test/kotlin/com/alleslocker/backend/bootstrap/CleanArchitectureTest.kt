@@ -6,7 +6,6 @@ import com.lemonappdev.konsist.api.architecture.Layer
 import com.lemonappdev.konsist.api.ext.list.imports
 import com.lemonappdev.konsist.api.ext.list.withPackage
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.core.spec.style.scopes.FreeSpecContainerScope.invoke
 import io.kotest.matchers.collections.shouldBeEmpty
 
 class CleanArchitectureTest :
