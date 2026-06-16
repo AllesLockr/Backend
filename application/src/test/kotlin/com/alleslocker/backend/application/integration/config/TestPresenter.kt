@@ -1,4 +1,4 @@
-package com.alleslocker.backend.bootstrap.integration.config
+package com.alleslocker.backend.application.integration.config
 
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.OutputBoundary

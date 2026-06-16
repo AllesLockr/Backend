@@ -15,11 +15,5 @@ dependencies {
     implementation(libs.spring.boot.jpa)
     implementation(libs.mariadb.java.client)
 
-    testImplementation(libs.konsist)
-    testImplementation(libs.kotest.engine)
-    testImplementation(libs.kotest.assertions)
-    testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.spring)
-    testImplementation(libs.h2)
-    testImplementation(libs.spring.boot.test)
 }

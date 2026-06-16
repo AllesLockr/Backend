@@ -1,4 +1,4 @@
-package com.alleslocker.backend.bootstrap.integration.config
+package com.alleslocker.backend.application.integration.config
 
 import com.alleslocker.backend.application.common.security.PasswordHasher
 import java.security.MessageDigest

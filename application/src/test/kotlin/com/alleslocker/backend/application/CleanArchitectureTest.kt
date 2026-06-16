@@ -1,4 +1,4 @@
-package com.alleslocker.backend.bootstrap
+package com.alleslocker.backend.application
 
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.architecture.KoArchitectureCreator.assertArchitecture

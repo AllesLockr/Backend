@@ -1,15 +1,11 @@
-package com.alleslocker.backend.bootstrap.integration.user
+package com.alleslocker.backend.application.integration.user
 
 import com.alleslocker.backend.application.common.ErrorResponse
-import com.alleslocker.backend.application.common.factory.UseCaseFactory
-import com.alleslocker.backend.application.common.security.PasswordHasher
+import com.alleslocker.backend.application.integration.config.TestPresenter
+import com.alleslocker.backend.application.integration.config.createUserTestContext
 import com.alleslocker.backend.application.user.dto.UserRoleDto
 import com.alleslocker.backend.application.user.dto.request.ChangeUserRoleRequestDto
-import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCase
-import com.alleslocker.backend.bootstrap.integration.config.TestLogger
-import com.alleslocker.backend.bootstrap.integration.config.TestPresenter
-import com.alleslocker.backend.bootstrap.integration.config.TestUserIntegrationConfig
 import com.alleslocker.backend.domain.user.PasswordHash
 import com.alleslocker.backend.domain.user.User
 import com.alleslocker.backend.domain.user.UserEmail
@@ -18,36 +14,25 @@ import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.user.UserLastname
 import com.alleslocker.backend.domain.user.UserRole
 import com.alleslocker.backend.domain.user.Username
-import com.alleslocker.backend.persistence.user.repository.UserRepository
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest(classes = [TestUserIntegrationConfig::class])
-@ActiveProfiles("test")
-class ChangeUserRoleUseCaseTest(
-    @Autowired private val useCaseFactory: UseCaseFactory,
-    @Autowired private val userGateway: UserGateway,
-    @Autowired private val userRepository: UserRepository,
-    @Autowired private val passwordHasher: PasswordHasher,
-    @Autowired private val testLogger: TestLogger,
-) : FreeSpec({
-
-        val useCase: ChangeUserRoleUseCase = useCaseFactory.make(ChangeUserRoleUseCase::class)
+class ChangeUserRoleUseCaseTest :
+    FreeSpec({
+        val ctx = createUserTestContext()
+        val useCase: ChangeUserRoleUseCase = ctx.useCaseFactory.make(ChangeUserRoleUseCase::class)
 
         lateinit var adminId: String
         lateinit var targetUserId: String
 
         beforeEach {
-            userRepository.deleteAll()
-            testLogger.clear()
+            ctx.userGateway.deleteAll()
+            ctx.logger.clear()
             val admin =
-                userGateway.save(
+                ctx.userGateway.save(
                     User(
                         id = UserId.generate(),
                         role = UserRole.ADMIN,
@@ -55,7 +40,7 @@ class ChangeUserRoleUseCaseTest(
                         lastname = UserLastname("User"),
                         username = Username("admin"),
                         email = UserEmail("admin@test.de"),
-                        passwordHash = PasswordHash(passwordHasher.hash("admin123")),
+                        passwordHash = PasswordHash(ctx.passwordHasher.hash("admin123")),
                         isActive = true,
                         mustChangePassword = false,
                     ),
@@ -63,7 +48,7 @@ class ChangeUserRoleUseCaseTest(
             adminId = admin.id.value
 
             val targetUser =
-                userGateway.save(
+                ctx.userGateway.save(
                     User(
                         id = UserId.generate(),
                         role = UserRole.USER,
@@ -71,7 +56,7 @@ class ChangeUserRoleUseCaseTest(
                         lastname = UserLastname("Mustermann"),
                         username = Username("mmuster"),
                         email = UserEmail("max@test.de"),
-                        passwordHash = PasswordHash(passwordHasher.hash("pass123")),
+                        passwordHash = PasswordHash(ctx.passwordHasher.hash("pass123")),
                         isActive = true,
                         mustChangePassword = false,
                     ),
@@ -92,14 +77,14 @@ class ChangeUserRoleUseCaseTest(
             )
 
             presenter.error shouldBe null
-            val updatedUser = userGateway.findById(UserId(targetUserId))
+            val updatedUser = ctx.userGateway.findById(UserId(targetUserId))
             updatedUser!!.role shouldBe UserRole.ADMIN
-            testLogger.auditLogs.size shouldBe 1
+            ctx.logger.auditLogs.size shouldBe 1
         }
 
         "should change ADMIN to USER" {
-            userGateway.save(
-                userGateway.findById(UserId(targetUserId))!!.copy(role = UserRole.ADMIN),
+            ctx.userGateway.save(
+                ctx.userGateway.findById(UserId(targetUserId))!!.copy(role = UserRole.ADMIN),
             )
 
             val presenter = TestPresenter<Unit>()
@@ -113,7 +98,7 @@ class ChangeUserRoleUseCaseTest(
             )
 
             presenter.error shouldBe null
-            val updatedUser = userGateway.findById(UserId(targetUserId))
+            val updatedUser = ctx.userGateway.findById(UserId(targetUserId))
             updatedUser!!.role shouldBe UserRole.USER
         }
 
@@ -136,7 +121,7 @@ class ChangeUserRoleUseCaseTest(
 
         "should reject role change by non-admin" {
             val regularUser =
-                userGateway.save(
+                ctx.userGateway.save(
                     User(
                         id = UserId.generate(),
                         role = UserRole.USER,
@@ -144,7 +129,7 @@ class ChangeUserRoleUseCaseTest(
                         lastname = UserLastname("User"),
                         username = Username("regular"),
                         email = UserEmail("regular@test.de"),
-                        passwordHash = PasswordHash(passwordHasher.hash("pass123")),
+                        passwordHash = PasswordHash(ctx.passwordHasher.hash("pass123")),
                         isActive = true,
                         mustChangePassword = false,
                     ),
