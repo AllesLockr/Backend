@@ -217,6 +217,7 @@ class UseCaseFactoryImpl(
                 DeleteVendorDataUseCaseImpl(
                     vendorDataGateway = gatewayFactory[VendorDataGateway::class],
                     logger = logger,
+                    vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
                 ),
             GetImplementedVendorsUseCase::class to GetImplementedVendorsUseCaseImpl(),
             GetVendorSpecificDefinitionsUseCase::class to

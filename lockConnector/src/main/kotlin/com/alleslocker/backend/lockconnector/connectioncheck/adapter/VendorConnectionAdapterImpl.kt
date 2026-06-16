@@ -42,4 +42,14 @@ class VendorConnectionAdapterImpl(
             AvailableVendors.ASSA_AMOQ -> return assaAmoqVendorConnectionClient.handleMetadata(vendor, metadata)
         }
     }
+
+    override fun handleMetadataOnDelete(
+        forVendor: AvailableVendors,
+        metadata: Set<MetadataEntry>,
+    ) {
+        when (forVendor) {
+            AvailableVendors.ISEO -> iseoVendorConnectionClient.handleMetadataOnDelete(forVendor, metadata)
+            AvailableVendors.ASSA_AMOQ -> assaAmoqVendorConnectionClient.handleMetadataOnDelete(forVendor, metadata)
+        }
+    }
 }
