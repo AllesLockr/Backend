@@ -19,10 +19,14 @@ import com.alleslocker.backend.application.lock.adapter.LockAdapter
 import com.alleslocker.backend.application.lock.gateway.LockGateway
 import com.alleslocker.backend.application.lock.usecase.CountLocksUseCase
 import com.alleslocker.backend.application.lock.usecase.CountLocksUseCaseImpl
+import com.alleslocker.backend.application.lock.usecase.CreateLockUseCase
+import com.alleslocker.backend.application.lock.usecase.CreateLockUseCaseImpl
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCaseImpl
 import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCase
 import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCaseImpl
+import com.alleslocker.backend.application.lock.usecase.UpdateLockUseCase
+import com.alleslocker.backend.application.lock.usecase.UpdateLockUseCaseImpl
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.application.person.usecase.CountPersonsUseCase
@@ -123,6 +127,18 @@ class UseCaseFactoryImpl(
                 ),
             SyncLocksUseCase::class to
                 SyncLocksUseCaseImpl(
+                    lockGateway = gatewayFactory[LockGateway::class],
+                    lockAdapter = adapterFactory[LockAdapter::class],
+                    logger = logger,
+                ),
+            CreateLockUseCase::class to
+                CreateLockUseCaseImpl(
+                    lockAdapter = adapterFactory[LockAdapter::class],
+                    lockGateway = gatewayFactory[LockGateway::class],
+                    logger = logger,
+                ),
+            UpdateLockUseCase::class to
+                UpdateLockUseCaseImpl(
                     lockGateway = gatewayFactory[LockGateway::class],
                     lockAdapter = adapterFactory[LockAdapter::class],
                     logger = logger,
