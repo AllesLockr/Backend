@@ -62,7 +62,5 @@ internal class PersonAdapterImpl(
             errs.drop(1).forEach { primary.addSuppressed(it) }
             throw primary
         }
-
     }
 }
-

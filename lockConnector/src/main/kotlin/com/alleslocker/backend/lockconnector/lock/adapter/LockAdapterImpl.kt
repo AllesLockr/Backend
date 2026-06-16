@@ -34,12 +34,13 @@ internal class LockAdapterImpl(
 
         val locks =
             targetVendors.flatMap { vendor ->
-                runCatching { clientFor(vendor).fetchAllLocks().locks }.onFailure {
-                    logger.error(
-                        "Failed to fetch locks for vendor $vendor",
-                        it
-                    )
-                }.getOrElse { emptyList() }
+                runCatching { clientFor(vendor).fetchAllLocks().locks }
+                    .onFailure {
+                        logger.error(
+                            "Failed to fetch locks for vendor $vendor",
+                            it,
+                        )
+                    }.getOrElse { emptyList() }
             }
         return FetchLocksAdapterResponse(locks = locks)
     }
