@@ -12,4 +12,9 @@ interface VendorConnectionAdapter : Adapter {
         vendor: AvailableVendors,
         metadata: Set<MetadataEntry>,
     ): Set<MetadataEntry>
+
+    fun handleMetadataOnDelete(
+        forVendor: AvailableVendors,
+        metadata: Set<MetadataEntry>,
+    )
 }

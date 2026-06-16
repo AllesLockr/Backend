@@ -41,4 +41,11 @@ class AssaAmoqVendorConnectionClientImpl(
         // No metadata needed for AssaAmock
         return metadata
     }
+
+    override fun handleMetadataOnDelete(
+        forVendor: AvailableVendors,
+        metadata: Set<MetadataEntry>,
+    ) {
+        // Not metadata needed
+    }
 }

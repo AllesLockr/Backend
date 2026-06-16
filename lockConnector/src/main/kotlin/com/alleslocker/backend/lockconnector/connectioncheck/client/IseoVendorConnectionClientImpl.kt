@@ -67,6 +67,21 @@ class IseoVendorConnectionClientImpl(
         return metadata + iseoIdEntry
     }
 
+    override fun handleMetadataOnDelete(
+        forVendor: AvailableVendors,
+        metadata: Set<MetadataEntry>,
+    ) {
+        val token = tokenProvider.getValidToken()
+        val baseUrl = configProvider.load(forVendor).baseUrl
+
+        val existingId = metadata.find { it.key == "installer-iseo-id" }!!.value
+
+        restClient.delete(
+            "$baseUrl/api/v2/users/$existingId?anonymizeAllEvents=false&deleteAllStandardDevices=false&blockAllStandardDevices=false",
+            headers = mapOf("Authorization" to "Bearer $token"),
+        )
+    }
+
     private fun Set<MetadataEntry>.requireValue(key: String): String =
         find { it.key == key }?.value
             ?: throw IllegalStateException(
