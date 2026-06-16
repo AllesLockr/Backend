@@ -154,7 +154,7 @@ class LockController(
     }
 
     @Operation(
-        summary = "Create a new lock for an implemented vendor.",
+        summary = "Update a lock.",
         responses = [
             ApiResponse(
                 responseCode = "200",

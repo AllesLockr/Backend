@@ -28,7 +28,13 @@ class CreateLockUseCaseImpl(
                 )
             }
 
-        val lock = lockAdapter.createLock(forVendor)
+        val lock =
+            try {
+                lockAdapter.createLock(forVendor)
+            } catch (e: Exception) {
+                logger.error("Error while creating lock", e)
+                return presenter.presentFailure(ErrorResponse.InternalServerError("Error while creating lock."))
+            }
 
         try {
             lockGateway.save(lock)
