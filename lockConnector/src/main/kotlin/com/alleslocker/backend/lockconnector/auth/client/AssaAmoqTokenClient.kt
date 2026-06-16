@@ -41,7 +41,11 @@ class AssaAmoqTokenClient(
             "This shouldn't happen: VendorAuthentification for ASSA_AMOQ should be BaseAuth!"
         }
         val apiKey =
-            credentials.metadata.firstOrNull { it.key == "api-key" }?.value
+            credentials.metadata
+                .filter { it.key == "api-key" }
+                .map { it.value }
+                .distinct()
+                .singleOrNull()
                 ?: throw IllegalStateException("ASSA_AMOQ vendor-data is missing the required api-key metadata field")
         val formData =
             LoginRequest(

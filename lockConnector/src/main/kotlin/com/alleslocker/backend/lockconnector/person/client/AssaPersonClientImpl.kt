@@ -24,7 +24,7 @@ class AssaPersonClientImpl(
             restClient
                 .postForResponse(
                     endpoint = "$baseUrl/user",
-                    body = mapOf("role" to "USER"), // Types would be USER or ADMIN
+                    body = mapOf("role" to "USER"), // Types would be USER or ADMIN, nothing else is expected
                     headers = mapOf("Authorization" to "Bearer $token"),
                     contentType = MediaType.APPLICATION_JSON,
                 ).body<AssaIdResponse>()

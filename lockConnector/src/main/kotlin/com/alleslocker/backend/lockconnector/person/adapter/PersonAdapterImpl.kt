@@ -50,10 +50,19 @@ internal class PersonAdapterImpl(
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
+        val errs = mutableListOf<Throwable>()
         request.externalIds.forEach { (vendor, externalId) ->
-            clientFor(vendor).deletePerson(
-                DeletePersonAdapterRequest(externalIds = mapOf(vendor to externalId)),
-            )
+            runCatching {
+                clientFor(vendor).deletePerson(
+                    DeletePersonAdapterRequest(externalIds = mapOf(vendor to externalId)),
+                )
+            }.onFailure { errs.add(it) }
         }
+        errs.firstOrNull()?.let { primary ->
+            errs.drop(1).forEach { primary.addSuppressed(it) }
+            throw primary
+        }
+
     }
 }
+

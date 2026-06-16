@@ -67,7 +67,7 @@ internal class IseoAccessGrantClientImpl(
 
     override fun revoke(request: RevokeAccessAdapterRequest) {
         val token = tokenProvider.getValidToken()
-        val baseUrl = configProvider.load(AvailableVendors.ISEO).baseUrl
+        val baseUrl = configProvider.load(vendor).baseUrl
         restClient.delete(
             endpoint = "$baseUrl/api/v2/credentialRules/${request.externalId}",
             headers = mapOf("Authorization" to "Bearer $token"),

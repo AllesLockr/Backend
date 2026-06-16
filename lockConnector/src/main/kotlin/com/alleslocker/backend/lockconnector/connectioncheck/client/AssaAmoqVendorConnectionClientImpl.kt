@@ -10,6 +10,7 @@ import com.alleslocker.backend.lockconnector.common.GenericRestClient
 import com.alleslocker.backend.lockconnector.connectioncheck.adapter.VendorConnectionClient
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpStatusCodeException
+import org.springframework.web.client.ResourceAccessException
 import java.time.Instant
 
 class AssaAmoqVendorConnectionClientImpl(
@@ -37,6 +38,8 @@ class AssaAmoqVendorConnectionClientImpl(
                     HttpStatus.UNAUTHORIZED, HttpStatus.FORBIDDEN -> VendorConnectionState.AUTH_FAILED
                     else -> VendorConnectionState.DISCONNECTED
                 }
+            } catch (e: ResourceAccessException) {
+                VendorConnectionState.DISCONNECTED
             }
 
         return VendorState(connectionState, Instant.now())

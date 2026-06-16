@@ -1,5 +1,6 @@
 package com.alleslocker.backend.lockconnector.lock.adapter
 
+import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.lock.adapter.LockAdapter
 import com.alleslocker.backend.application.lock.dto.response.FetchLocksAdapterResponse
 import com.alleslocker.backend.domain.vendor.AvailableVendors
@@ -15,6 +16,7 @@ internal class LockAdapterImpl(
     private val restClient: GenericRestClient,
     private val tokenProviderFactory: TokenProviderFactory,
     private val configProvider: ConfigProvider,
+    private val logger: Logger,
 ) : LockAdapter {
     private val iseoClient: LockClient =
         IseoLockClientImpl(restClient, tokenProviderFactory.make(AvailableVendors.ISEO), configProvider)
@@ -32,7 +34,12 @@ internal class LockAdapterImpl(
 
         val locks =
             targetVendors.flatMap { vendor ->
-                runCatching { clientFor(vendor).fetchAllLocks().locks }.getOrElse { emptyList() }
+                runCatching { clientFor(vendor).fetchAllLocks().locks }.onFailure {
+                    logger.error(
+                        "Failed to fetch locks for vendor $vendor",
+                        it
+                    )
+                }.getOrElse { emptyList() }
             }
         return FetchLocksAdapterResponse(locks = locks)
     }
