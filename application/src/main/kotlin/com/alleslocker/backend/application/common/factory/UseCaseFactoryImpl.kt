@@ -19,10 +19,14 @@ import com.alleslocker.backend.application.lock.adapter.LockAdapter
 import com.alleslocker.backend.application.lock.gateway.LockGateway
 import com.alleslocker.backend.application.lock.usecase.CountLocksUseCase
 import com.alleslocker.backend.application.lock.usecase.CountLocksUseCaseImpl
+import com.alleslocker.backend.application.lock.usecase.CreateLockUseCase
+import com.alleslocker.backend.application.lock.usecase.CreateLockUseCaseImpl
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCase
 import com.alleslocker.backend.application.lock.usecase.GetLocksPagedUseCaseImpl
 import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCase
 import com.alleslocker.backend.application.lock.usecase.SyncLocksUseCaseImpl
+import com.alleslocker.backend.application.lock.usecase.UpdateLockUseCase
+import com.alleslocker.backend.application.lock.usecase.UpdateLockUseCaseImpl
 import com.alleslocker.backend.application.person.adapter.PersonAdapter
 import com.alleslocker.backend.application.person.gateway.PersonGateway
 import com.alleslocker.backend.application.person.usecase.CountPersonsUseCase
@@ -38,6 +42,8 @@ import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.usecase.ActivateUserUseCase
 import com.alleslocker.backend.application.user.usecase.ActivateUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.AdminResetPasswordUserUseCase
+import com.alleslocker.backend.application.user.usecase.AdminResetPasswordUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCase
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
@@ -127,6 +133,18 @@ class UseCaseFactoryImpl(
                     lockAdapter = adapterFactory[LockAdapter::class],
                     logger = logger,
                 ),
+            CreateLockUseCase::class to
+                CreateLockUseCaseImpl(
+                    lockAdapter = adapterFactory[LockAdapter::class],
+                    lockGateway = gatewayFactory[LockGateway::class],
+                    logger = logger,
+                ),
+            UpdateLockUseCase::class to
+                UpdateLockUseCaseImpl(
+                    lockGateway = gatewayFactory[LockGateway::class],
+                    lockAdapter = adapterFactory[LockAdapter::class],
+                    logger = logger,
+                ),
             GrantAccessUseCase::class to
                 GrantAccessUseCaseImpl(
                     accessGrantGateway = gatewayFactory[AccessGrantGateway::class],
@@ -174,6 +192,13 @@ class UseCaseFactoryImpl(
                     logger = logger,
                     passwordGeneratorService = passwordGeneratorService,
                 ),
+            AdminResetPasswordUserUseCase::class to
+                AdminResetPasswordUserUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    passwordHasher = passwordHasher,
+                    passwordGeneratorService = passwordGeneratorService,
+                    logger = logger,
+                ),
             RequestUserPasswordChangeUseCase::class to
                 RequestUserPasswordChangeUseCaseImpl(
                     userGateway = gatewayFactory[UserGateway::class],
@@ -217,6 +242,7 @@ class UseCaseFactoryImpl(
                 DeleteVendorDataUseCaseImpl(
                     vendorDataGateway = gatewayFactory[VendorDataGateway::class],
                     logger = logger,
+                    vendorConnectionAdapter = adapterFactory[VendorConnectionAdapter::class],
                 ),
             GetImplementedVendorsUseCase::class to GetImplementedVendorsUseCaseImpl(),
             GetVendorSpecificDefinitionsUseCase::class to

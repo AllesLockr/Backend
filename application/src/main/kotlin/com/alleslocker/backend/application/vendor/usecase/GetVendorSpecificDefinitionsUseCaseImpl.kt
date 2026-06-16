@@ -37,6 +37,7 @@ class GetVendorSpecificDefinitionsUseCaseImpl(
                         VendorSpecificFieldDto(
                             it.name,
                             it.type.name,
+                            it.description,
                         )
                     },
             ),

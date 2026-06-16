@@ -17,16 +17,23 @@ class VendorSpecificDefinitionsAdapterImpl : VendorSpecificDefinitionsAdapter {
                 AvailableVendors.ISEO,
                 listOf(
                     VendorSpecificField(
-                        name = "installer-email",
+                        name = "Installer Email",
                         type = VendorSpecificFieldType.EMAIL,
                         internal = false,
+                        description = "An installer account is required to add new locks to the platform.",
                     ),
                     VendorSpecificField(
-                        name = "installer-password",
+                        name = "Installer Password",
                         type = VendorSpecificFieldType.PASSWORD,
                         internal = false,
+                        description = "Password for the installer account.",
                     ),
-                    VendorSpecificField(name = "installer-id", type = VendorSpecificFieldType.NUMBER, internal = true),
+                    VendorSpecificField(
+                        name = "installer-account-id",
+                        type = VendorSpecificFieldType.NUMBER,
+                        internal = true,
+                        description = "ID is required to modify the installer account.",
+                    ),
                 ),
             ),
             VendorSpecificDefinition(

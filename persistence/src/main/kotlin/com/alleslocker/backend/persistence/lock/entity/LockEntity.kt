@@ -12,6 +12,8 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(name = "locks")
@@ -35,5 +37,6 @@ open class LockEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "lock_metadata", joinColumns = [JoinColumn(name = "lock_id")])
+    @OnDelete(action = OnDeleteAction.CASCADE)
     open var metadata: MutableSet<MetadataEntryEntity> = mutableSetOf()
 }

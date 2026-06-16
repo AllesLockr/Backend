@@ -1,5 +1,6 @@
 package com.alleslocker.backend.application.vendor.mapper
 
+import com.alleslocker.backend.application.common.dto.MetadataEntryDto
 import com.alleslocker.backend.application.vendor.dto.response.GetVendorDataResponseDto
 import com.alleslocker.backend.domain.vendor.VendorAuthentication
 import com.alleslocker.backend.domain.vendor.VendorData
@@ -29,5 +30,6 @@ fun VendorData.toDto(): GetVendorDataResponseDto {
         apiPassword = apiPassword,
         vendorConnectionState = vendorState.connectionState.toString(),
         lastChecked = vendorState.lastChecked.toEpochMilli(),
+        metadata = metadata.map { MetadataEntryDto(it.key, it.value) }.toSet(),
     )
 }

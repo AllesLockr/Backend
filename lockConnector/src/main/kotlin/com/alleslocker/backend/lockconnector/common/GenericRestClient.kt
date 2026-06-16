@@ -75,7 +75,7 @@ class GenericRestClient {
             .uri(endpoint)
             .headers { header -> headers.forEach { (k, v) -> header.set(k, v) } }
             .retrieve()
-            .toBodilessEntity()
+            .body(String::class.java)
     }
 
     inline fun <reified T> get(

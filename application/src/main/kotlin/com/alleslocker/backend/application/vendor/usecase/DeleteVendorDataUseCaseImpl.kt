@@ -4,6 +4,7 @@ import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.Logger
 import com.alleslocker.backend.application.common.OutputBoundary
 import com.alleslocker.backend.application.common.SuccessResponse
+import com.alleslocker.backend.application.vendor.adapter.VendorConnectionAdapter
 import com.alleslocker.backend.application.vendor.dto.request.DeleteVendorDataRequestDto
 import com.alleslocker.backend.application.vendor.gateway.VendorDataGateway
 import com.alleslocker.backend.domain.auditlog.AuditLog
@@ -16,6 +17,7 @@ import java.time.Instant
 class DeleteVendorDataUseCaseImpl(
     private val vendorDataGateway: VendorDataGateway,
     private val logger: Logger,
+    private val vendorConnectionAdapter: VendorConnectionAdapter,
 ) : DeleteVendorDataUseCase {
     override fun execute(
         request: DeleteVendorDataRequestDto,
@@ -26,6 +28,12 @@ class DeleteVendorDataUseCaseImpl(
         val existing =
             vendorDataGateway.findById(id)
                 ?: return presenter.presentFailure(ErrorResponse.NotFound("Vendor with id ${request.id} not found"))
+
+        try {
+            vendorConnectionAdapter.handleMetadataOnDelete(existing.forVendor, existing.metadata)
+        } catch (e: Exception) {
+            logger.error("Error while deleting metadata: ", e)
+        }
 
         try {
             vendorDataGateway.deleteById(id)

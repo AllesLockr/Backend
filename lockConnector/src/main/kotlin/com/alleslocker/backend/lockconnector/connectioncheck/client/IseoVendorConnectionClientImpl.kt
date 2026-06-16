@@ -51,10 +51,10 @@ class IseoVendorConnectionClientImpl(
         val token = tokenProvider.getValidToken()
         val baseUrl = configProvider.load(vendor).baseUrl
 
-        val installerEmail = metadata.requireValue("installer-email")
-        val installerPassword = metadata.requireValue("installer-password")
+        val installerEmail = metadata.requireValue("Installer Email")
+        val installerPassword = metadata.requireValue("Installer Password")
 
-        val existingIdEntry = metadata.find { it.key == "installer-iseo-id" }
+        val existingIdEntry = metadata.find { it.key == "installer-account-id" }
 
         val iseoIdEntry =
             if (existingIdEntry == null) {
@@ -65,6 +65,21 @@ class IseoVendorConnectionClientImpl(
             }
 
         return metadata + iseoIdEntry
+    }
+
+    override fun handleMetadataOnDelete(
+        forVendor: AvailableVendors,
+        metadata: Set<MetadataEntry>,
+    ) {
+        val token = tokenProvider.getValidToken()
+        val baseUrl = configProvider.load(forVendor).baseUrl
+
+        val existingId = metadata.find { it.key == "installer-account-id" }!!.value
+
+        restClient.delete(
+            "$baseUrl/api/v2/users/$existingId?anonymizeAllEvents=false&deleteAllStandardDevices=false&blockAllStandardDevices=false",
+            headers = mapOf("Authorization" to "Bearer $token"),
+        )
     }
 
     private fun Set<MetadataEntry>.requireValue(key: String): String =
@@ -102,7 +117,7 @@ class IseoVendorConnectionClientImpl(
                 ?: throw IllegalStateException("ISEO API returned null body on user creation")
 
         val userId = requireNotNull(response.id) { "ISEO API returned null user ID" }
-        return MetadataEntry("installer-iseo-id", userId.toString())
+        return MetadataEntry("installer-account-id", userId.toString())
     }
 
     private fun updateInstallerAccount(
