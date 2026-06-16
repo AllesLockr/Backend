@@ -3,6 +3,7 @@ package com.alleslocker.backend.web.user.controller
 import com.alleslocker.backend.application.common.ErrorResponse
 import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.application.user.usecase.ActivateUserUseCase
+import com.alleslocker.backend.application.user.usecase.AdminResetPasswordUserUseCase
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCase
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
@@ -16,6 +17,7 @@ import com.alleslocker.backend.application.user.usecase.ResetPasswordUserUseCase
 import com.alleslocker.backend.web.common.security.JwtService
 import com.alleslocker.backend.web.user.mapper.toDto
 import com.alleslocker.backend.web.user.presenter.ActivateUserPresenter
+import com.alleslocker.backend.web.user.presenter.AdminResetPasswordUserPresenter
 import com.alleslocker.backend.web.user.presenter.ChangeUserRolePresenter
 import com.alleslocker.backend.web.user.presenter.CreateUserPresenter
 import com.alleslocker.backend.web.user.presenter.DeactivateUserPresenter
@@ -26,6 +28,7 @@ import com.alleslocker.backend.web.user.presenter.LoginUserPresenter
 import com.alleslocker.backend.web.user.presenter.RequestUserPasswordChangePresenter
 import com.alleslocker.backend.web.user.presenter.ResetPasswordUserPresenter
 import com.alleslocker.backend.web.user.schema.request.ActivateUserRequestSchema
+import com.alleslocker.backend.web.user.schema.request.AdminResetPasswordUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.ChangeUserRoleRequestSchema
 import com.alleslocker.backend.web.user.schema.request.CreateUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.DeactivateUserRequestSchema
@@ -35,6 +38,7 @@ import com.alleslocker.backend.web.user.schema.request.GetUsersPagedRequestSchem
 import com.alleslocker.backend.web.user.schema.request.LoginUserRequestSchema
 import com.alleslocker.backend.web.user.schema.request.RequestUserPasswordChangeRequestSchema
 import com.alleslocker.backend.web.user.schema.request.ResetPasswordUserRequestSchema
+import com.alleslocker.backend.web.user.schema.response.AdminResetPasswordUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.CreateUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.GetUserResponseSchema
 import com.alleslocker.backend.web.user.schema.response.GetUsersPagedResponseSchema
@@ -619,5 +623,69 @@ class UserController(
     ) {
         val presenter = ChangeUserRolePresenter(httpServletResponse, jacksonConverter)
         useCaseFactory.make(ChangeUserRoleUseCase::class).execute(request.toDto(requesterId), presenter)
+    }
+
+    @Operation(
+        summary = "Admin-reset a user's password (admin only). Generates a new password and returns it.",
+        responses = [
+            ApiResponse(
+                responseCode = "201",
+                description = "Password successfully reset.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = AdminResetPasswordUserResponseSchema::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid requestor or target user ID.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "Requestor is not an admin.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "Requestor or target user not found.",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
+                responseCode = "500",
+                description = "Something went wrong...rip",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponse::class),
+                    ),
+                ],
+            ),
+        ],
+    )
+    @PostMapping("/admin-reset-password")
+    fun adminResetPassword(
+        @AuthenticationPrincipal requesterId: String,
+        @RequestBody request: AdminResetPasswordUserRequestSchema,
+    ) {
+        val presenter = AdminResetPasswordUserPresenter(httpServletResponse, jacksonConverter)
+        useCaseFactory.make(AdminResetPasswordUserUseCase::class).execute(request.toDto(requesterId), presenter)
     }
 }
