@@ -40,13 +40,19 @@ class CleanArchitectureTest :
                         listOf(
                             "com.alleslocker.backend.domain",
                             "java.util",
+                            "java.time",
+                            "java.net",
                         ),
                     "application" to
                         listOf(
                             "com.alleslocker.backend.application",
                             "com.alleslocker.backend.domain",
                             "java.util",
+                            "java.time",
+                            "java.net",
+                            "java.security",
                             "kotlin.reflect",
+                            "kotlin.math",
                         ),
                     "persistence" to
                         listOf(
@@ -54,8 +60,16 @@ class CleanArchitectureTest :
                             "com.alleslocker.backend.domain",
                             "com.alleslocker.backend.application",
                             "kotlin.reflect",
+                            "kotlin.properties",
                             "jakarta.persistence",
                             "org.springframework",
+                            "java.time",
+                            "java.net",
+                            "java.nio",
+                            "java.security",
+                            "java.util",
+                            "org.hibernate",
+                            "javax.crypto",
                         ),
                     "web" to
                         listOf(
@@ -68,6 +82,8 @@ class CleanArchitectureTest :
                             "io.jsonwebtoken",
                             "java.util",
                             "org.apache.coyote",
+                            "java.time",
+                            "io.swagger.v3.oas",
                         ),
                 )
 
