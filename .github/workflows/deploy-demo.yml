@@ -1,0 +1,25 @@
+name: Deploy-Demo
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    deploy:
+        runs-on: self-hosted
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Build Docker image
+              run: docker build -t alleslocker-backend:latest .
+
+            - name: Restart docker-compose
+              run: |
+                  cd /opt/alleslocker
+                  docker compose up -d --force-recreate --remove-orphans
+
+            - name: Cleanup old images
+              run: docker image prune -f
