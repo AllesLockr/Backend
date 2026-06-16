@@ -44,7 +44,7 @@ internal class LockAdapterImpl(
                     }.getOrElse { emptyList() }
             }
         return FetchLocksAdapterResponse(locks = locks)
-    override fun fetchAllLocks(): FetchLocksAdapterResponse = iseoClient.fetchAllLocks()
+    }
 
     override fun createLock(forVendor: AvailableVendors): Lock {
         when (forVendor) {
@@ -60,3 +60,4 @@ internal class LockAdapterImpl(
         }
     }
 }
+
