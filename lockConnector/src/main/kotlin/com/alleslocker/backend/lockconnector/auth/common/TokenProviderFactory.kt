@@ -12,8 +12,14 @@ class TokenProviderFactory(
 ) {
     private val tokenProviders: Map<AvailableVendors, TokenProvider> =
         mapOf(
-            AvailableVendors.ISEO to TokenProvider(IseoOAuthTokenClient(configProvider, AvailableVendors.ISEO)),
-            AvailableVendors.ASSA_AMOQ to TokenProvider(AssaAmoqTokenClient()),
+            AvailableVendors.ISEO to
+                TokenProvider(
+                    IseoOAuthTokenClient(configProvider, AvailableVendors.ISEO),
+                ),
+            AvailableVendors.ASSA_AMOQ to
+                TokenProvider(
+                    AssaAmoqTokenClient(configProvider, AvailableVendors.ASSA_AMOQ),
+                ),
         )
 
     fun make(availableVendor: AvailableVendors): TokenProvider {

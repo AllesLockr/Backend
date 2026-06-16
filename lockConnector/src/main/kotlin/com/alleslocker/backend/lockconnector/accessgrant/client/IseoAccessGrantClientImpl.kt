@@ -35,7 +35,7 @@ internal class IseoAccessGrantClientImpl(
 
     override fun grant(request: GrantAccessAdapterRequest): GrantAccessAdapterResponse {
         val token = tokenProvider.getValidToken()
-        val baseUrl = configProvider.load(AvailableVendors.ISEO).baseUrl
+        val baseUrl = configProvider.load(vendor).baseUrl
         val authHeader = mapOf("Authorization" to "Bearer $token")
 
         val user =

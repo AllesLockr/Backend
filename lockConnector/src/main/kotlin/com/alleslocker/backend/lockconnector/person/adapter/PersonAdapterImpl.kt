@@ -18,19 +18,42 @@ internal class PersonAdapterImpl(
     private val tokenProviderFactory: TokenProviderFactory,
     private val configProvider: ConfigProvider,
 ) : PersonAdapter {
-    private val assaClient: PersonClient = AssaPersonClientImpl(restClient)
+    private val assaClient: PersonClient =
+        AssaPersonClientImpl(restClient, tokenProviderFactory.make(AvailableVendors.ASSA_AMOQ), configProvider)
     private val iseoClient: PersonClient =
         IseoPersonClientImpl(restClient, tokenProviderFactory.make(AvailableVendors.ISEO), configProvider)
 
+    private fun clientFor(vendor: AvailableVendors): PersonClient =
+        when (vendor) {
+            AvailableVendors.ASSA_AMOQ -> assaClient
+            AvailableVendors.ISEO -> iseoClient
+        }
+
     override fun addPerson(request: AddPersonAdapterRequest): AddPersonAdapterResponse {
+        val targetVendors = configProvider.configuredVendors()
         val merged = mutableMapOf<AvailableVendors, String>()
-        // assaClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value }
-        iseoClient.addPerson(request).externalIds.forEach { merged[it.key] = it.value }
+        try {
+            targetVendors.forEach { vendor ->
+                clientFor(vendor).addPerson(request).externalIds.forEach { (key, value) -> merged[key] = value }
+            }
+        } catch (e: Exception) {
+            merged.forEach { (vendor, externalId) ->
+                runCatching {
+                    clientFor(vendor).deletePerson(
+                        DeletePersonAdapterRequest(externalIds = mapOf(vendor to externalId)),
+                    )
+                }.onFailure { e.addSuppressed(it) }
+            }
+            throw e
+        }
         return AddPersonAdapterResponse(externalIds = merged)
     }
 
     override fun deletePerson(request: DeletePersonAdapterRequest) {
-        // assaClient.deletePerson(request)
-        iseoClient.deletePerson(request)
+        request.externalIds.forEach { (vendor, externalId) ->
+            clientFor(vendor).deletePerson(
+                DeletePersonAdapterRequest(externalIds = mapOf(vendor to externalId)),
+            )
+        }
     }
 }

@@ -29,6 +29,16 @@ class VendorSpecificDefinitionsAdapterImpl : VendorSpecificDefinitionsAdapter {
                     VendorSpecificField(name = "installer-id", type = VendorSpecificFieldType.NUMBER, internal = true),
                 ),
             ),
+            VendorSpecificDefinition(
+                AvailableVendors.ASSA_AMOQ,
+                listOf(
+                    VendorSpecificField(
+                        name = "api-key",
+                        type = VendorSpecificFieldType.PASSWORD,
+                        internal = false,
+                    ),
+                ),
+            ),
         )
 
     override fun get(availableVendors: AvailableVendors): VendorSpecificDefinition? =
