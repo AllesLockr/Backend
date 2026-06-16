@@ -1,6 +1,6 @@
 package com.alleslocker.backend.bootstrap
 
-/*import com.lemonappdev.konsist.api.Konsist
+import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.architecture.KoArchitectureCreator.assertArchitecture
 import com.lemonappdev.konsist.api.architecture.Layer
 import com.lemonappdev.konsist.api.ext.list.imports
@@ -83,4 +83,3 @@ class CleanArchitectureTest :
             }
         }
     })
-*/
