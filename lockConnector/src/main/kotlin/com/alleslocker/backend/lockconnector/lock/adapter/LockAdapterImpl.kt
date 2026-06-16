@@ -2,6 +2,7 @@ package com.alleslocker.backend.lockconnector.lock.adapter
 
 import com.alleslocker.backend.application.lock.adapter.LockAdapter
 import com.alleslocker.backend.application.lock.dto.response.FetchLocksAdapterResponse
+import com.alleslocker.backend.domain.lock.Lock
 import com.alleslocker.backend.domain.vendor.AvailableVendors
 import com.alleslocker.backend.lockconnector.auth.common.TokenProviderFactory
 import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
@@ -19,4 +20,18 @@ internal class LockAdapterImpl(
         IseoLockClientImpl(restClient, tokenProviderFactory.make(AvailableVendors.ISEO), configProvider)
 
     override fun fetchAllLocks(): FetchLocksAdapterResponse = iseoClient.fetchAllLocks()
+
+    override fun createLock(forVendor: AvailableVendors): Lock {
+        when (forVendor) {
+            AvailableVendors.ISEO -> return iseoClient.createLock(forVendor)
+            AvailableVendors.ASSA_AMOQ -> TODO()
+        }
+    }
+
+    override fun updateLock(lock: Lock): Lock {
+        when (lock.apiIdentity!!.api) {
+            AvailableVendors.ISEO -> return iseoClient.updateLock(lock)
+            AvailableVendors.ASSA_AMOQ -> TODO()
+        }
+    }
 }

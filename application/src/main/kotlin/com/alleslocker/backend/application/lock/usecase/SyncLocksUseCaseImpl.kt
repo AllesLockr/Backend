@@ -60,8 +60,8 @@ internal class SyncLocksUseCaseImpl(
                     buildSet {
                         existing?.metadata?.let { addAll(it) }
                         fetchedLock.tagId?.let { tagId ->
-                            removeIf { it.key == "tagId" }
-                            add(MetadataEntry(key = "tagId", value = tagId.toString()))
+                            removeIf { it.key == "lockTag-id" }
+                            add(MetadataEntry(key = "lockTag-id", value = tagId.toString()))
                         }
                     }
                 Lock(

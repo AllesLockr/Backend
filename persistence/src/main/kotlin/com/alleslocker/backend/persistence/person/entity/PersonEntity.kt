@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.MapKeyColumn
 import jakarta.persistence.MapKeyEnumerated
 import jakarta.persistence.Table
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 
 @Entity
 @Table(name = "person")
@@ -39,5 +41,6 @@ open class PersonEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "person_metadata", joinColumns = [JoinColumn(name = "person_id")])
+    @OnDelete(action = OnDeleteAction.CASCADE)
     open var metadata: MutableSet<MetadataEntryEntity> = mutableSetOf()
 }
