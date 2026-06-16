@@ -31,6 +31,8 @@ import com.alleslocker.backend.application.person.usecase.CreatePersonUseCase
 import com.alleslocker.backend.application.person.usecase.CreatePersonUseCaseImpl
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCase
 import com.alleslocker.backend.application.person.usecase.DeletePersonUseCaseImpl
+import com.alleslocker.backend.application.person.usecase.GetPersonUseCase
+import com.alleslocker.backend.application.person.usecase.GetPersonUseCaseImpl
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCaseImpl
 import com.alleslocker.backend.application.user.gateway.UserGateway
@@ -100,6 +102,11 @@ class UseCaseFactoryImpl(
             GetPersonsPagedUseCase::class to
                 GetPersonsPagedUseCaseImpl(
                     personGateway = gatewayFactory[PersonGateway::class],
+                ),
+            GetPersonUseCase::class to
+                GetPersonUseCaseImpl(
+                    personGateway = gatewayFactory[PersonGateway::class],
+                    logger = logger,
                 ),
             CountPersonsUseCase::class to
                 CountPersonsUseCaseImpl(
