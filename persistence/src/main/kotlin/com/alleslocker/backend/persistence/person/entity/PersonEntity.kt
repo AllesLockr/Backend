@@ -37,6 +37,7 @@ open class PersonEntity {
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "api")
     @Column(name = "external_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     open var externalIds: MutableMap<AvailableVendors, String> = mutableMapOf()
 
     @ElementCollection(fetch = FetchType.EAGER)
