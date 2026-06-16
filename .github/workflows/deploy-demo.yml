@@ -8,44 +8,15 @@ jobs:
         runs-on: self-hosted
 
         steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-
-            - name: Setup JDK
-              uses: actions/setup-java@v4
-              with:
-                  distribution: temurin
-                  java-version: 21
-
-            - name: Make Gradle executable
-              run: chmod +x gradlew
-
-            - name: Run tests
-              run: ./gradlew test
-
-            - name: Build JAR
-              run: ./gradlew bootJar
+            - uses: actions/checkout@v4
 
             - name: Build Docker image
-              run: |
-                  docker build \
-                    -t localhost:5000/alleslocker-backend:${{ github.sha }} \
-                    -t localhost:5000/alleslocker-backend:latest \
-                    .
+              run: docker build -t alleslocker-backend:latest .
 
-            - name: Push Docker image
-              run: |
-                  docker push localhost:5000/alleslocker-backend:${{ github.sha }}
-                  docker push localhost:5000/alleslocker-backend:latest
-
-            - name: Deploy
+            - name: Restart docker-compose
               run: |
                   cd /opt/alleslocker
-                  
-                  docker compose pull
-                  
-                  docker compose up -d \
-                    --force-recreate \
-                    --remove-orphans
-                  
-                  docker image prune -f
+                  docker compose up -d --force-recreate --remove-orphans
+
+            - name: Cleanup old images
+              run: docker image prune -f
