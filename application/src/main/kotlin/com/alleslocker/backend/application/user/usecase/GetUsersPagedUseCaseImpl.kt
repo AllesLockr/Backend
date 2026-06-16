@@ -8,7 +8,7 @@ import com.alleslocker.backend.application.user.dto.response.GetUsersPagedRespon
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.mapper.toDto
 
-class GetUsersPagedUseCaseImpl(
+internal class GetUsersPagedUseCaseImpl(
     private val userGateway: UserGateway,
     private val logger: Logger,
 ) : GetUsersPagedUseCase {

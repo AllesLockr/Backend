@@ -12,7 +12,7 @@ import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.user.UserRole
 import java.time.Instant
 
-class RequestUserPasswordChangeUseCaseImpl(
+internal class RequestUserPasswordChangeUseCaseImpl(
     private val userGateway: UserGateway,
     private val logger: Logger,
 ) : RequestUserPasswordChangeUseCase {
@@ -22,7 +22,7 @@ class RequestUserPasswordChangeUseCaseImpl(
     ) {
         val requestorId =
             try {
-                UserId(request.userId)
+                UserId(request.requestorId)
             } catch (e: IllegalArgumentException) {
                 presenter.presentFailure(ErrorResponse.BadRequest("Invalid id: ${e.message}"))
                 return

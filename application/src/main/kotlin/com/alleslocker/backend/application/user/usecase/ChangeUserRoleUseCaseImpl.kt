@@ -13,7 +13,7 @@ import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.user.UserRole
 import java.time.Instant
 
-class ChangeUserRoleUseCaseImpl(
+internal class ChangeUserRoleUseCaseImpl(
     private val userGateway: UserGateway,
     private val logger: Logger,
 ) : ChangeUserRoleUseCase {

@@ -20,4 +20,6 @@ dependencies {
     testImplementation(libs.kotest.assertions)
     testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.spring)
+    testImplementation(libs.h2)
+    testImplementation(libs.spring.boot.test)
 }

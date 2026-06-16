@@ -16,7 +16,7 @@ import com.alleslocker.backend.domain.user.UserId
 import com.alleslocker.backend.domain.user.UserRole
 import java.time.Instant
 
-class AdminResetPasswordUserUseCaseImpl(
+internal class AdminResetPasswordUserUseCaseImpl(
     private val userGateway: UserGateway,
     private val passwordHasher: PasswordHasher,
     private val passwordGeneratorService: PasswordGeneratorService,
