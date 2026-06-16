@@ -49,14 +49,14 @@ internal class LockAdapterImpl(
     override fun createLock(forVendor: AvailableVendors): Lock {
         when (forVendor) {
             AvailableVendors.ISEO -> return iseoClient.createLock(forVendor)
-            AvailableVendors.ASSA_AMOQ -> TODO()
+            AvailableVendors.ASSA_AMOQ -> return assaClient.createLock(forVendor)
         }
     }
 
     override fun updateLock(lock: Lock): Lock {
         when (lock.apiIdentity!!.api) {
             AvailableVendors.ISEO -> return iseoClient.updateLock(lock)
-            AvailableVendors.ASSA_AMOQ -> TODO()
+            AvailableVendors.ASSA_AMOQ -> return assaClient.updateLock(lock)
         }
     }
 }

@@ -43,6 +43,7 @@ class VendorSpecificDefinitionsAdapterImpl : VendorSpecificDefinitionsAdapter {
                         name = "api-key",
                         type = VendorSpecificFieldType.PASSWORD,
                         internal = false,
+                        description = "API key used to authenticate requests to the ASSA Abloy platform.",
                     ),
                 ),
             ),
