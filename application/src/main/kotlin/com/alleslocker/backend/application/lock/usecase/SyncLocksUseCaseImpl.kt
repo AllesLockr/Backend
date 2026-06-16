@@ -81,11 +81,12 @@ internal class SyncLocksUseCaseImpl(
                 presenter.presentFailure(ErrorResponse.InternalServerError("Failed to load local locks for cleanup"))
                 return
             }
+        val synchedVendors = fetchedLocks.map { it.vendor }.toSet()
 
         val idsToDelete =
             allLocalLocks
                 .filter {
-                    it.apiIdentity?.api == AvailableVendors.ISEO && it.serialNumber.value !in fetchedSerialNumbers
+                    it.apiIdentity?.api in synchedVendors && it.serialNumber.value !in fetchedSerialNumbers
                 }.map { it.id }
 
         try {

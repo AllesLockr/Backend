@@ -9,6 +9,8 @@ import com.alleslocker.backend.lockconnector.auth.config.ConfigProvider
 import com.alleslocker.backend.lockconnector.common.GenericRestClient
 import com.alleslocker.backend.lockconnector.connectioncheck.adapter.VendorConnectionClient
 import org.springframework.http.HttpStatus
+import org.springframework.web.client.HttpStatusCodeException
+import org.springframework.web.client.ResourceAccessException
 import java.time.Instant
 
 class AssaAmoqVendorConnectionClientImpl(
@@ -17,18 +19,27 @@ class AssaAmoqVendorConnectionClientImpl(
     private val configProvider: ConfigProvider,
 ) : VendorConnectionClient {
     override fun check(vendor: AvailableVendors): VendorState {
+        val token = tokenProvider.getValidToken()
         val baseUrl = configProvider.load(vendor).baseUrl
 
-        val response =
-            restClient.getBodiless(
-                endpoint = "$baseUrl/user",
-            )
-
         val connectionState =
-            when (response.statusCode) {
-                HttpStatus.OK -> VendorConnectionState.CONNECTED
-                HttpStatus.FORBIDDEN -> VendorConnectionState.AUTH_FAILED
-                else -> VendorConnectionState.DISCONNECTED
+            try {
+                val response =
+                    restClient.getBodiless(
+                        endpoint = "$baseUrl/user",
+                        headers = mapOf("Authorization" to "Bearer $token"),
+                    )
+                when (response.statusCode) {
+                    HttpStatus.OK -> VendorConnectionState.CONNECTED
+                    else -> VendorConnectionState.DISCONNECTED
+                }
+            } catch (e: HttpStatusCodeException) {
+                when (e.statusCode) {
+                    HttpStatus.UNAUTHORIZED, HttpStatus.FORBIDDEN -> VendorConnectionState.AUTH_FAILED
+                    else -> VendorConnectionState.DISCONNECTED
+                }
+            } catch (e: ResourceAccessException) {
+                VendorConnectionState.DISCONNECTED
             }
 
         return VendorState(connectionState, Instant.now())

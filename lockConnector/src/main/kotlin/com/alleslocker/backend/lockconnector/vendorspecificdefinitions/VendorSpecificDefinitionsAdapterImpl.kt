@@ -36,6 +36,17 @@ class VendorSpecificDefinitionsAdapterImpl : VendorSpecificDefinitionsAdapter {
                     ),
                 ),
             ),
+            VendorSpecificDefinition(
+                AvailableVendors.ASSA_AMOQ,
+                listOf(
+                    VendorSpecificField(
+                        name = "api-key",
+                        type = VendorSpecificFieldType.PASSWORD,
+                        internal = false,
+                        description = "API key used to authenticate requests to the ASSA Amock platform.",
+                    ),
+                ),
+            ),
         )
 
     override fun get(availableVendors: AvailableVendors): VendorSpecificDefinition? =
