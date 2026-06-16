@@ -44,3 +44,4 @@ bin/
 ## Misc ##
 docker-compose.yml
 **/application-local.yml
+AGENTS.md

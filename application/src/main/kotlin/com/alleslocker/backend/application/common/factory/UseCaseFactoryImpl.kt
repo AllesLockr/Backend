@@ -42,6 +42,8 @@ import com.alleslocker.backend.application.person.usecase.GetPersonsPagedUseCase
 import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.application.user.usecase.ActivateUserUseCase
 import com.alleslocker.backend.application.user.usecase.ActivateUserUseCaseImpl
+import com.alleslocker.backend.application.user.usecase.AdminResetPasswordUserUseCase
+import com.alleslocker.backend.application.user.usecase.AdminResetPasswordUserUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCase
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
@@ -189,6 +191,13 @@ class UseCaseFactoryImpl(
                     passwordHasher = passwordHasher,
                     logger = logger,
                     passwordGeneratorService = passwordGeneratorService,
+                ),
+            AdminResetPasswordUserUseCase::class to
+                AdminResetPasswordUserUseCaseImpl(
+                    userGateway = gatewayFactory[UserGateway::class],
+                    passwordHasher = passwordHasher,
+                    passwordGeneratorService = passwordGeneratorService,
+                    logger = logger,
                 ),
             RequestUserPasswordChangeUseCase::class to
                 RequestUserPasswordChangeUseCaseImpl(
