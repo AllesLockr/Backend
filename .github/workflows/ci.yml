@@ -1,4 +1,4 @@
-name: lint
+name: ci
 on:
   push:
     branches: [ "**" ]
@@ -6,6 +6,7 @@ on:
     branches: [ "**" ]
 jobs:
   ktlint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,3 +19,18 @@ jobs:
         run: chmod +x ./gradlew
       - name: Run ktlintCheck
         run: ./gradlew ktlintCheck
+
+  build:
+    name: test & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'temurin'
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Build & test
+        run: ./gradlew build
