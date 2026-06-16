@@ -49,7 +49,7 @@ class VendorConnectionAdapterImpl(
     ) {
         when (forVendor) {
             AvailableVendors.ISEO -> iseoVendorConnectionClient.handleMetadataOnDelete(forVendor, metadata)
-            AvailableVendors.ASSA_AMOQ -> iseoVendorConnectionClient.handleMetadataOnDelete(forVendor, metadata)
+            AvailableVendors.ASSA_AMOQ -> assaAmoqVendorConnectionClient.handleMetadataOnDelete(forVendor, metadata)
         }
     }
 }
