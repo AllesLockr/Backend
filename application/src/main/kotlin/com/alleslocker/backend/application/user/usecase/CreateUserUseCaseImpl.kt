@@ -21,7 +21,7 @@ import com.alleslocker.backend.domain.user.UserRole
 import com.alleslocker.backend.domain.user.Username
 import java.time.Instant
 
-class CreateUserUseCaseImpl(
+internal class CreateUserUseCaseImpl(
     private val userGateway: UserGateway,
     private val logger: Logger,
     private val passwordGeneratorService: PasswordGeneratorService,

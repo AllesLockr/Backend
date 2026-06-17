@@ -14,7 +14,7 @@ import com.alleslocker.backend.domain.user.UserRole
 import java.time.Instant
 import kotlin.math.log
 
-class ActivateUserUseCaseImpl(
+internal class ActivateUserUseCaseImpl(
     val userGateway: UserGateway,
     val logger: Logger,
 ) : ActivateUserUseCase {

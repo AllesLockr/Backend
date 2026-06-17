@@ -5,7 +5,6 @@ import com.alleslocker.backend.application.common.factory.UseCaseFactory
 import com.alleslocker.backend.application.user.usecase.ActivateUserUseCase
 import com.alleslocker.backend.application.user.usecase.AdminResetPasswordUserUseCase
 import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCase
-import com.alleslocker.backend.application.user.usecase.ChangeUserRoleUseCaseImpl
 import com.alleslocker.backend.application.user.usecase.CreateUserUseCase
 import com.alleslocker.backend.application.user.usecase.DeactivateUserUseCase
 import com.alleslocker.backend.application.user.usecase.EditUserUseCase

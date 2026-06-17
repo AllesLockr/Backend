@@ -10,7 +10,7 @@ import com.alleslocker.backend.application.user.gateway.UserGateway
 import com.alleslocker.backend.domain.user.PasswordHash
 import com.alleslocker.backend.domain.user.UserId
 
-class ResetPasswordUserUseCaseImpl(
+internal class ResetPasswordUserUseCaseImpl(
     private val passwordHasher: PasswordHasher,
     private val logger: Logger,
     private val userGateway: UserGateway,
