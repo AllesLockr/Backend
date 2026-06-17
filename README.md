@@ -1,7 +1,7 @@
-<p align="center">
+<div align="center">
     <img src="https://media.nocars.tk/lock.svg" alt="logo" width="50" />
-</p>
-<h1 align="center">AllesLocker</h1>
+    <h1>AllesLocker</h1>
+</div>
 
 AllesLocker is a web-based access management system. It lets you manage electronic locks, assign access rights to persons, and integrate with <a href="https://github.com/AllesLockr/Backend/wiki#Implemented-Vendors">implemented</a> third-party lock vendors — all from a single dashboard. The architecture enables easy integration of additional vendors.
 
