@@ -1,58 +1,34 @@
-# [Project Name]
+<div align="center">
+    <img src="https://media.nocars.tk/lock.svg" alt="logo" width="50" />
+    <h1>AllesLocker</h1>
+</div>
 
-> **[One-sentence value proposition / elevator pitch]**
+AllesLocker is a web-based access management system. It lets you manage electronic locks, assign access rights to persons, and integrate with <a href="https://github.com/AllesLockr/Backend/wiki#Implemented-Vendors">implemented</a> third-party lock vendors — all from a single dashboard. The architecture enables easy integration of additional vendors.
 
-[Badges Placeholder: Build | License | Docker | Version]
+<p align="center">
+    <img src="https://media.nocars.tk/alles-locker.png" alt="logo" width="600"/>
+</p>
 
----
+## Architecture
 
-## 📖 Overview
-[Briefly describe the business problem being solved]
-[Briefly describe the technical solution and its primary goal]
+```
+┌──────────┐     ┌──────────┐     ┌─────────┐
+│ Frontend │────▶│ Backend  │────▶│ MariaDB │
+│  :5173   │     │  :8080   │     │  :3306  │
+└──────────┘     └──────────┘     └─────────┘
+                        │
+                        ▼
+                 ┌──────────┐
+                 │  Vendor  │
+                 │ APIs     │
+                 └──────────┘
+```
 
-## ✨ Key Features
-* **[Feature 1]:** [Short description of core functionality]
-* **[Feature 2]:** [Short description of hardware abstraction]
-* **[Feature 3]:** [Short description of administrative capabilities]
-* **[Feature 4]:** [Short description of security/audit features]
+## Getting Started
 
-## 🏗 Technical Architecture
-[High-level explanation of Clean Architecture and design principles]
+For further information, please visit the [wiki](https://github.com/AllesLockr/Backend/wiki).
 
-* **Language:** [Primary programming language]
-* **Framework:** [Main application framework]
-* **Architecture Style:** [e.g., Clean Architecture / Hexagonal]
-* **Database:** [Type of SQL database and migration tool]
-* **Artifact Registry:** [Container registry details]
+## Repositories
 
-## 🚀 Development
-### Prerequisites
-* [Tool/Dependency 1]
-* [Tool/Dependency 2]
-
-### Getting Started
-1. [Steps for cloning the repository]
-2. [Steps for initializing local infrastructure]
-3. [Steps for running the application in development mode]
-
-## 🤝 Contributing
-We welcome contributions! To ensure that all additions align with our Clean Architecture standards and Kotlin coding conventions, please review our detailed guidelines in the **CONTRIBUTING.md** file. 
-
-The contributing guide covers:
-* Code style and linting rules
-* The process for adding new hardware adapters
-* Testing requirements (Unit & Integration)
-* Pull Request and Review workflows
-
-## 🔒 Security & License
-* **Security Policy:** [Description of security measures and reporting vulnerabilities]
-* **License:** This project is licensed under the **GNU AGPLv3**.
-* **Project Status:** [Note regarding the academic nature of the project and liability disclaimer]
-
-## 👥 The Team
-* **[Name 1]** (@[github-handle]) - [Core Responsibilities]
-* **[Name 2]** (@[github-handle]) - [Core Responsibilities]
-* **[Name 3]** (@[github-handle]) - [Core Responsibilities]
-
----
-*[University/Institution Name] — Bachelor Project [Year]*
+- [Frontend](https://github.com/AllesLockr/Frontend)
+- [Backend](https://github.com/AllesLockr/Backend)
